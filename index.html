@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>TECCHNEX · CAM-ACCESO-00H · Lectura de documento</title>
+<title>TECCHNEX · CAM-ACCESO-00I · Informes de control de acceso</title>
 <style>
 :root{--navy:#123B5D;--cyan:#0AA7C0;--bg:#F4F7F9;--line:#D5E0E6;--soft:#EAF3F6;--text:#163247;--muted:#687784;--ok:#2E7D5B;--warn:#B57B10;--danger:#B23A48;--danger-bg:#FFF0F2;--orange:#C76D16}
 *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
@@ -32,7 +32,7 @@ button{border:0;border-radius:8px;padding:9px 12px;font-weight:800;cursor:pointe
 .parking{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.cell{padding:10px 4px;text-align:center;border-radius:7px;border:1px solid var(--line);font-weight:800;font-size:12px}.free{background:#F0F8F3;color:var(--ok)}.busy{background:#FCEDEF;color:var(--danger)}
 .note{margin-top:10px;padding:10px;border-left:4px solid var(--cyan);background:var(--soft);color:var(--muted);font-size:12px}
 .status{margin-top:10px;padding:10px;border-radius:8px;background:#F0F8F3;color:var(--ok);font-size:12px;font-weight:700;display:none}
-.empty{padding:16px;text-align:center;color:var(--muted);font-size:13px}.search-box{margin:12px 0 10px;padding:11px;background:#F8FBFC;border:1px solid var(--line);border-radius:10px}.search-box label{margin-bottom:6px}.search-results{margin-top:8px}.search-result{padding:10px;border:1px solid var(--line);border-radius:9px;background:#fff;margin-top:7px}.search-result-head{display:flex;justify-content:space-between;gap:10px;align-items:center}.search-result small{display:block;color:var(--muted);margin-top:4px;line-height:1.35}.resident-suggestions{margin-top:6px}.resident-chip{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 9px;background:var(--soft);border:1px solid var(--line);border-radius:7px;margin-top:5px;font-size:12px}.resident-chip button{padding:5px 8px;font-size:11px}.resident-list{margin-top:8px;max-height:190px;overflow:auto}.resident-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px;border-bottom:1px solid var(--line);font-size:12px}.resident-row:last-child{border-bottom:0}.resident-row small{display:block;color:var(--muted);margin-top:2px}.resident-row-actions{display:flex;gap:5px}.resident-row-actions button{padding:5px 8px;font-size:11px}.resident-admin{margin-bottom:0}.resident-form{margin-top:10px}.admin-panel{display:none;margin-top:12px}.admin-panel.visible{display:block}.admin-gate{margin-top:14px;padding:11px;background:#F8FBFC;border:1px solid var(--line);border-radius:10px}.admin-gate .actions{margin-top:8px}.admin-title{display:flex;justify-content:space-between;align-items:center;gap:8px}.admin-title h3{margin:0;color:var(--navy);font-size:14px}
+.empty{padding:16px;text-align:center;color:var(--muted);font-size:13px}.search-box{margin:12px 0 10px;padding:11px;background:#F8FBFC;border:1px solid var(--line);border-radius:10px}.search-box label{margin-bottom:6px}.search-results{margin-top:8px}.search-result{padding:10px;border:1px solid var(--line);border-radius:9px;background:#fff;margin-top:7px}.search-result-head{display:flex;justify-content:space-between;gap:10px;align-items:center}.search-result small{display:block;color:var(--muted);margin-top:4px;line-height:1.35}.resident-suggestions{margin-top:6px}.resident-chip{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 9px;background:var(--soft);border:1px solid var(--line);border-radius:7px;margin-top:5px;font-size:12px}.resident-chip button{padding:5px 8px;font-size:11px}.resident-list{margin-top:8px;max-height:190px;overflow:auto}.resident-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px;border-bottom:1px solid var(--line);font-size:12px}.resident-row:last-child{border-bottom:0}.resident-row small{display:block;color:var(--muted);margin-top:2px}.resident-row-actions{display:flex;gap:5px}.resident-row-actions button{padding:5px 8px;font-size:11px}.resident-admin{margin-bottom:0}.resident-form{margin-top:10px}.admin-panel{display:none;margin-top:12px}.admin-panel.visible{display:block}.admin-gate{margin-top:14px;padding:11px;background:#F8FBFC;border:1px solid var(--line);border-radius:10px}.admin-gate .actions{margin-top:8px}.admin-title{display:flex;justify-content:space-between;align-items:center;gap:8px}.admin-title h3{margin:0;color:var(--navy);font-size:14px} .report-panel{margin-top:12px;padding:12px;border:1px solid var(--line);border-radius:10px;background:#FBFCFD}.report-filters{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.report-filters .wide{grid-column:1/-1}.report-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}.report-summary .stat{padding:9px}.report-summary .stat strong{font-size:20px}.report-table-wrap{margin-top:10px;overflow:auto;border:1px solid var(--line);border-radius:9px}.report-table{width:100%;border-collapse:collapse;font-size:11px;background:#fff}.report-table th,.report-table td{padding:8px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}.report-table th{background:var(--soft);color:var(--navy);position:sticky;top:0}.report-empty{padding:14px;text-align:center;color:var(--muted)}@media(max-width:700px){.report-filters{grid-template-columns:1fr}.report-summary{grid-template-columns:1fr 1fr}}
 @media(max-width:900px){.grid{grid-template-columns:1fr}} @media(max-width:600px){.row{grid-template-columns:1fr}.parking{grid-template-columns:repeat(3,1fr)}.brand{align-items:flex-start;flex-direction:column}.item-head{flex-direction:column}}
 .modal-scan{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;z-index:9999;padding:18px}.modal-scan.visible{display:flex}.scan-card{width:min(520px,100%);background:#fff;border-radius:16px;padding:16px;box-shadow:0 18px 60px rgba(0,0,0,.3)}.scan-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.scan-close{border:0;background:#eee;border-radius:9px;padding:8px 11px;cursor:pointer}.scan-card video{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:12px;background:#111}.scan-status{margin:10px 0;padding:10px;border-radius:10px;background:#f3f6f8;font-size:14px}.scan-actions{display:flex;gap:8px}.scan-actions button{flex:1}.scan-note{font-size:12px;color:#68737d;margin-top:10px;line-height:1.35}</style>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
@@ -40,7 +40,7 @@ button{border:0;border-radius:8px;padding:9px 12px;font-weight:800;cursor:pointe
 <body>
 <header>
   <div class="brand">
-    <div><h1>TECCHNEX · CONTROL DE ACCESO</h1><small>CAM-ACCESO-00H · Lectura de documento</small></div>
+    <div><h1>TECCHNEX · CONTROL DE ACCESO</h1><small>CAM-ACCESO-00I · Informes de control de acceso</small></div>
     <!-- CAM-ACCESO-00F-CAMBIO-01: recordatorio operativo de visitantes pendientes de salida. -->
     <div class="brand-actions">
       <button id="btnRecordatorioSalidas" class="btn-reminder no-pending" onclick="irAPendientes()" aria-live="polite">🔔 Verificar salidas</button>
@@ -101,6 +101,26 @@ button{border:0;border-radius:8px;padding:9px 12px;font-weight:800;cursor:pointe
             <input id="archivoResidentes" type="file" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv" style="display:none" onchange="importarResidentes(event)">
             <div class="note"><strong>Fuente administrativa:</strong> Excel de la copropiedad. La aplicación conserva solo los datos básicos necesarios para operar en portería: apartamento, residente y estado; el teléfono es opcional.</div>
           </div>
+        </div>
+      </div>
+
+      <!-- CAM-ACCESO-00I: informe general mensual con filtros operativos; acceso protegido por Administración. -->
+      <div class="report-panel">
+        <div class="admin-title"><h3>📊 Informes de control de acceso</h3><button class="btn-light" onclick="abrirInforme()">Generar informe</button></div>
+        <div id="panelInforme" style="display:none">
+          <div class="section-title">Informe general</div>
+          <div class="report-filters">
+            <div class="field"><label>Desde</label><input id="informeDesde" type="date"></div>
+            <div class="field"><label>Hasta</label><input id="informeHasta" type="date"></div>
+            <div class="field"><label>Apartamento / residencia</label><input id="informeApartamento" placeholder="Opcional"></div>
+            <div class="field"><label>Proveedor / servicio</label><input id="informeProveedor" placeholder="Opcional"></div>
+            <div class="field"><label>Tipo de visitante</label><select id="informeTipo"><option value="">Todos</option><option>Visita</option><option>Empleada doméstica</option><option>Domiciliario</option><option>Mensajero</option><option>Visitador médico</option><option>Proveedor</option><option>Otro</option></select></div>
+            <div class="field"><label>Visitante / documento</label><input id="informeVisitante" placeholder="Opcional"></div>
+          </div>
+          <div class="actions"><button class="btn-main" onclick="generarVistaInforme()">🔎 Aplicar filtros</button><button class="btn-alt" onclick="exportarInformeExcel()">📊 Exportar Excel</button><button class="btn-light" onclick="imprimirInformePDF()">📄 Generar PDF</button></div>
+          <div id="informeResumen" class="report-summary"></div>
+          <div id="informeTabla" class="report-table-wrap"></div>
+          <div class="note"><strong>Privacidad:</strong> el informe se genera en el equipo de la copropiedad con los datos almacenados localmente. Los filtros no modifican ni eliminan el historial.</div>
         </div>
       </div>
     </section>
@@ -451,6 +471,8 @@ function registrarSalida(id){
   const item=visitantes.find(v=>v.id===id);
   if(!item||item.salio)return;
   item.salio=true;
+  item.salida=Date.now();
+  // CAM-ACCESO-00I-CAMBIO-01: conservar la hora real de salida para informes y auditoría.
   guardarVisitantes();
   const ingresoBase=Number(document.getElementById('total').textContent);
   // El contador del día no disminuye; la salida solo cierra la permanencia.
@@ -575,6 +597,57 @@ function limpiar(){
 }
 
 function escapeHtml(value){return String(value).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
+
+// CAM-ACCESO-00I: prepara fechas mensuales y aplica filtros sin modificar el historial.
+function abrirInforme(){
+  document.getElementById('panelInforme').style.display='block';
+  const ahora=new Date(), primero=new Date(ahora.getFullYear(),ahora.getMonth(),1), ultimo=new Date(ahora.getFullYear(),ahora.getMonth()+1,0);
+  document.getElementById('informeDesde').value=fechaLocalISO(primero);
+  document.getElementById('informeHasta').value=fechaLocalISO(ultimo);
+  generarVistaInforme();
+}
+function fechaLocalISO(d){return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10);}
+function obtenerRegistrosInforme(){
+  const desde=document.getElementById('informeDesde').value;
+  const hasta=document.getElementById('informeHasta').value;
+  const apt=normalizarTexto(document.getElementById('informeApartamento').value);
+  const prov=normalizarTexto(document.getElementById('informeProveedor').value);
+  const tipo=document.getElementById('informeTipo').value;
+  const visitante=normalizarTexto(document.getElementById('informeVisitante').value);
+  const inicio=desde?new Date(desde+'T00:00:00').getTime():0;
+  const fin=hasta?new Date(hasta+'T23:59:59.999').getTime():Infinity;
+  return visitantes.filter(v=>{
+    if(v.ingreso<inicio||v.ingreso>fin)return false;
+    if(apt&&!normalizarTexto(v.destino).includes(apt))return false;
+    if(prov&&(v.tipo!=='Proveedor'||!normalizarTexto(v.nombre).includes(prov)&&!normalizarTexto(v.autoriza).includes(prov)))return false;
+    if(tipo&&v.tipo!==tipo)return false;
+    if(visitante&&!normalizarTexto(v.nombre).includes(visitante)&&!normalizarTexto(v.cedula).includes(visitante))return false;
+    return true;
+  }).sort((a,b)=>a.ingreso-b.ingreso);
+}
+function generarVistaInforme(){
+  const datos=obtenerRegistrosInforme();
+  const resumen=document.getElementById('informeResumen');
+  const salidas=datos.filter(v=>v.salio).length, pendientes=datos.length-salidas, vehiculos=datos.filter(v=>v.placa).length, frecuentes=datos.filter(v=>v.cedula).length;
+  resumen.innerHTML=`<div class="stat"><strong>${datos.length}</strong><span>Ingresos</span></div><div class="stat"><strong>${salidas}</strong><span>Salidas registradas</span></div><div class="stat"><strong>${pendientes}</strong><span>Pendientes</span></div><div class="stat"><strong>${vehiculos}</strong><span>Con vehículo</span></div>`;
+  const tabla=document.getElementById('informeTabla');
+  if(!datos.length){tabla.innerHTML='<div class="report-empty">No hay registros que coincidan con los filtros seleccionados.</div>';return;}
+  tabla.innerHTML=`<table class="report-table"><thead><tr><th>Fecha</th><th>Entrada</th><th>Visitante</th><th>Documento</th><th>Apartamento</th><th>Autoriza</th><th>Tipo</th><th>Proveedor</th><th>Placa</th><th>Salida</th><th>Permanencia</th></tr></thead><tbody>${datos.map(v=>{const salida=v.salio&&v.salida?new Date(v.salida):null;const salidaTxt=salida?salida.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'}):'Pendiente';const mins=salida?Math.max(0,Math.round((salida.getTime()-v.ingreso)/60000)):'—';return `<tr><td>${new Date(v.ingreso).toLocaleDateString('es-CO')}</td><td>${new Date(v.ingreso).toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'})}</td><td>${escapeHtml(v.nombre)}</td><td>${escapeHtml(v.cedula||'')}</td><td>${escapeHtml(v.destino)}</td><td>${escapeHtml(v.autoriza)}</td><td>${escapeHtml(v.tipo)}</td><td>${v.tipo==='Proveedor'?escapeHtml(v.nombre):''}</td><td>${escapeHtml(v.placa||'')}</td><td>${salidaTxt}</td><td>${mins==='—'?'—':mins+' min'}</td></tr>`;}).join('')}</tbody></table>`;
+}
+function exportarInformeExcel(){
+  const datos=obtenerRegistrosInforme();
+  if(!datos.length){alert('No hay registros para exportar con los filtros actuales.');return;}
+  const filas=datos.map(v=>({Fecha:new Date(v.ingreso).toLocaleDateString('es-CO'),Entrada:new Date(v.ingreso).toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'}),Visitante:v.nombre,Documento:v.cedula||'',Apartamento:v.destino,Autoriza:v.autoriza,Tipo:v.tipo,Proveedor:v.tipo==='Proveedor'?v.nombre:'',Placa:v.placa||'',Salida:v.salio&&v.salida?new Date(v.salida).toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'}):'Pendiente'}));
+  if(window.XLSX){const ws=XLSX.utils.json_to_sheet(filas),wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Informe');XLSX.writeFile(wb,'CAM-ACCESO-INFORME.xlsx');}
+}
+function imprimirInformePDF(){
+  const datos=obtenerRegistrosInforme();
+  if(!datos.length){alert('No hay registros para generar el informe.');return;}
+  const desde=document.getElementById('informeDesde').value||'',hasta=document.getElementById('informeHasta').value||'';
+  const filas=datos.map(v=>`<tr><td>${new Date(v.ingreso).toLocaleDateString('es-CO')}</td><td>${new Date(v.ingreso).toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'})}</td><td>${escapeHtml(v.nombre)}</td><td>${escapeHtml(v.cedula||'')}</td><td>${escapeHtml(v.destino)}</td><td>${escapeHtml(v.autoriza)}</td><td>${escapeHtml(v.tipo)}</td><td>${escapeHtml(v.placa||'')}</td><td>${v.salio&&v.salida?new Date(v.salida).toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'}):'Pendiente'}</td></tr>`).join('');
+  const w=window.open('','_blank','width=1200,height=800'); if(!w){alert('El navegador bloqueó la ventana del informe. Permita ventanas emergentes para CAM-ACCESO.');return;}
+  w.document.write(`<!doctype html><html lang="es"><head><meta charset="utf-8"><title>CAM-ACCESO · Informe general</title><style>body{font-family:Arial,sans-serif;color:#163247;margin:28px}h1{color:#123B5D;margin-bottom:4px}p{color:#687784}table{width:100%;border-collapse:collapse;font-size:10px}th,td{border:1px solid #D5E0E6;padding:6px;text-align:left}th{background:#EAF3F6;color:#123B5D} @media print{@page{size:A4 landscape;margin:12mm}}</style></head><body><h1>TECCHNEX · CAM-ACCESO</h1><h2>Informe General de Control de Acceso</h2><p>Período: ${escapeHtml(desde)} a ${escapeHtml(hasta)} · Registros: ${datos.length}</p><table><thead><tr><th>Fecha</th><th>Entrada</th><th>Visitante</th><th>Documento</th><th>Apartamento</th><th>Autoriza</th><th>Tipo</th><th>Placa</th><th>Salida</th></tr></thead><tbody>${filas}</tbody></table><script>window.onload=()=>setTimeout(()=>window.print(),300);<\/script></body></html>`);w.document.close();
+}
 
 render();
 setInterval(render,1000);
