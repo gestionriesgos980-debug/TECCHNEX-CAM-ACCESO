@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>TECCHNEX · CAM-ACCESO-00B · Pendientes de salida</title>
+<title>TECCHNEX · CAM-ACCESO-00H · Lectura de documento</title>
 <style>
 :root{--navy:#123B5D;--cyan:#0AA7C0;--bg:#F4F7F9;--line:#D5E0E6;--soft:#EAF3F6;--text:#163247;--muted:#687784;--ok:#2E7D5B;--warn:#B57B10;--danger:#B23A48;--danger-bg:#FFF0F2;--orange:#C76D16}
 *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
 header{background:#fff;border-bottom:1px solid var(--line);padding:16px 20px;position:sticky;top:0;z-index:10}
-.brand{max-width:1150px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:16px}.brand h1{margin:0;color:var(--navy);font-size:23px}.brand small{color:var(--cyan);font-weight:700}
+.brand{max-width:1150px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:16px}.brand h1{margin:0;color:var(--navy);font-size:23px}.brand small{color:var(--cyan);font-weight:700}.brand-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.btn-reminder{min-width:185px;transition:background .2s ease,color .2s ease,border-color .2s ease}.btn-reminder.has-pending{background:var(--danger);color:#fff;box-shadow:0 2px 7px rgba(178,58,72,.18)}.btn-reminder.no-pending{background:#FFF4DB;color:var(--warn);border:1px solid #E7C46C}.btn-reminder:focus{outline:2px solid rgba(10,167,192,.25);outline-offset:2px}
+.frequent-box{margin-top:7px;padding:9px 10px;border:1px solid #B8DDE5;border-radius:9px;background:#F2FAFC;font-size:12px}.frequent-box strong{color:var(--navy)}.frequent-box small{display:block;color:var(--muted);margin:3px 0 7px}.frequent-box .btn-light{padding:7px 9px;font-size:12px}
 .wrap{max-width:1150px;margin:18px auto;padding:0 16px}.grid{display:grid;grid-template-columns:1.15fr 1fr;gap:16px}
 .card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;box-shadow:0 3px 10px rgba(18,59,93,.05)}
 .card h2{margin:0 0 14px;color:var(--navy);font-size:18px}.section-title{margin:14px 0 8px;font-size:13px;font-weight:800;color:var(--navy);text-transform:uppercase}
@@ -33,13 +34,18 @@ button{border:0;border-radius:8px;padding:9px 12px;font-weight:800;cursor:pointe
 .status{margin-top:10px;padding:10px;border-radius:8px;background:#F0F8F3;color:var(--ok);font-size:12px;font-weight:700;display:none}
 .empty{padding:16px;text-align:center;color:var(--muted);font-size:13px}.search-box{margin:12px 0 10px;padding:11px;background:#F8FBFC;border:1px solid var(--line);border-radius:10px}.search-box label{margin-bottom:6px}.search-results{margin-top:8px}.search-result{padding:10px;border:1px solid var(--line);border-radius:9px;background:#fff;margin-top:7px}.search-result-head{display:flex;justify-content:space-between;gap:10px;align-items:center}.search-result small{display:block;color:var(--muted);margin-top:4px;line-height:1.35}.resident-suggestions{margin-top:6px}.resident-chip{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 9px;background:var(--soft);border:1px solid var(--line);border-radius:7px;margin-top:5px;font-size:12px}.resident-chip button{padding:5px 8px;font-size:11px}.resident-list{margin-top:8px;max-height:190px;overflow:auto}.resident-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px;border-bottom:1px solid var(--line);font-size:12px}.resident-row:last-child{border-bottom:0}.resident-row small{display:block;color:var(--muted);margin-top:2px}.resident-row-actions{display:flex;gap:5px}.resident-row-actions button{padding:5px 8px;font-size:11px}.resident-admin{margin-bottom:0}.resident-form{margin-top:10px}.admin-panel{display:none;margin-top:12px}.admin-panel.visible{display:block}.admin-gate{margin-top:14px;padding:11px;background:#F8FBFC;border:1px solid var(--line);border-radius:10px}.admin-gate .actions{margin-top:8px}.admin-title{display:flex;justify-content:space-between;align-items:center;gap:8px}.admin-title h3{margin:0;color:var(--navy);font-size:14px}
 @media(max-width:900px){.grid{grid-template-columns:1fr}} @media(max-width:600px){.row{grid-template-columns:1fr}.parking{grid-template-columns:repeat(3,1fr)}.brand{align-items:flex-start;flex-direction:column}.item-head{flex-direction:column}}
-</style>
+.modal-scan{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;z-index:9999;padding:18px}.modal-scan.visible{display:flex}.scan-card{width:min(520px,100%);background:#fff;border-radius:16px;padding:16px;box-shadow:0 18px 60px rgba(0,0,0,.3)}.scan-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.scan-close{border:0;background:#eee;border-radius:9px;padding:8px 11px;cursor:pointer}.scan-card video{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:12px;background:#111}.scan-status{margin:10px 0;padding:10px;border-radius:10px;background:#f3f6f8;font-size:14px}.scan-actions{display:flex;gap:8px}.scan-actions button{flex:1}.scan-note{font-size:12px;color:#68737d;margin-top:10px;line-height:1.35}</style>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 </head>
 <body>
 <header>
   <div class="brand">
-    <div><h1>TECCHNEX · CONTROL DE ACCESO</h1><small>CAM-ACCESO-00D · Base de residentes</small></div>
-    <button class="btn-light" onclick="limpiar()">Nueva visita</button>
+    <div><h1>TECCHNEX · CONTROL DE ACCESO</h1><small>CAM-ACCESO-00H · Lectura de documento</small></div>
+    <!-- CAM-ACCESO-00F-CAMBIO-01: recordatorio operativo de visitantes pendientes de salida. -->
+    <div class="brand-actions">
+      <button id="btnRecordatorioSalidas" class="btn-reminder no-pending" onclick="irAPendientes()" aria-live="polite">🔔 Verificar salidas</button>
+      <button class="btn-light" onclick="limpiar()">Nueva visita</button>
+    </div>
   </div>
 </header>
 
@@ -49,7 +55,7 @@ button{border:0;border-radius:8px;padding:9px 12px;font-weight:800;cursor:pointe
       <h2>Registrar visitante</h2>
 
       <div class="section-title">1. Identificación</div>
-      <div class="field"><label>Número de cédula</label><div class="scanbar"><input id="cedula" placeholder="Escanear o digitar documento"><button class="btn-alt" onclick="simularEscaneo()">Escanear</button></div></div>
+      <div class="field"><label>Número de cédula</label><div class="scanbar"><input id="cedula" placeholder="Escanear o digitar documento" oninput="buscarVisitanteFrecuente()"><button class="btn-alt" onclick="abrirEscanerDocumento()">📷 Escanear</button><button class="btn-light" onclick="document.getElementById('capturaDocumentoMovil').click()">📱 Foto</button><input id="capturaDocumentoMovil" type="file" accept="image/*" capture="environment" style="display:none" onchange="procesarFotoDocumento(event)"></div><div id="visitanteFrecuente" class="frequent-box" style="display:none"></div></div>
       <div class="row">
         <div class="field"><label>Nombres completos</label><input id="nombre" placeholder="Nombre del visitante"></div>
         <div class="field"><label>Número de acompañantes</label><input id="acompanantes" type="number" min="0" value="0"></div>
@@ -119,7 +125,7 @@ button{border:0;border-radius:8px;padding:9px 12px;font-weight:800;cursor:pointe
         <div id="resultadosSalida" class="search-results"></div>
       </div>
 
-      <div class="section-title">Visitantes pendientes de salida</div>
+      <div id="seccionPendientes" class="section-title">Visitantes pendientes de salida</div>
       <!-- CAM-ACCESO-00B-CAMBIO-01: el panel operativo prioriza las salidas pendientes. -->
       <div id="listaSalidas" class="list"></div>
 
@@ -135,12 +141,17 @@ button{border:0;border-radius:8px;padding:9px 12px;font-weight:800;cursor:pointe
 /* CAM-ACCESO-00B-CAMBIO-01
    Prioridad funcional: pendientes de salida + temporizador de 20 min para domiciliarios + alerta visual. */
 
-const visitantes = [
-  {id:1,nombre:'María López',tipo:'Visita',destino:'Apto 502',autoriza:'Carlos López',ingreso:Date.now()-37*60000,placa:'',celda:'',salio:false},
-  {id:2,nombre:'Andrés Pérez',tipo:'Domiciliario',destino:'Apto 1103',autoriza:'Laura Gómez',ingreso:Date.now()-20*60000-12*1000,placa:'ABC123',celda:'V-03',salio:false},
-  {id:3,nombre:'ServiExpress',tipo:'Proveedor',destino:'Administración',autoriza:'Administración',ingreso:Date.now()-52*60000,placa:'XYZ987',celda:'V-01',salio:false}
+// CAM-ACCESO-00G-CAMBIO-01: historial operativo local para reutilizar datos de visitantes frecuentes.
+const VISITANTES_KEY='tecchnex_cam_acceso_visitantes_v1';
+const visitantesDemo=[
+  {id:1,nombre:'María López',cedula:'',tipo:'Visita',destino:'Apto 502',autoriza:'Carlos López',ingreso:Date.now()-37*60000,placa:'',celda:'',salio:false},
+  {id:2,nombre:'Andrés Pérez',cedula:'',tipo:'Domiciliario',destino:'Apto 1103',autoriza:'Laura Gómez',ingreso:Date.now()-20*60000-12*1000,placa:'ABC123',celda:'V-03',salio:false},
+  {id:3,nombre:'ServiExpress',cedula:'',tipo:'Proveedor',destino:'Administración',autoriza:'Administración',ingreso:Date.now()-52*60000,placa:'XYZ987',celda:'V-01',salio:false}
 ];
-let nextId=4;
+let visitantes=JSON.parse(localStorage.getItem(VISITANTES_KEY)||'null');
+if(!Array.isArray(visitantes)||!visitantes.length) visitantes=visitantesDemo;
+let nextId=visitantes.reduce((max,v)=>Math.max(max,Number(v.id)||0),0)+1;
+function guardarVisitantes(){ localStorage.setItem(VISITANTES_KEY,JSON.stringify(visitantes)); }
 
 // CAM-ACCESO-00D-CAMBIO-02: base de residentes local para los equipos de la copropiedad.
 const RESIDENTES_KEY='tecchnex_cam_acceso_residentes';
@@ -320,9 +331,98 @@ function importarResidentes(event){
 
 
 
-function simularEscaneo(){
-  document.getElementById('cedula').value='1030000000';
-  document.getElementById('nombre').value='VISITANTE DEMOSTRACIÓN';
+// CAM-ACCESO-00G-CAMBIO-02: búsqueda por cédula para reutilizar visitantes frecuentes.
+function buscarVisitanteFrecuente(){
+  const cedula=normalizarTexto(document.getElementById('cedula').value).replace(/\s+/g,'');
+  const box=document.getElementById('visitanteFrecuente');
+  if(!cedula){box.style.display='none';box.innerHTML='';return;}
+  const coincidencias=visitantes.filter(v=>String(v.cedula||'').replace(/\s+/g,'')===cedula && v.nombre);
+  if(!coincidencias.length){box.style.display='none';box.innerHTML='';return;}
+  const ultimo=coincidencias.sort((a,b)=>Number(b.ingreso)-Number(a.ingreso))[0];
+  box.innerHTML=`<strong>👤 Visitante frecuente encontrado</strong><small>${escapeHtml(ultimo.nombre)} · Última visita: ${escapeHtml(ultimo.destino)} · ${new Date(ultimo.ingreso).toLocaleDateString('es-CO')}</small><button class="btn-light" onclick="usarVisitanteFrecuente(${Number(ultimo.id)})">Usar estos datos</button>`;
+  box.style.display='block';
+}
+
+function usarVisitanteFrecuente(id){
+  const v=visitantes.find(x=>Number(x.id)===Number(id));
+  if(!v)return;
+  document.getElementById('cedula').value=v.cedula||'';
+  document.getElementById('nombre').value=v.nombre||'';
+  document.getElementById('destino').value=v.destino||'';
+  document.getElementById('autoriza').value=v.autoriza||'';
+  document.getElementById('tipo').value=v.tipo||'Visita';
+  document.getElementById('placa').value=v.placa||'';
+  document.getElementById('celda').value='';
+  document.getElementById('visitanteFrecuente').innerHTML='<strong>✓ Datos recuperados.</strong><small>Verifique apartamento, autorización y vehículo antes de registrar el nuevo ingreso.</small>';
+}
+
+let streamDocumento=null;
+async function abrirEscanerDocumento(){
+  const modal=document.getElementById('modalEscaner'); const video=document.getElementById('videoDocumento');
+  modal.classList.add('visible'); modal.setAttribute('aria-hidden','false');
+  document.getElementById('estadoEscaner').textContent='Solicitando cámara…';
+  try{
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error('Cámara no disponible');
+    streamDocumento=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},audio:false});
+    video.srcObject=streamDocumento;
+    document.getElementById('estadoEscaner').textContent='Centre el documento y pulse Capturar.';
+  }catch(e){document.getElementById('estadoEscaner').textContent='No fue posible abrir la cámara. Puede cerrar esta ventana y digitar la cédula manualmente.';}
+}
+function cerrarEscanerDocumento(){
+  if(streamDocumento){streamDocumento.getTracks().forEach(t=>t.stop());streamDocumento=null;}
+  const video=document.getElementById('videoDocumento'); if(video) video.srcObject=null;
+  document.getElementById('modalEscaner').classList.remove('visible'); document.getElementById('modalEscaner').setAttribute('aria-hidden','true');
+}
+function extraerCedulaOCR(texto){
+  const candidatos=[]; const re=/\b\d[\d .-]{5,11}\d\b/g; let m;
+  while((m=re.exec(texto))!==null){const n=m[0].replace(/\D/g,'');if(n.length>=7&&n.length<=12)candidatos.push(n);}
+  for(const linea of texto.split(/\n+/)){if(/(cedula|cédula|documento|identificaci[oó]n|cc\.?)/i.test(linea)){for(const x of (linea.match(/\d[\d .-]{6,11}\d/g)||[])){const n=x.replace(/\D/g,'');if(n.length>=7&&n.length<=12)candidatos.unshift(n);}}}
+  return [...new Set(candidatos)][0]||'';
+}
+function extraerNombreOCR(texto,cedula){
+  const lineas=texto.split(/\n+/).map(x=>x.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñÜü' -]/g,' ').replace(/\s+/g,' ').trim()).filter(Boolean);
+  for(const linea of lineas){if(cedula&&linea.includes(cedula))continue;if(/^(apellidos?|nombres?|name|surname)\b/i.test(linea)){const v=linea.replace(/^(apellidos?|nombres?|name|surname)\s*[:.-]?\s*/i,'').trim();if(v.length>=4)return v;}}
+  return '';
+}
+async function procesarFotoDocumento(event){
+  const file=event.target.files&&event.target.files[0];
+  if(!file)return;
+  const estado=document.getElementById('estadoEscaner');
+  estado.textContent='Leyendo fotografía del documento…';
+  try{
+    if(!window.Tesseract)throw new Error('OCR no disponible');
+    const img=new Image();
+    const url=URL.createObjectURL(file);
+    await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=reject;img.src=url;});
+    const canvas=document.getElementById('canvasDocumento');
+    const maxW=1800, scale=Math.min(1,maxW/img.naturalWidth);
+    canvas.width=Math.round(img.naturalWidth*scale); canvas.height=Math.round(img.naturalHeight*scale);
+    const ctx=canvas.getContext('2d',{willReadFrequently:true}); ctx.drawImage(img,0,0,canvas.width,canvas.height);
+    URL.revokeObjectURL(url);
+    const r=await Tesseract.recognize(canvas,'spa',{logger:m=>{if(m.status==='recognizing text'&&m.progress)estado.textContent=`Leyendo documento… ${Math.round(m.progress*100)}%`;}});
+    const texto=r.data.text||'', cedula=extraerCedulaOCR(texto), nombre=extraerNombreOCR(texto,cedula);
+    if(!cedula){estado.textContent='No pude identificar el número. Tome otra foto con buena luz o digítelo manualmente.';return;}
+    document.getElementById('cedula').value=cedula;
+    if(nombre)document.getElementById('nombre').value=nombre;
+    buscarVisitanteFrecuente();
+    cerrarEscanerDocumento();
+  }catch(e){estado.textContent='No fue posible leer el documento. Intente otra foto o digite la cédula manualmente.';}
+  finally{event.target.value='';document.getElementById('canvasDocumento').width=0;document.getElementById('canvasDocumento').height=0;}
+}
+
+async function capturarDocumento(){
+  const video=document.getElementById('videoDocumento'),canvas=document.getElementById('canvasDocumento'),estado=document.getElementById('estadoEscaner');
+  if(!video.videoWidth){estado.textContent='La cámara aún no está lista. Espere un momento.';return;}
+  canvas.width=video.videoWidth;canvas.height=video.videoHeight;canvas.getContext('2d').drawImage(video,0,0);estado.textContent='Leyendo documento…';
+  try{
+    if(window.BarcodeDetector){try{const d=new BarcodeDetector({formats:['pdf417','qr_code']});const codes=await d.detect(canvas);const bruto=codes.map(c=>c.rawValue||'').join('\n');const ced=extraerCedulaOCR(bruto)||((bruto.match(/\d{7,12}/)||[])[0]||'');if(ced){document.getElementById('cedula').value=ced;buscarVisitanteFrecuente();cerrarEscanerDocumento();return;}}catch(_e){}}
+    if(!window.Tesseract)throw new Error('OCR no disponible');
+    const r=await Tesseract.recognize(canvas,'spa',{logger:m=>{if(m.status==='recognizing text'&&m.progress)estado.textContent=`Leyendo documento… ${Math.round(m.progress*100)}%`;}});
+    const texto=r.data.text||'',cedula=extraerCedulaOCR(texto),nombre=extraerNombreOCR(texto,cedula);
+    if(!cedula){estado.textContent='No pude identificar el número. Intente nuevamente o digítelo manualmente.';return;}
+    document.getElementById('cedula').value=cedula;if(nombre)document.getElementById('nombre').value=nombre;buscarVisitanteFrecuente();cerrarEscanerDocumento();
+  }catch(e){estado.textContent='No fue posible leer el documento. Puede intentarlo nuevamente o digitar los datos manualmente.';}
+  finally{canvas.width=0;canvas.height=0;}
 }
 
 function registrar(){
@@ -332,11 +432,12 @@ function registrar(){
   if(!n||!d||!a){alert('Complete visitante, destino y persona que autoriza.');return;}
 
   const item={
-    id:nextId++, nombre:n, tipo:document.getElementById('tipo').value, destino:d,
+    id:nextId++, cedula:document.getElementById('cedula').value.trim(), nombre:n, tipo:document.getElementById('tipo').value, destino:d,
     autoriza:a, ingreso:Date.now(), placa:document.getElementById('placa').value.trim(),
     celda:document.getElementById('celda').value, salio:false
   };
   visitantes.push(item);
+  guardarVisitantes();
   document.getElementById('total').textContent=Number(document.getElementById('total').textContent)+1;
   // CAM-ACCESO-00C-CAMBIO-02: después de registrar el ingreso se limpian los campos
   // para dejar la pantalla lista para el siguiente visitante, conservando la confirmación.
@@ -350,6 +451,7 @@ function registrarSalida(id){
   const item=visitantes.find(v=>v.id===id);
   if(!item||item.salio)return;
   item.salio=true;
+  guardarVisitantes();
   const ingresoBase=Number(document.getElementById('total').textContent);
   // El contador del día no disminuye; la salida solo cierra la permanencia.
   document.getElementById('status').textContent=`Salida registrada: ${item.nombre}.`;
@@ -367,10 +469,30 @@ function esAlerta(item,now=Date.now()){
   return item.tipo==='Domiciliario' && (now-item.ingreso)>=20*60000 && !item.salio;
 }
 
+function actualizarRecordatorioSalidas(cantidad){
+  const boton=document.getElementById('btnRecordatorioSalidas');
+  if(!boton)return;
+  const hayPendientes=cantidad>0;
+  boton.classList.toggle('has-pending',hayPendientes);
+  boton.classList.toggle('no-pending',!hayPendientes);
+  boton.textContent=hayPendientes?`⚠️ ${cantidad} pendiente${cantidad===1?'':'s'} de salida`:'🔔 Verificar salidas';
+  boton.setAttribute('aria-label',hayPendientes?`${cantidad} visitante${cantidad===1?'':'s'} pendiente${cantidad===1?'':'s'} de salida`:'Verificar visitantes pendientes de salida');
+}
+
+function irAPendientes(){
+  const seccion=document.getElementById('seccionPendientes');
+  if(seccion){
+    seccion.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  const buscador=document.getElementById('buscarApartamento');
+  if(buscador) setTimeout(()=>buscador.focus(),350);
+}
+
 function render(){
   const ahora=Date.now();
   const activos=visitantes.filter(v=>!v.salio);
   const alertados=activos.filter(v=>esAlerta(v,ahora));
+  actualizarRecordatorioSalidas(activos.length);
   document.getElementById('pendientes').textContent=activos.length;
   document.getElementById('alertas').textContent=alertados.length;
   document.getElementById('dentro').textContent=activos.length+4;
@@ -442,6 +564,8 @@ function limpiarFormularioIngreso(){
   document.getElementById('tipo').value='Visita';
   document.getElementById('medio').value='Citófono';
   document.getElementById('celda').value='';
+  const frecuente=document.getElementById('visitanteFrecuente');
+  if(frecuente){frecuente.style.display='none';frecuente.innerHTML='';}
 }
 
 function limpiar(){
@@ -455,5 +579,7 @@ function escapeHtml(value){return String(value).replace(/[&<>'"]/g,c=>({'&':'&am
 render();
 setInterval(render,1000);
 </script>
+<!-- CAM-ACCESO-00H: imagen temporal solo en memoria; no se guarda la fotografía del documento. -->
+<div id="modalEscaner" class="modal-scan" aria-hidden="true"><div class="scan-card"><div class="scan-head"><strong>📷 Escanear documento</strong><button class="scan-close" onclick="cerrarEscanerDocumento()">✕</button></div><video id="videoDocumento" autoplay playsinline muted></video><canvas id="canvasDocumento" style="display:none"></canvas><div id="estadoEscaner" class="scan-status">Centre el documento y pulse Capturar.</div><div class="scan-actions"><button class="btn-main" onclick="capturarDocumento()">Capturar</button><button class="btn-light" onclick="cerrarEscanerDocumento()">Cancelar</button></div><div class="scan-note">La imagen se utiliza temporalmente para extraer datos y no se almacena como fotografía del documento.</div></div></div>
 </body>
 </html>
