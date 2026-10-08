@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TECCHNEX · CAM-ACCESO-00B · Pendientes de salida</title>
+<style>
+:root{--navy:#123B5D;--cyan:#0AA7C0;--bg:#F4F7F9;--line:#D5E0E6;--soft:#EAF3F6;--text:#163247;--muted:#687784;--ok:#2E7D5B;--warn:#B57B10;--danger:#B23A48;--danger-bg:#FFF0F2;--orange:#C76D16}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
+header{background:#fff;border-bottom:1px solid var(--line);padding:16px 20px;position:sticky;top:0;z-index:10}
+.brand{max-width:1150px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:16px}.brand h1{margin:0;color:var(--navy);font-size:23px}.brand small{color:var(--cyan);font-weight:700}
+.wrap{max-width:1150px;margin:18px auto;padding:0 16px}.grid{display:grid;grid-template-columns:1.15fr 1fr;gap:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;box-shadow:0 3px 10px rgba(18,59,93,.05)}
+.card h2{margin:0 0 14px;color:var(--navy);font-size:18px}.section-title{margin:14px 0 8px;font-size:13px;font-weight:800;color:var(--navy);text-transform:uppercase}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{margin-bottom:10px}
+label{display:block;font-size:12px;font-weight:700;margin-bottom:5px;color:var(--muted)}
+input,select{width:100%;padding:10px 11px;border:1px solid var(--line);border-radius:8px;background:#fff;font-size:14px;color:var(--text)}
+input:focus,select:focus{outline:2px solid rgba(10,167,192,.18);border-color:var(--cyan)}
+.scanbar{display:grid;grid-template-columns:1fr auto;gap:8px}
+button{border:0;border-radius:8px;padding:9px 12px;font-weight:800;cursor:pointer}.btn-main{background:var(--navy);color:#fff}.btn-alt{background:var(--cyan);color:#fff}.btn-light{background:var(--soft);color:var(--navy)}.btn-exit{background:#fff;border:1px solid #D7A1A8;color:var(--danger)}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:12px;text-align:center}.stat strong{display:block;font-size:25px;color:var(--navy)}.stat span{font-size:11px;font-weight:700;color:var(--muted)}
+.stat.alert-stat{background:var(--danger-bg);border-color:#E6B9C0}.stat.alert-stat strong{color:var(--danger)}
+.list{border:1px solid var(--line);border-radius:10px;overflow:hidden}.item{padding:12px;border-bottom:1px solid var(--line);background:#fff}.item:last-child{border-bottom:0}.item.alert{background:var(--danger-bg);border-left:5px solid var(--danger)}
+.item-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.item b{color:var(--navy)}.item small{display:block;color:var(--muted);margin-top:3px;line-height:1.35}.item-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px}
+.timer{font-size:13px;font-weight:900;padding:4px 8px;border-radius:999px;background:#F0F8F3;color:var(--ok)}.timer.warn{background:#FFF4DB;color:var(--warn)}.timer.alert{background:#FADCE1;color:var(--danger)}
+.badge{display:inline-block;padding:3px 8px;border-radius:999px;font-size:10px;font-weight:800}.badge.type{background:#EAF3F6;color:var(--navy)}.badge.alert{background:#FADCE1;color:var(--danger)}
+.alert-banner{display:none;margin:12px 0 0;padding:11px 12px;border-radius:9px;background:var(--danger-bg);border:1px solid #E6B9C0;color:var(--danger);font-size:12px;font-weight:800}
+.alert-banner.visible{display:block;animation:pulse 1.8s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(178,58,72,.08)}50%{box-shadow:0 0 0 5px rgba(178,58,72,.08)}}
+.parking{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.cell{padding:10px 4px;text-align:center;border-radius:7px;border:1px solid var(--line);font-weight:800;font-size:12px}.free{background:#F0F8F3;color:var(--ok)}.busy{background:#FCEDEF;color:var(--danger)}
+.note{margin-top:10px;padding:10px;border-left:4px solid var(--cyan);background:var(--soft);color:var(--muted);font-size:12px}
+.status{margin-top:10px;padding:10px;border-radius:8px;background:#F0F8F3;color:var(--ok);font-size:12px;font-weight:700;display:none}
+.empty{padding:16px;text-align:center;color:var(--muted);font-size:13px}.search-box{margin:12px 0 10px;padding:11px;background:#F8FBFC;border:1px solid var(--line);border-radius:10px}.search-box label{margin-bottom:6px}.search-results{margin-top:8px}.search-result{padding:10px;border:1px solid var(--line);border-radius:9px;background:#fff;margin-top:7px}.search-result-head{display:flex;justify-content:space-between;gap:10px;align-items:center}.search-result small{display:block;color:var(--muted);margin-top:4px;line-height:1.35}.resident-suggestions{margin-top:6px}.resident-chip{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 9px;background:var(--soft);border:1px solid var(--line);border-radius:7px;margin-top:5px;font-size:12px}.resident-chip button{padding:5px 8px;font-size:11px}.resident-list{margin-top:8px;max-height:190px;overflow:auto}.resident-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px;border-bottom:1px solid var(--line);font-size:12px}.resident-row:last-child{border-bottom:0}.resident-row small{display:block;color:var(--muted);margin-top:2px}.resident-row-actions{display:flex;gap:5px}.resident-row-actions button{padding:5px 8px;font-size:11px}.resident-admin{margin-bottom:0}.resident-form{margin-top:10px}.admin-panel{display:none;margin-top:12px}.admin-panel.visible{display:block}.admin-gate{margin-top:14px;padding:11px;background:#F8FBFC;border:1px solid var(--line);border-radius:10px}.admin-gate .actions{margin-top:8px}.admin-title{display:flex;justify-content:space-between;align-items:center;gap:8px}.admin-title h3{margin:0;color:var(--navy);font-size:14px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}} @media(max-width:600px){.row{grid-template-columns:1fr}.parking{grid-template-columns:repeat(3,1fr)}.brand{align-items:flex-start;flex-direction:column}.item-head{flex-direction:column}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <div><h1>TECCHNEX · CONTROL DE ACCESO</h1><small>CAM-ACCESO-00D · Base de residentes</small></div>
+    <button class="btn-light" onclick="limpiar()">Nueva visita</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="grid">
+    <section class="card">
+      <h2>Registrar visitante</h2>
+
+      <div class="section-title">1. Identificación</div>
+      <div class="field"><label>Número de cédula</label><div class="scanbar"><input id="cedula" placeholder="Escanear o digitar documento"><button class="btn-alt" onclick="simularEscaneo()">Escanear</button></div></div>
+      <div class="row">
+        <div class="field"><label>Nombres completos</label><input id="nombre" placeholder="Nombre del visitante"></div>
+        <div class="field"><label>Número de acompañantes</label><input id="acompanantes" type="number" min="0" value="0"></div>
+      </div>
+
+      <div class="section-title">2. Tipo y destino</div>
+      <div class="row">
+        <div class="field"><label>Tipo de visitante</label><select id="tipo"><option>Visita</option><option>Empleada doméstica</option><option>Domiciliario</option><option>Mensajero</option><option>Visitador médico</option><option>Proveedor</option><option>Otro</option></select></div>
+        <div class="field"><label>Apartamento / residencia</label><input id="destino" placeholder="Ej. Torre 2 · Apto 402" oninput="buscarResidentesDesdeDestino()">
+          <div id="residentesSugeridos" class="resident-suggestions"></div></div>
+      </div>
+      <div class="row">
+        <div class="field"><label>Persona que autoriza</label><input id="autoriza" placeholder="Residente / administración"></div>
+        <div class="field"><label>Medio de autorización</label><select id="medio"><option>Citófono</option><option>Correo electrónico</option><option>Viva voz</option></select></div>
+      </div>
+
+      <div class="section-title">3. Vehículo y estacionamiento</div>
+      <div class="row">
+        <div class="field"><label>Placa (si aplica)</label><input id="placa" placeholder="ABC123"></div>
+        <div class="field"><label>Celda disponible</label><select id="celda"><option value="">No asignar</option><option>V-01</option><option>V-02</option><option>V-03</option><option>V-04</option><option>V-05</option><option>V-06</option><option>V-07</option><option>V-08</option></select></div>
+      </div>
+      <div class="note"><strong>Domiciliarios:</strong> el sistema controla un máximo de <strong>20 minutos</strong> desde el ingreso. Si no se registra la salida, se genera una alerta visual al vigilante.</div>
+      <div class="actions"><button class="btn-main" onclick="registrar()">Registrar ingreso</button><button class="btn-light" onclick="limpiar()">Limpiar</button></div>
+      <div id="status" class="status">Ingreso registrado correctamente.</div>
+
+      <!-- CAM-ACCESO-00E-CAMBIO-01: administración de residentes protegida y separada de la operación de portería. -->
+      <div class="admin-gate">
+        <div class="admin-title"><strong>Administración de residentes</strong><button class="btn-light" onclick="abrirAdministracion()">🔐 Abrir administración</button></div>
+        <div class="note">La base completa permanece oculta durante la operación normal. Solo Administración puede actualizarla.</div>
+      </div>
+
+      <div id="panelAdministracion" class="admin-panel">
+        <div class="search-box resident-admin">
+          <div class="admin-title"><h3>Base operativa de residentes</h3><button class="btn-light" onclick="cerrarAdministracion()">Cerrar</button></div>
+          <label for="buscarResidenteAdmin">Buscar apartamento o residente</label>
+          <input id="buscarResidenteAdmin" placeholder="Ej. Torre 2 · Apto 402" oninput="renderResidentes()">
+          <div id="listaResidentesAdmin" class="resident-list"></div>
+          <div class="resident-form">
+            <input id="residenteId" type="hidden">
+            <div class="row"><div class="field"><label>Apartamento</label><input id="nuevoApto" placeholder="Torre 2 · Apto 402"></div><div class="field"><label>Nombre del residente</label><input id="nuevoResidente" placeholder="Nombre completo"></div></div>
+            <div class="row"><div class="field"><label>Teléfono (opcional)</label><input id="nuevoTelefono" placeholder="Teléfono de contacto"></div><div class="field"><label>Estado</label><select id="nuevoEstado"><option>Activo</option><option>Inactivo</option></select></div></div>
+            <div class="actions"><button class="btn-main" onclick="guardarResidente()">Guardar residente</button><button class="btn-light" onclick="limpiarResidenteForm()">Nuevo</button><button class="btn-alt" onclick="exportarResidentes()">Exportar base</button><button class="btn-light" onclick="document.getElementById('archivoResidentes').click()">Importar Excel / CSV</button><button class="btn-light" onclick="cambiarClaveAdministracion()">Cambiar contraseña</button></div>
+            <input id="archivoResidentes" type="file" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv" style="display:none" onchange="importarResidentes(event)">
+            <div class="note"><strong>Fuente administrativa:</strong> Excel de la copropiedad. La aplicación conserva solo los datos básicos necesarios para operar en portería: apartamento, residente y estado; el teléfono es opcional.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="card">
+      <h2>Vista del operador</h2>
+      <div class="stats">
+        <div class="stat"><strong id="total">12</strong><span>Ingresos del día</span></div>
+        <div class="stat"><strong id="pendientes">3</strong><span>Pendientes de salida</span></div>
+        <div class="stat"><strong id="dentro">7</strong><span>Actualmente dentro</span></div>
+        <div class="stat alert-stat"><strong id="alertas">1</strong><span>Alertas activas</span></div>
+      </div>
+
+      <div id="alertBanner" class="alert-banner">⚠️ Hay domiciliarios que superaron los 20 minutos y requieren verificación de salida.</div>
+
+      <div class="section-title">Buscar visitante para registrar salida</div>
+      <!-- CAM-ACCESO-00C-CAMBIO-01: búsqueda operativa por apartamento para localizar rápidamente
+           al visitante que debe registrar salida, sin reemplazar la lista general. -->
+      <div class="search-box">
+        <label for="buscarApartamento">Apartamento donde estaba el visitante</label>
+        <input id="buscarApartamento" placeholder="Ej. Torre 2 · Apto 402" oninput="buscarSalidasPorApartamento()">
+        <div id="resultadosSalida" class="search-results"></div>
+      </div>
+
+      <div class="section-title">Visitantes pendientes de salida</div>
+      <!-- CAM-ACCESO-00B-CAMBIO-01: el panel operativo prioriza las salidas pendientes. -->
+      <div id="listaSalidas" class="list"></div>
+
+      <div class="section-title">Estacionamiento de visitantes</div>
+      <div id="parking" class="parking"></div>
+      <div class="note">Registrar la salida cierra el ciclo de permanencia y libera automáticamente la celda asignada.</div>
+    </aside>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script>
+/* CAM-ACCESO-00B-CAMBIO-01
+   Prioridad funcional: pendientes de salida + temporizador de 20 min para domiciliarios + alerta visual. */
+
+const visitantes = [
+  {id:1,nombre:'María López',tipo:'Visita',destino:'Apto 502',autoriza:'Carlos López',ingreso:Date.now()-37*60000,placa:'',celda:'',salio:false},
+  {id:2,nombre:'Andrés Pérez',tipo:'Domiciliario',destino:'Apto 1103',autoriza:'Laura Gómez',ingreso:Date.now()-20*60000-12*1000,placa:'ABC123',celda:'V-03',salio:false},
+  {id:3,nombre:'ServiExpress',tipo:'Proveedor',destino:'Administración',autoriza:'Administración',ingreso:Date.now()-52*60000,placa:'XYZ987',celda:'V-01',salio:false}
+];
+let nextId=4;
+
+// CAM-ACCESO-00D-CAMBIO-02: base de residentes local para los equipos de la copropiedad.
+const RESIDENTES_KEY='tecchnex_cam_acceso_residentes';
+let residentes=JSON.parse(localStorage.getItem(RESIDENTES_KEY)||'[]');
+
+function guardarBaseResidentes(){ localStorage.setItem(RESIDENTES_KEY,JSON.stringify(residentes)); }
+
+function buscarResidentesDesdeDestino(){
+  const termino=normalizarTexto(document.getElementById('destino').value);
+  const box=document.getElementById('residentesSugeridos');
+  if(!termino){box.innerHTML='';return;}
+  const encontrados=residentes.filter(r=>r.estado==='Activo' && (normalizarTexto(r.apartamento).includes(termino)||normalizarTexto(r.nombre).includes(termino)));
+  box.innerHTML=encontrados.slice(0,6).map(r=>`<div class="resident-chip"><span><b>${escapeHtml(r.nombre)}</b> · ${escapeHtml(r.apartamento)}${r.telefono?' · '+escapeHtml(r.telefono):''}</span><button class="btn-light" onclick="seleccionarResidente('${String(r.id).replace(/'/g,"\\'")}')">Usar</button></div>`).join('');
+}
+
+function seleccionarResidente(id){
+  const r=residentes.find(x=>String(x.id)===String(id));
+  if(!r)return;
+  document.getElementById('destino').value=r.apartamento;
+  document.getElementById('autoriza').value=r.nombre;
+  document.getElementById('residentesSugeridos').innerHTML=`<div class="resident-chip"><span>Residente seleccionado: <b>${escapeHtml(r.nombre)}</b></span></div>`;
+}
+
+function guardarResidente(){
+  const id=document.getElementById('residenteId').value;
+  const apartamento=document.getElementById('nuevoApto').value.trim();
+  const nombre=document.getElementById('nuevoResidente').value.trim();
+  const telefono=document.getElementById('nuevoTelefono').value.trim();
+  const estado=document.getElementById('nuevoEstado').value;
+  if(!apartamento||!nombre){alert('Complete apartamento y nombre del residente.');return;}
+  if(id){
+    const r=residentes.find(x=>String(x.id)===String(id));
+    if(r){r.apartamento=apartamento;r.nombre=nombre;r.telefono=telefono;r.estado=estado;}
+  }else{
+    residentes.push({id:'r-'+Date.now()+'-'+Math.random().toString(36).slice(2,7),apartamento,nombre,telefono,estado});
+  }
+  guardarBaseResidentes(); limpiarResidenteForm(); renderResidentes(); buscarResidentesDesdeDestino();
+}
+
+function editarResidente(id){
+  const r=residentes.find(x=>String(x.id)===String(id)); if(!r)return;
+  document.getElementById('residenteId').value=r.id; document.getElementById('nuevoApto').value=r.apartamento; document.getElementById('nuevoResidente').value=r.nombre; document.getElementById('nuevoTelefono').value=r.telefono||''; document.getElementById('nuevoEstado').value=r.estado||'Activo';
+}
+
+function eliminarResidente(id){
+  const r=residentes.find(x=>String(x.id)===String(id)); if(!r)return;
+  if(!confirm('¿Desea eliminar este residente de la base local?'))return;
+  residentes=residentes.filter(x=>String(x.id)!==String(id)); guardarBaseResidentes(); renderResidentes(); buscarResidentesDesdeDestino();
+}
+
+function limpiarResidenteForm(){['residenteId','nuevoApto','nuevoResidente','nuevoTelefono'].forEach(id=>document.getElementById(id).value='');document.getElementById('nuevoEstado').value='Activo';}
+
+function renderResidentes(){
+  const termino=normalizarTexto(document.getElementById('buscarResidenteAdmin').value);
+  const encontrados=residentes.filter(r=>!termino || normalizarTexto(r.apartamento).includes(termino)||normalizarTexto(r.nombre).includes(termino));
+  const box=document.getElementById('listaResidentesAdmin');
+  if(!encontrados.length){box.innerHTML='<div class="empty">No hay residentes registrados en esta base local.</div>';return;}
+  box.innerHTML=encontrados.map(r=>`<div class="resident-row"><div><b>${escapeHtml(r.nombre)}</b><small>${escapeHtml(r.apartamento)}${r.telefono?' · '+escapeHtml(r.telefono):''} · ${escapeHtml(r.estado||'Activo')}</small></div><div class="resident-row-actions"><button class="btn-light" onclick="editarResidente('${String(r.id).replace(/'/g,"\\'")}')">Editar</button><button class="btn-exit" onclick="eliminarResidente('${String(r.id).replace(/'/g,"\\'")}')">Eliminar</button></div></div>`).join('');
+}
+
+const ADMIN_CLAVE_KEY='tecchnex_cam_acceso_admin_clave_v1';
+
+async function hashTexto(texto){
+  const data=new TextEncoder().encode(texto);
+  const hash=await crypto.subtle.digest('SHA-256',data);
+  return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+async function establecerClaveAdministracion(){
+  const clave=prompt('Cree una contraseña para Administración (mínimo 6 caracteres):');
+  if(clave===null)return false;
+  if(clave.length<6){alert('La contraseña debe tener mínimo 6 caracteres.');return false;}
+  localStorage.setItem(ADMIN_CLAVE_KEY,await hashTexto(clave));
+  return true;
+}
+
+async function verificarClaveAdministracion(){
+  let guardada=localStorage.getItem(ADMIN_CLAVE_KEY);
+  if(!guardada){
+    const creada=await establecerClaveAdministracion();
+    if(!creada)return false;
+    guardada=localStorage.getItem(ADMIN_CLAVE_KEY);
+    alert('Contraseña de Administración creada correctamente.');
+  }
+  const clave=prompt('Contraseña de Administración:');
+  if(clave===null)return false;
+  const valida=(await hashTexto(clave))===guardada;
+  if(!valida)alert('Contraseña incorrecta.');
+  return valida;
+}
+
+async function abrirAdministracion(){
+  if(!(await verificarClaveAdministracion()))return;
+  document.getElementById('panelAdministracion').classList.add('visible');
+  renderResidentes();
+}
+
+function cerrarAdministracion(){
+  document.getElementById('panelAdministracion').classList.remove('visible');
+  limpiarResidenteForm();
+}
+
+async function cambiarClaveAdministracion(){
+  if(!(await verificarClaveAdministracion()))return;
+  await establecerClaveAdministracion();
+  alert('Contraseña actualizada.');
+}
+
+function exportarResidentes(){
+  const filas=residentes.map(r=>({Apartamento:r.apartamento,Residente:r.nombre,Estado:r.estado||'Activo'}));
+  if(window.XLSX){
+    const ws=XLSX.utils.json_to_sheet(filas);
+    const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Residentes');
+    XLSX.writeFile(wb,'TECCHNEX-BASE-RESIDENTES.xlsx');
+  }else{
+    const csv='Apartamento,Residente,Estado\n'+filas.map(r=>[r.Apartamento,r.Residente,r.Estado].map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
+    const blob=new Blob([csv],{type:'text/csv;charset=utf-8'}); const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='TECCHNEX-BASE-RESIDENTES.csv';a.click();
+  }
+}
+
+function obtenerCampoFila(fila,nombres){
+  const claves=Object.keys(fila);
+  const buscadas=nombres.map(normalizarTexto);
+  const clave=claves.find(k=>buscadas.includes(normalizarTexto(k)));
+  return clave?String(fila[clave]??'').trim():'';
+}
+
+function normalizarEstado(valor){
+  const v=normalizarTexto(valor);
+  return ['inactivo','inactiva','no','baja','retirado','retirada'].includes(v)?'Inactivo':'Activo';
+}
+
+function procesarFilasResidentes(filas){
+  const importados=filas.map((r,i)=>({
+    id:'r-import-'+Date.now()+'-'+i,
+    apartamento:obtenerCampoFila(r,['Apartamento','Apto','Unidad','Inmueble','Vivienda']),
+    nombre:obtenerCampoFila(r,['Residente','Nombre','Nombre completo','Propietario','Residente principal']),
+    telefono:obtenerCampoFila(r,['Telefono','Teléfono','Celular','Movil','Móvil']),
+    estado:normalizarEstado(obtenerCampoFila(r,['Estado','Estatus','Activo']))
+  })).filter(r=>r.apartamento&&r.nombre);
+  if(!importados.length)throw new Error('No se encontraron filas válidas.');
+  residentes=importados;
+  guardarBaseResidentes();
+  renderResidentes();
+  buscarResidentesDesdeDestino();
+  alert(`Base importada correctamente: ${importados.length} residentes.`);
+}
+
+function importarResidentes(event){
+  const file=event.target.files[0]; if(!file)return;
+  const nombre=file.name.toLowerCase();
+  if((nombre.endsWith('.xlsx')||nombre.endsWith('.xls')) && !window.XLSX){
+    alert('El lector de Excel no está disponible en este momento. Para importar Excel se requiere conexión para cargar el componente de lectura.');
+    event.target.value=''; return;
+  }
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      if(nombre.endsWith('.csv')){
+        const texto=reader.result;
+        const filas=texto.split(/\r?\n/).filter(Boolean).map(linea=>{
+          const valores=[]; let actual='',enComillas=false;
+          for(let i=0;i<linea.length;i++){const c=linea[i];if(c==='"'){if(enComillas&&linea[i+1]==='"'){actual+='"';i++;}else enComillas=!enComillas;}else if((c===','||c===';')&&!enComillas){valores.push(actual);actual='';}else actual+=c;} valores.push(actual);return valores;
+        });
+        const cab=filas.shift();
+        procesarFilasResidentes(filas.map(v=>Object.fromEntries(cab.map((h,i)=>[h,v[i]||'']))));
+      }else{
+        const wb=XLSX.read(reader.result,{type:'array'});
+        const ws=wb.Sheets[wb.SheetNames[0]];
+        procesarFilasResidentes(XLSX.utils.sheet_to_json(ws,{defval:''}));
+      }
+    }catch(e){alert('No fue posible importar la base. Verifique que tenga columnas como Apartamento, Residente y Estado.');}
+  };
+  if(nombre.endsWith('.csv'))reader.readAsText(file,'UTF-8'); else reader.readAsArrayBuffer(file);
+  event.target.value='';
+}
+
+
+
+function simularEscaneo(){
+  document.getElementById('cedula').value='1030000000';
+  document.getElementById('nombre').value='VISITANTE DEMOSTRACIÓN';
+}
+
+function registrar(){
+  const n=document.getElementById('nombre').value.trim();
+  const d=document.getElementById('destino').value.trim();
+  const a=document.getElementById('autoriza').value.trim();
+  if(!n||!d||!a){alert('Complete visitante, destino y persona que autoriza.');return;}
+
+  const item={
+    id:nextId++, nombre:n, tipo:document.getElementById('tipo').value, destino:d,
+    autoriza:a, ingreso:Date.now(), placa:document.getElementById('placa').value.trim(),
+    celda:document.getElementById('celda').value, salio:false
+  };
+  visitantes.push(item);
+  document.getElementById('total').textContent=Number(document.getElementById('total').textContent)+1;
+  // CAM-ACCESO-00C-CAMBIO-02: después de registrar el ingreso se limpian los campos
+  // para dejar la pantalla lista para el siguiente visitante, conservando la confirmación.
+  limpiarFormularioIngreso();
+  document.getElementById('status').textContent='Ingreso registrado correctamente.';
+  document.getElementById('status').style.display='block';
+  render();
+}
+
+function registrarSalida(id){
+  const item=visitantes.find(v=>v.id===id);
+  if(!item||item.salio)return;
+  item.salio=true;
+  const ingresoBase=Number(document.getElementById('total').textContent);
+  // El contador del día no disminuye; la salida solo cierra la permanencia.
+  document.getElementById('status').textContent=`Salida registrada: ${item.nombre}.`;
+  document.getElementById('status').style.display='block';
+  render();
+}
+
+function formatElapsed(ms){
+  const total=Math.max(0,Math.floor(ms/1000));
+  const h=Math.floor(total/3600),m=Math.floor((total%3600)/60),s=total%60;
+  return h>0?`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`:`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+function esAlerta(item,now=Date.now()){
+  return item.tipo==='Domiciliario' && (now-item.ingreso)>=20*60000 && !item.salio;
+}
+
+function render(){
+  const ahora=Date.now();
+  const activos=visitantes.filter(v=>!v.salio);
+  const alertados=activos.filter(v=>esAlerta(v,ahora));
+  document.getElementById('pendientes').textContent=activos.length;
+  document.getElementById('alertas').textContent=alertados.length;
+  document.getElementById('dentro').textContent=activos.length+4;
+  document.getElementById('alertBanner').classList.toggle('visible',alertados.length>0);
+
+  const lista=document.getElementById('listaSalidas');
+  if(!activos.length){
+    lista.innerHTML='<div class="empty">No hay visitantes pendientes de salida.</div>';
+  }else{
+    activos.sort((a,b)=>a.ingreso-b.ingreso);
+    lista.innerHTML=activos.map(v=>{
+      const alerta=esAlerta(v,ahora);
+      const transcurrido=ahora-v.ingreso;
+      const restante=20*60000-transcurrido;
+      let timer='';
+      if(v.tipo==='Domiciliario'){
+        if(alerta){timer=`<span class="timer alert">🔴 ${formatElapsed(transcurrido)} · EXCEDIDO</span>`;}
+        else if(restante<=5*60000){timer=`<span class="timer warn">🟠 ${formatElapsed(restante)} restantes</span>`;}
+        else{timer=`<span class="timer">🟢 ${formatElapsed(restante)} restantes</span>`;}
+      }else{
+        timer=`<span class="timer warn">En permanencia ${formatElapsed(transcurrido)}</span>`;
+      }
+      return `<div class="item ${alerta?'alert':''}">
+        <div class="item-head"><div><b>${escapeHtml(v.nombre)}</b><small>${escapeHtml(v.destino)} · ${escapeHtml(v.autoriza)}</small></div><span class="badge type">${escapeHtml(v.tipo)}</span></div>
+        <small>Ingreso: ${new Date(v.ingreso).toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'})}${v.placa?' · Placa: '+escapeHtml(v.placa):''}${v.celda?' · Celda: '+escapeHtml(v.celda):''}</small>
+        <div class="item-actions">${timer}${alerta?'<span class="badge alert">⚠️ Verificar salida</span>':''}<button class="btn-exit" onclick="registrarSalida(${v.id})">Registrar salida</button></div>
+      </div>`;
+    }).join('');
+  }
+
+  renderParking();
+}
+
+function normalizarTexto(value){
+  return String(value||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
+}
+
+function buscarSalidasPorApartamento(){
+  const termino=normalizarTexto(document.getElementById('buscarApartamento').value);
+  const contenedor=document.getElementById('resultadosSalida');
+  if(!termino){
+    contenedor.innerHTML='';
+    return;
+  }
+  const encontrados=visitantes.filter(v=>!v.salio && normalizarTexto(v.destino).includes(termino));
+  if(!encontrados.length){
+    contenedor.innerHTML='<div class="empty">No hay visitantes pendientes para ese apartamento.</div>';
+    return;
+  }
+  contenedor.innerHTML=encontrados.map(v=>{
+    const alerta=esAlerta(v);
+    return `<div class="search-result">
+      <div class="search-result-head"><div><b>${escapeHtml(v.nombre)}</b><span class="badge type">${escapeHtml(v.tipo)}</span></div>
+      <button class="btn-exit" onclick="registrarSalida(${v.id})">Registrar salida</button></div>
+      <small>${escapeHtml(v.destino)} · Autoriza: ${escapeHtml(v.autoriza)} · Ingreso: ${new Date(v.ingreso).toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'})}${v.placa?' · Placa: '+escapeHtml(v.placa):''}${alerta?' · ⚠️ Tiempo excedido':''}</small>
+    </div>`;
+  }).join('');
+}
+
+function renderParking(){
+  const ocupadas=new Set(visitantes.filter(v=>!v.salio&&v.celda).map(v=>v.celda));
+  const celdas=['V-01','V-02','V-03','V-04','V-05','V-06','V-07','V-08'];
+  document.getElementById('parking').innerHTML=celdas.map(c=>`<div class="cell ${ocupadas.has(c)?'busy':'free'}">${c}<br><small>${ocupadas.has(c)?'OCUPADA':'LIBRE'}</small></div>`).join('');
+}
+
+function limpiarFormularioIngreso(){
+  ['cedula','nombre','destino','autoriza','placa'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('acompanantes').value='0';
+  document.getElementById('tipo').value='Visita';
+  document.getElementById('medio').value='Citófono';
+  document.getElementById('celda').value='';
+}
+
+function limpiar(){
+  // CAM-ACCESO-00C-CAMBIO-03: limpieza manual conserva el comportamiento de Nueva visita.
+  limpiarFormularioIngreso();
+  document.getElementById('status').style.display='none';
+}
+
+function escapeHtml(value){return String(value).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
+
+render();
+setInterval(render,1000);
+</script>
+</body>
+</html>
