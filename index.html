@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>TECCHNEX · CAM-ACCESO · LAB 13 · Alineación formulario</title>
+<title>TECCHNEX · CAM-ACCESO · LAB 17 · Directorio conectado y administración restringida</title>
 <style>
 :root{--navy:#123B5D;--cyan:#0AA7C0;--bg:#F4F7F9;--line:#D5E0E6;--soft:#EAF3F6;--text:#163247;--muted:#687784;--ok:#2E7D5B;--warn:#B57B10;--danger:#B23A48;--danger-bg:#FFF0F2;--orange:#C76D16}
 *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
@@ -165,7 +165,7 @@ main.wrap .grid.lab14-access-layout textarea { max-width: 100%; box-sizing: bord
   </section>
 <!-- CAM-DIRECTORIO-07: directorio de residentes; números ocultos en la vista operativa -->
 <section class="dir-panel" id="panelDirectorioResidencial">
-  <h2>Directorio residencial · Laboratorio 07</h2>
+  <h2>Directorio residencial · Administración</h2>
   <p class="dir-note">Busca por apartamento o nombre. La vista operativa muestra nombres y unidades, no los teléfonos. Los botones abren la aplicación telefónica o WhatsApp usando el contacto almacenado localmente.</p>
   <div class="dir-grid">
     <div class="field">
@@ -173,7 +173,7 @@ main.wrap .grid.lab14-access-layout textarea { max-width: 100%; box-sizing: bord
       <input id="dirBusqueda" type="search" placeholder="Ej. Torre 3 609 o María Rodríguez" oninput="renderResultadosDirectorio()">
     </div>
     <div class="field">
-      <label for="dirArchivo">Importar plantilla CSV</label>
+      <label for="dirArchivo">Importar / actualizar residentes (administración)</label>
       <input id="dirArchivo" type="file" accept=".csv,text/csv">
     </div>
   </div>
@@ -187,7 +187,7 @@ main.wrap .grid.lab14-access-layout textarea { max-width: 100%; box-sizing: bord
   <div id="dirAdmin" class="dir-hidden">
     <hr>
     <h3>Administración local del directorio</h3>
-    <p class="dir-note">Esta sección es una separación visual, no autenticación segura. Cualquier persona con acceso al dispositivo o a sus archivos podría inspeccionar los datos almacenados. Usa solo datos ficticios en este laboratorio.</p>
+    <p class="dir-note">Acceso protegido por clave local para las tareas administrativas. Importación, edición y exportación requieren autorización. Es una protección de laboratorio en este navegador; no reemplaza autenticación del servidor para producción.</p>
     <div class="dir-grid">
       <div class="field"><label for="dirAdminNombre">Nombre del residente</label><input id="dirAdminNombre" placeholder="Nombre completo"></div>
       <div class="field"><label for="dirAdminUnidad">Torre / apartamento</label><input id="dirAdminUnidad" placeholder="Torre 3 · Apto 609"></div>
@@ -224,7 +224,7 @@ main.wrap .grid.lab14-access-layout textarea { max-width: 100%; box-sizing: bord
       <div class="row">
         <div class="field"><label>Tipo de visitante</label><select id="tipo"><option>Visita</option><option>Empleada doméstica</option><option>Domiciliario</option><option>Mensajero</option><option>Visitador médico</option><option>Proveedor</option><option>Otro</option></select></div>
         <div class="field"><label>Apartamento / residencia</label><input id="destino" placeholder="Ej. Torre 2 · Apto 402" oninput="buscarResidentesDesdeDestino()">
-          <div id="residentesSugeridos" class="resident-suggestions"></div></div>
+          <div id="residentesSugeridos" class="resident-suggestions"></div><div id="contactoResidenteAcceso" class="resident-contact" hidden style="margin-top:8px;padding:10px;border:1px solid var(--line);border-radius:9px;background:#EAF5F8"><strong id="contactoResidenteNombre">Residente seleccionado</strong><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button type="button" class="btn-main" id="btnLlamarResidenteAcceso">📞 Llamar al residente</button><button type="button" class="btn-alt" id="btnWhatsAppResidenteAcceso">💬 Contactar por WhatsApp</button></div><small style="display:block;margin-top:6px">Confirma la autorización con el residente antes de registrar el ingreso. WhatsApp abrirá un mensaje preparado; debes pulsar Enviar.</small></div></div>
       </div>
       <div class="row">
         <div class="field"><label>Persona que autoriza</label><input id="autoriza" placeholder="Residente / administración"></div>
@@ -642,27 +642,71 @@ function guardarCapacidadParqueaderos(){
   renderParking();
 }
 
-// CAM-ACCESO-00D-CAMBIO-02: base de residentes local para los equipos de la copropiedad.
-const RESIDENTES_KEY='tecchnex_cam_acceso_residentes';
+// CAM-ACCESO-LAB-17: Control de acceso consulta la MISMA base importada en Directorio residencial.
+// El directorio conserva la administración; búsqueda, selección, llamada y WhatsApp se ejecutan aquí.
+const RESIDENTES_KEY='tecchnex_cam_acceso_residentes'; // Compatibilidad con datos antiguos; no es la fuente operativa del LAB-16.
 let residentes=JSON.parse(localStorage.getItem(RESIDENTES_KEY)||'[]');
-
 function guardarBaseResidentes(){ localStorage.setItem(RESIDENTES_KEY,JSON.stringify(residentes)); }
-
-function buscarResidentesDesdeDestino(){
-  const termino=normalizarTexto(document.getElementById('destino').value);
-  const box=document.getElementById('residentesSugeridos');
-  if(!termino){box.innerHTML='';return;}
-  const encontrados=residentes.filter(r=>r.estado==='Activo' && (normalizarTexto(r.apartamento).includes(termino)||normalizarTexto(r.nombre).includes(termino)));
-  box.innerHTML=encontrados.slice(0,6).map(r=>`<div class="resident-chip"><span><b>${escapeHtml(r.nombre)}</b> · ${escapeHtml(r.apartamento)}${r.telefono?' · '+escapeHtml(r.telefono):''}</span><button class="btn-light" onclick="seleccionarResidente('${String(r.id).replace(/'/g,"\\'")}')">Usar</button></div>`).join('');
+function residenteDirectorioNormalizado(r){
+  return {
+    id:r.id || r.codigo || (String(r.nombre||r.nombre_residente||'')+'|'+String(r.unidad||r.apartamento_unidad||r.apartamento||'')),
+    nombre:String(r.nombre||r.nombre_residente||r.residente||''),
+    apartamento:String(r.unidad||r.apartamento_unidad||r.apartamento||r.torre_apartamento||''),
+    telefono:String(r.telefono||r.telefono_privado||r.celular||''),
+    whatsapp:String(r.whatsapp||r.whatsapp_privado||r.numero_whatsapp||r.telefono||r.telefono_privado||''),
+    estado:String(r.estado||'Activo')
+  };
 }
-
-function seleccionarResidente(id){
-  const r=residentes.find(x=>String(x.id)===String(id));
+function residentesActivosDirectorio(){
+  try { return leerDirectorioLocal().map(residenteDirectorioNormalizado).filter(r=>r.nombre&&r.apartamento&&r.estado.trim().toLowerCase()==='activo'); }
+  catch(e){ return []; }
+}
+function buscarResidentesDesdeDestino(){
+  const campo=document.getElementById('destino');
+  const termino=normalizarTexto(campo?.value||'');
+  if(residenteContactoAcceso && normalizarTexto(residenteContactoAcceso.apartamento)!==termino){residenteContactoAcceso=null;document.getElementById('contactoResidenteAcceso').hidden=true;}
+  const box=document.getElementById('residentesSugeridos');
+  if(!box)return;
+  const todos=residentesActivosDirectorio();
+  if(!termino){box.innerHTML='';return;}
+  const encontrados=todos.filter(r=>normalizarTexto(r.apartamento).includes(termino)||normalizarTexto(r.nombre).includes(termino));
+  if(!encontrados.length){box.innerHTML='<div class="resident-chip">No se encontraron residentes activos. Verifica que el directorio esté importado.</div>';return;}
+  box.innerHTML=encontrados.slice(0,8).map((r,i)=>`<div class="resident-chip"><span><b>${escapeHtml(r.nombre)}</b> · ${escapeHtml(r.apartamento)}</span><button type="button" class="btn-light" onclick="seleccionarResidenteDesdeDirectorio(${i})">Usar residente</button></div>`).join('');
+  window._tecchnexSugerenciasAcceso=encontrados.slice(0,8);
+}
+let residenteContactoAcceso=null;
+function seleccionarResidenteDesdeDirectorio(i){
+  const r=(window._tecchnexSugerenciasAcceso||[])[i];
   if(!r)return;
+  residenteContactoAcceso=r;
   document.getElementById('destino').value=r.apartamento;
   document.getElementById('autoriza').value=r.nombre;
-  document.getElementById('residentesSugeridos').innerHTML=`<div class="resident-chip"><span>Residente seleccionado: <b>${escapeHtml(r.nombre)}</b></span></div>`;
+  document.getElementById('residentesSugeridos').innerHTML=`<div class="resident-chip"><span>Residente seleccionado: <b>${escapeHtml(r.nombre)}</b> · ${escapeHtml(r.apartamento)}</span><button type="button" class="btn-light" onclick="limpiarSeleccionResidenteAcceso()">Cambiar</button></div>`;
+  document.getElementById('contactoResidenteNombre').textContent='Contacto directo: '+r.nombre;
+  document.getElementById('contactoResidenteAcceso').hidden=false;
 }
+function limpiarSeleccionResidenteAcceso(){residenteContactoAcceso=null;const panel=document.getElementById('contactoResidenteAcceso');if(panel)panel.hidden=true;buscarResidentesDesdeDestino();}
+function obtenerTelefonoResidenteAcceso(r,whatsapp=false){
+  let n=String((whatsapp?(r.whatsapp||r.telefono):(r.telefono||r.whatsapp))||'').replace(/\D/g,'');
+  if(n.startsWith('00'))n=n.slice(2);
+  if(n.length===10&&n.startsWith('3'))n='57'+n;
+  return n;
+}
+document.getElementById('btnLlamarResidenteAcceso')?.addEventListener('click',()=>{
+  if(!residenteContactoAcceso){alert('Primero busca y selecciona un residente en Control de acceso.');return;}
+  const n=obtenerTelefonoResidenteAcceso(residenteContactoAcceso,false);
+  if(!n){alert('El residente seleccionado no tiene teléfono registrado en el directorio.');return;}
+  window.location.href='tel:+'+n;
+});
+document.getElementById('btnWhatsAppResidenteAcceso')?.addEventListener('click',()=>{
+  if(!residenteContactoAcceso){alert('Primero busca y selecciona un residente en Control de acceso.');return;}
+  const n=obtenerTelefonoResidenteAcceso(residenteContactoAcceso,true);
+  if(!n){alert('El residente seleccionado no tiene WhatsApp/teléfono registrado en el directorio.');return;}
+  const visitante=(document.getElementById('nombre')?.value||'el visitante').trim()||'el visitante';
+  const unidad=residenteContactoAcceso.apartamento||document.getElementById('destino').value||'su apartamento';
+  const msg=`Buen día, ${residenteContactoAcceso.nombre}. En portería se encuentra ${visitante}, quien indica dirigirse a ${unidad}. ¿Autoriza su ingreso? Por favor confirme con el personal de vigilancia. — TECCHNEX CAM-ACCESO.`;
+  window.open('https://wa.me/'+n+'?text='+encodeURIComponent(msg),'_blank','noopener');
+});
 
 function guardarResidente(){
   const id=document.getElementById('residenteId').value;
@@ -1278,7 +1322,7 @@ function renderResultadosDirectorio(){
   const todos=leerDirectorioLocal();
   const datos=todos.map((r,indice)=>({...r,_indice:indice})).filter(r=>estadoDirectorio(r) && (!q || (r.nombre+' '+r.unidad).toLowerCase().includes(q)));
   if(!datos.length){cont.innerHTML='<div class="dir-result">No se encontraron residentes activos.</div>';return;}
-  cont.innerHTML=datos.slice(0,50).map(r=>'<div class="dir-result"><div><strong>'+textoSeguroDir(r.nombre)+'</strong><small>'+textoSeguroDir(r.unidad)+'</small><span class="dir-badge">Activo</span></div><div class="dir-actions"><button type="button" class="dir-btn" data-dir-action="usar" data-dir-index="'+r._indice+'">Usar residente</button><button type="button" class="dir-btn secondary" data-dir-action="llamar" data-dir-index="'+r._indice+'">Llamar</button><button type="button" class="dir-btn secondary" data-dir-action="whatsapp" data-dir-index="'+r._indice+'">WhatsApp</button></div></div>').join('');
+  cont.innerHTML=datos.slice(0,50).map(r=>'<div class="dir-result"><div><strong>'+textoSeguroDir(r.nombre)+'</strong><small>'+textoSeguroDir(r.unidad)+'</small><span class="dir-badge">Activo</span></div><div class="dir-actions"><span class="dir-badge">Contacto disponible desde Control de acceso</span></div></div>').join('');
 }
 document.addEventListener('click',function(ev){
   const b=ev.target.closest('[data-dir-action]');
@@ -1311,7 +1355,14 @@ function whatsappResidenteDirectorio(i){
   const msg=`Buenas tardes. En portería se encuentra ${visitante}, quien indica dirigirse a ${unidad}. ¿Autoriza su ingreso? Por favor confirme con el personal de vigilancia.`;
   window.open('https://wa.me/'+n+'?text='+encodeURIComponent(msg),'_blank','noopener');
 }
-function mostrarPanelAdministracionDirectorio(){document.getElementById('dirAdmin')?.classList.remove('dir-hidden');}
+const DIR_ADMIN_HASH_KEY='tecchnex_cam_acceso_directorio_admin_hash_lab17';
+async function hashAdminDirectorio(texto){const bytes=new TextEncoder().encode(texto);const hash=await crypto.subtle.digest('SHA-256',bytes);return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('');}
+async function autorizarAdminDirectorio(){
+  let hash=localStorage.getItem(DIR_ADMIN_HASH_KEY);
+  if(!hash){const nueva=prompt('Primera configuración: cree la clave de Administración del Directorio (mínimo 8 caracteres).');if(nueva===null)return false;if(nueva.length<8){alert('La clave debe tener al menos 8 caracteres.');return false;}hash=await hashAdminDirectorio(nueva);localStorage.setItem(DIR_ADMIN_HASH_KEY,hash);alert('Clave administrativa creada en este navegador.');return true;}
+  const clave=prompt('Clave de Administración del Directorio:');if(clave===null)return false;const ok=(await hashAdminDirectorio(clave))===hash;if(!ok)alert('Clave incorrecta. No se habilitó la administración.');return ok;
+}
+async function mostrarPanelAdministracionDirectorio(){if(!(await autorizarAdminDirectorio()))return;document.getElementById('dirAdmin')?.classList.remove('dir-hidden');document.getElementById('dirEstado').textContent='Administración autorizada en este navegador.';}
 function ocultarPanelAdministracionDirectorio(){document.getElementById('dirAdmin')?.classList.add('dir-hidden');}
 function guardarResidenteDirectorio(){
   const nombre=document.getElementById('dirAdminNombre').value.trim();
@@ -1346,6 +1397,7 @@ function parsearCSVDirectorio(texto, separador){
   fila.push(campo);if(fila.some(v=>v.trim()))filas.push(fila);return filas;
 }
 async function importarDirectorioCSV(){
+  if(!(await autorizarAdminDirectorio()))return;
   const f=document.getElementById('dirArchivo')?.files?.[0]; if(!f){alert('Selecciona un archivo CSV.');return;}
   try{
     const texto=(await f.text()).replace(/^\uFEFF/,'');
@@ -1355,10 +1407,10 @@ async function importarDirectorioCSV(){
     const normalizar=h=>h.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,'_');
     const headers=filas[0].map(normalizar);
     const buscar=(...nombres)=>headers.findIndex(h=>nombres.includes(h));
-    const iNombre=buscar('nombre_residente','nombre','residente');
-    const iUnidad=buscar('apartamento_unidad','apartamento','unidad','torre_apartamento');
-    const iTel=buscar('telefono_privado','telefono','celular','telefono_residente');
-    const iWa=buscar('whatsapp_privado','whatsapp','numero_whatsapp');
+    const iNombre=buscar('nombre_residente','nombre','residente','nombre_completo','propietario');
+    const iUnidad=buscar('apartamento_unidad','apartamento','unidad','torre_apartamento','apto','inmueble','vivienda');
+    const iTel=buscar('telefono_privado','telefono','celular','telefono_residente','movil','telefono_contacto');
+    const iWa=buscar('whatsapp_privado','whatsapp','numero_whatsapp','whatsapp_residente');
     const iEstado=buscar('estado');
     if(iNombre<0||iUnidad<0){
       alert('No se reconocieron las columnas obligatorias. Guarda el archivo desde la hoja Directorio como CSV UTF-8 y verifica que los encabezados sean nombre_residente y apartamento_unidad. Separador detectado: '+(separador===';'?'punto y coma':'coma')+'.');
@@ -1382,7 +1434,8 @@ function descargarPlantillaDirectorioCSV(){
   const csv='nombre_residente,apartamento_unidad,telefono_privado,whatsapp_privado,estado\r\nMaría Rodríguez,Torre 3 - Apto 609,573001234567,573001234567,Activo\r\n';
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv.startsWith('\uFEFFsep=;')?csv:'\uFEFFsep=;\r\n'+csv],{type:'text/csv;charset=utf-8;'}));a.download='PLANTILLA_DIRECTORIO_RESIDENCIAL_EJEMPLO.csv';a.click();URL.revokeObjectURL(a.href);
 }
-function exportarDirectorioCSV(){
+async function exportarDirectorioCSV(){
+  if(!(await autorizarAdminDirectorio()))return;
   const datos=leerDirectorioLocal(); if(!datos.length){alert('No hay datos para exportar.');return;}
   const esc=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
   const filas=[['nombre_residente','apartamento_unidad','telefono_privado','whatsapp_privado','estado'],...datos.map(r=>[r.nombre,r.unidad,r.telefono,r.whatsapp,r.estado])];
