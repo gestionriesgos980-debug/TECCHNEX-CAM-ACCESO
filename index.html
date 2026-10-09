@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>TECCHNEX · CAM-ACCESO-00N · Historial y trazabilidad</title>
+<title>TECCHNEX · CAM-ACCESO-00P · Relevo de turno</title>
 <style>
 :root{--navy:#123B5D;--cyan:#0AA7C0;--bg:#F4F7F9;--line:#D5E0E6;--soft:#EAF3F6;--text:#163247;--muted:#687784;--ok:#2E7D5B;--warn:#B57B10;--danger:#B23A48;--danger-bg:#FFF0F2;--orange:#C76D16}
 *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
@@ -50,7 +50,7 @@ button{border:0;border-radius:8px;padding:9px 12px;font-weight:800;cursor:pointe
 <body>
 <header>
   <div class="brand">
-    <div><h1>TECCHNEX · CONTROL DE ACCESO</h1><small>CAM-ACCESO-00N · Historial y trazabilidad</small></div>
+    <div><h1>TECCHNEX · CONTROL DE ACCESO</h1><small>CAM-ACCESO-00P · Relevo de turno</small></div>
     <!-- CAM-ACCESO-00F-CAMBIO-01: recordatorio operativo de visitantes pendientes de salida. -->
     <div class="brand-actions">
       <button id="btnRecordatorioSalidas" class="btn-reminder no-pending" onclick="irAPendientes()" aria-live="polite">🔔 Verificar salidas</button>
@@ -64,6 +64,13 @@ button{border:0;border-radius:8px;padding:9px 12px;font-weight:800;cursor:pointe
     <section class="card">
       <h2>Registrar visitante</h2>
 
+      <!-- CAM-ACCESO-00P-CAMBIO-01: el operador activo solo cambia al iniciar turno o registrar un relevo. -->
+      <div class="search-box" style="margin-top:0">
+        <label for="operadorActual">Operador de turno activo</label>
+        <input id="operadorActual" maxlength="100" autocomplete="off" placeholder="Use el botón para iniciar el turno" readonly aria-readonly="true">
+        <div class="actions" style="margin-top:8px"><button id="btnRelevoTurno" class="btn-main" onclick="gestionarRelevoTurno()">Iniciar turno / Registrar relevo</button></div>
+        <div class="note">El operador permanece fijo durante el turno. Para cambiarlo, registre el relevo: quedarán guardados fecha, hora, operador saliente y entrante. El nombre es declarado en este dispositivo; no verifica identidad individual.</div>
+      </div>
       <div class="section-title">1. Identificación</div>
       <div class="field"><label>Número de cédula</label><div class="scanbar"><input id="cedula" placeholder="Escanear o digitar documento" oninput="buscarVisitanteFrecuente()"><button class="btn-alt" onclick="abrirEscanerDocumento()">📷 Escanear</button><button class="btn-light" onclick="document.getElementById('capturaDocumentoMovil').click()">📱 Foto</button><input id="capturaDocumentoMovil" type="file" accept="image/*" capture="environment" style="display:none" onchange="procesarFotoDocumento(event)"></div><div id="visitanteFrecuente" class="frequent-box" style="display:none"></div></div>
       <div class="row">
@@ -162,7 +169,7 @@ button{border:0;border-radius:8px;padding:9px 12px;font-weight:800;cursor:pointe
           <div class="actions"><button class="btn-main" onclick="renderTrazabilidad()">Aplicar filtros</button><button class="btn-alt" onclick="exportarTrazabilidadCSV()">Exportar historial CSV</button></div>
           <div id="trazabilidadResumen" class="note">Los movimientos se registran localmente al ingresar o registrar salida.</div>
           <div id="trazabilidadTabla" class="report-table-wrap"></div>
-          <div class="note"><strong>Alcance:</strong> el historial identifica los movimientos registrados por esta aplicación en este navegador. No identifica automáticamente al vigilante ni sustituye un registro de auditoría en servidor.</div>
+          <div class="note"><strong>Alcance:</strong> el historial identifica los movimientos registrados por esta aplicación en este navegador. El operador es un nombre declarado en el dispositivo; no se verifica su identidad. No sustituye autenticación individual ni una auditoría en servidor. Los movimientos anteriores a 00O aparecen sin operador.</div>
         </div>
       </div>
     </section>
@@ -230,6 +237,32 @@ const BACKUP_META_KEY='tecchnex_cam_acceso_ultimo_respaldo_v1';
 const BACKUP_SCHEMA='TECCHNEX-CAM-ACCESO-BACKUP';
 // CAM-ACCESO-00N-CAMBIO-02: bitácora local cronológica de eventos operativos.
 const AUDIT_LOG_KEY='tecchnex_cam_acceso_historial_v1';
+// CAM-ACCESO-00P-CAMBIO-02: operador activo bloqueado; solo cambia mediante inicio o relevo registrado.
+const OPERADOR_ACTUAL_KEY='tecchnex_cam_acceso_operador_actual_v1';
+function obtenerOperadorActual(){return String(document.getElementById('operadorActual')?.value||'').trim().replace(/\s+/g,' ');}
+function guardarOperadorActual(nombre=obtenerOperadorActual()){
+  const limpio=String(nombre||'').trim().replace(/\s+/g,' ');
+  localStorage.setItem(OPERADOR_ACTUAL_KEY,limpio);
+  const campo=document.getElementById('operadorActual');if(campo)campo.value=limpio;
+  return limpio;
+}
+function inicializarOperadorActual(){const campo=document.getElementById('operadorActual');if(campo){try{campo.value=localStorage.getItem(OPERADOR_ACTUAL_KEY)||'';}catch(_e){campo.value='';}}}
+function gestionarRelevoTurno(){
+  const saliente=obtenerOperadorActual();
+  const entrante=String(prompt(saliente?'Nombre y apellido del operador que recibe el turno:':'Nombre y apellido del operador que inicia el turno:')||'').trim().replace(/\s+/g,' ');
+  if(!entrante){alert('No se cambió el operador. Debe indicar el nombre del operador entrante.');return;}
+  if(saliente&&normalizarTexto(entrante)===normalizarTexto(saliente)){alert('El operador entrante debe ser diferente al operador saliente.');return;}
+  const confirmar=confirm(saliente?`¿Confirmar relevo de turno?\n\nEntrega: ${saliente}\nRecibe: ${entrante}`:`¿Iniciar turno con ${entrante}?`);
+  if(!confirmar)return;
+  const evento={eventoId:'evt-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),fechaHora:Date.now(),accion:saliente?'RELEVO DE TURNO':'INICIO DE TURNO',operador:saliente||entrante,operadorEntrante:entrante,registroId:'',visitante:'',documento:'',destino:'',tipo:'',placa:'',detalle:saliente?`Entrega: ${saliente} | Recibe: ${entrante}`:`Inicio de turno: ${entrante}`};
+  historialOperativo.push(evento);
+  if(historialOperativo.length>5000)historialOperativo=historialOperativo.slice(-5000);
+  try{guardarHistorialOperativo();guardarOperadorActual(entrante);}
+  catch(e){historialOperativo.pop();alert('No se pudo guardar el inicio/relevo en el historial. El operador activo no se cambió. Verifique el almacenamiento.');return;}
+  const btn=document.getElementById('btnRelevoTurno');if(btn)btn.textContent='Registrar relevo de turno';
+  if(document.getElementById('trazabilidadContenido')?.style.display==='block')renderTrazabilidad();
+  alert(saliente?`Relevo registrado.\nSale: ${saliente}\nEntra: ${entrante}`:`Turno iniciado para ${entrante}.`);
+}
 let historialOperativo=[];
 try{
   const guardadoHistorial=JSON.parse(localStorage.getItem(AUDIT_LOG_KEY)||'[]');
@@ -239,10 +272,16 @@ function guardarHistorialOperativo(){
   localStorage.setItem(AUDIT_LOG_KEY,JSON.stringify(historialOperativo));
 }
 function registrarEventoOperativo(accion,visitante,detalle=''){
+  // CAM-ACCESO-00O-CAMBIO-02: no registrar movimientos sin operador declarado.
+  const operador=obtenerOperadorActual();
+  if(!operador){const campo=document.getElementById('operadorActual');alert('Antes de registrar un ingreso o una salida, escriba el nombre del operador de turno.');campo?.focus();throw new Error('Falta el operador declarado.');}
+  guardarOperadorActual();
   const evento={
     eventoId:'evt-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),
     fechaHora:Date.now(),
     accion:String(accion),
+    operador:operador,
+    operadorEntrante:'',
     registroId:String(visitante?.id??''),
     visitante:String(visitante?.nombre||''),
     documento:String(visitante?.cedula||''),
@@ -274,21 +313,21 @@ function renderTrazabilidad(){
   const desdeMs=desde?new Date(desde+'T00:00:00').getTime():-Infinity;
   const hastaMs=hasta?new Date(hasta+'T23:59:59.999').getTime():Infinity;
   const filas=historialOperativo.filter(e=>{
-    const texto=normalizarTexto([e.accion,e.visitante,e.documento,e.destino,e.tipo,e.placa,e.detalle,e.registroId].join(' '));
+    const texto=normalizarTexto([e.accion,e.operador,e.visitante,e.documento,e.destino,e.tipo,e.placa,e.detalle,e.registroId].join(' '));
     return Number(e.fechaHora)>=desdeMs&&Number(e.fechaHora)<=hastaMs&&(!buscar||texto.includes(buscar));
   }).slice().sort((a,b)=>Number(b.fechaHora)-Number(a.fechaHora));
   const resumen=document.getElementById('trazabilidadResumen');
   if(resumen)resumen.textContent=`Movimientos encontrados: ${filas.length} · Total conservado en este dispositivo: ${historialOperativo.length}.`;
   if(!filas.length){tabla.innerHTML='<div class="report-empty">No hay movimientos para los filtros seleccionados. Los eventos comienzan a registrarse desde esta versión.</div>';return;}
-  tabla.innerHTML=`<table class="report-table"><thead><tr><th>Fecha y hora</th><th>Movimiento</th><th>Visitante</th><th>Documento</th><th>Destino</th><th>Tipo</th><th>Placa</th><th>ID registro</th></tr></thead><tbody>${filas.map(e=>`<tr><td>${new Date(Number(e.fechaHora)).toLocaleString('es-CO')}</td><td class="${e.accion==='INGRESO'?'audit-entry':'audit-exit'}">${escapeHtml(e.accion)}</td><td>${escapeHtml(e.visitante)}</td><td>${escapeHtml(e.documento)}</td><td>${escapeHtml(e.destino)}</td><td>${escapeHtml(e.tipo)}</td><td>${escapeHtml(e.placa)}</td><td>${escapeHtml(e.registroId)}</td></tr>`).join('')}</tbody></table>`;
+  tabla.innerHTML=`<table class="report-table"><thead><tr><th>Fecha y hora</th><th>Movimiento</th><th>Operador declarado / saliente</th><th>Operador entrante / detalle</th><th>Visitante</th><th>Documento</th><th>Destino</th><th>Tipo</th><th>Placa</th><th>ID registro</th></tr></thead><tbody>${filas.map(e=>`<tr><td>${new Date(Number(e.fechaHora)).toLocaleString('es-CO')}</td><td class="${e.accion==='INGRESO'?'audit-entry':'audit-exit'}">${escapeHtml(e.accion)}</td><td>${escapeHtml(e.operador||'No registrado (versión anterior)')}</td><td>${escapeHtml(e.operadorEntrante||e.detalle||'—')}</td><td>${escapeHtml(e.visitante)}</td><td>${escapeHtml(e.documento)}</td><td>${escapeHtml(e.destino)}</td><td>${escapeHtml(e.tipo)}</td><td>${escapeHtml(e.placa)}</td><td>${escapeHtml(e.registroId)}</td></tr>`).join('')}</tbody></table>`;
 }
 function exportarTrazabilidadCSV(){
   const filas=historialOperativo.slice().sort((a,b)=>Number(a.fechaHora)-Number(b.fechaHora));
   if(!filas.length){alert('Todavía no hay movimientos en el historial.');return;}
-  const encabezados=['FechaHora','Movimiento','Visitante','Documento','Destino','Tipo','Placa','IDRegistro','Detalle'];
+  const encabezados=['FechaHora','Movimiento','OperadorDeclaradoOSaliente','OperadorEntrante','Visitante','Documento','Destino','Tipo','Placa','IDRegistro','Detalle'];
   const valor=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
   const csv='\\uFEFF'+[encabezados.join(';'),...filas.map(e=>[
-    new Date(Number(e.fechaHora)).toLocaleString('es-CO'),e.accion,e.visitante,e.documento,e.destino,e.tipo,e.placa,e.registroId,e.detalle
+    new Date(Number(e.fechaHora)).toLocaleString('es-CO'),e.accion,e.operador||'No registrado (versión anterior)',e.operadorEntrante||'',e.visitante,e.documento,e.destino,e.tipo,e.placa,e.registroId,e.detalle
   ].map(valor).join(';'))].join('\\r\\n');
   const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
   const url=URL.createObjectURL(blob);const a=document.createElement('a');
@@ -727,6 +766,8 @@ async function capturarDocumento(){
 
 // CAM-ACCESO-00L-CAMBIO-01: validar identificación, evitar duplicados activos y confirmar datos antes de guardar.
 function registrar(){
+  // CAM-ACCESO-00O-CAMBIO-02: validar el operador antes de iniciar el guardado del ingreso.
+  if(!obtenerOperadorActual()){alert('Antes de registrar un ingreso, escriba el nombre del operador de turno.');document.getElementById('operadorActual')?.focus();return;}
   const n=document.getElementById('nombre').value.trim();
   const d=document.getElementById('destino').value.trim();
   const a=document.getElementById('autoriza').value.trim();
@@ -777,7 +818,7 @@ function registrar(){
   visitantes.push(item);
   try{
     guardarVisitantes();
-    registrarEventoOperativo('INGRESO',item,'Ingreso registrado desde CAM-ACCESO-00N');
+    registrarEventoOperativo('INGRESO',item,'Ingreso registrado desde CAM-ACCESO-00O');
   }catch(error){
     visitantes=visitantes.filter(v=>String(v.id)!==String(item.id));
     try{guardarVisitantes();}catch(_e){}
@@ -795,6 +836,8 @@ function registrar(){
 
 // CAM-ACCESO-00M-CAMBIO-01: cierre de salida idempotente y persistencia protegida.
 function registrarSalida(id){
+  // CAM-ACCESO-00O-CAMBIO-02: validar el operador antes de modificar el estado de salida.
+  if(!obtenerOperadorActual()){alert('Antes de registrar una salida, escriba el nombre del operador de turno.');document.getElementById('operadorActual')?.focus();return;}
   const item=visitantes.find(v=>String(v.id)===String(id));
   if(!item){
     mostrarEstadoOperacion('No se encontró el registro seleccionado. Actualice la lista y vuelva a intentarlo.',true);
@@ -813,7 +856,7 @@ function registrarSalida(id){
   item.salida=marcaSalida;
   try{
     guardarVisitantes();
-    registrarEventoOperativo('SALIDA',item,'Salida registrada desde CAM-ACCESO-00N');
+    registrarEventoOperativo('SALIDA',item,'Salida registrada desde CAM-ACCESO-00O');
   }catch(error){
     item.salio=estadoAnterior.salio;
     if(estadoAnterior.salida===undefined)delete item.salida;else item.salida=estadoAnterior.salida;
@@ -1012,7 +1055,8 @@ function imprimirInformePDF(){
   const desde=document.getElementById('informeDesde').value||'',hasta=document.getElementById('informeHasta').value||'';
   const filas=datos.map(v=>`<tr><td>${new Date(v.ingreso).toLocaleDateString('es-CO')}</td><td>${new Date(v.ingreso).toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'})}</td><td>${escapeHtml(v.nombre)}</td><td>${escapeHtml(v.cedula||'')}</td><td>${escapeHtml(v.destino)}</td><td>${escapeHtml(v.autoriza)}</td><td>${escapeHtml(v.tipo)}</td><td>${escapeHtml(v.placa||'')}</td><td>${v.salio&&v.salida?new Date(v.salida).toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'}):'Pendiente'}</td></tr>`).join('');
   const w=window.open('','_blank','width=1200,height=800'); if(!w){alert('El navegador bloqueó la ventana del informe. Permita ventanas emergentes para CAM-ACCESO.');return;}
-  w.document.write(`<!doctype html><html lang="es"><head><meta charset="utf-8"><title>CAM-ACCESO · Informe general</title><style>body{font-family:Arial,sans-serif;color:#163247;margin:28px}h1{color:#123B5D;margin-bottom:4px}p{color:#687784}table{width:100%;border-collapse:collapse;font-size:10px}th,td{border:1px solid #D5E0E6;padding:6px;text-align:left}th{background:#EAF3F6;color:#123B5D} @media print{@page{size:A4 landscape;margin:12mm}}</style></head><body><h1>TECCHNEX · CAM-ACCESO</h1><h2>Informe General de Control de Acceso</h2><p>Período: ${escapeHtml(desde)} a ${escapeHtml(hasta)} · Registros: ${datos.length}</p><table><thead><tr><th>Fecha</th><th>Entrada</th><th>Visitante</th><th>Documento</th><th>Apartamento</th><th>Autoriza</th><th>Tipo</th><th>Placa</th><th>Salida</th></tr></thead><tbody>${filas}</tbody></table><script>window.onload=()=>setTimeout(()=>window.print(),300);<\/script></body></html>`);w.document.close();
+  w.document.write(`<!doctype html><html lang="es"><head><meta charset="utf-8"><title>CAM-ACCESO · Informe general</title><style>body{font-family:Arial,sans-serif;color:#163247;margin:28px}h1{color:#123B5D;margin-bottom:4px}p{color:#687784}table{width:100%;border-collapse:collapse;font-size:10px}th,td{border:1px solid #D5E0E6;padding:6px;text-align:left}th{background:#EAF3F6;color:#123B5D} @media print{@page{size:A4 landscape;margin:12mm}}</style></head><body><h1>TECCHNEX · CAM-ACCESO</h1><h2>Informe General de Control de Acceso</h2><p>Período: ${escapeHtml(desde)} a ${escapeHtml(hasta)} · Registros: ${datos.length}</p><table><thead><tr><th>Fecha</th><th>Entrada</th><th>Visitante</th><th>Documento</th><th>Apartamento</th><th>Autoriza</th><th>Tipo</th><th>Placa</th><th>Salida</th></tr></thead><tbody>${filas}</tbody></table><script>window.onload=()=>setTimeout(()=>window.print(),300);<\/script>
+</body></html>`);w.document.close();
 }
 
 render();
@@ -1020,5 +1064,7 @@ setInterval(render,1000);
 </script>
 <!-- CAM-ACCESO-00H: imagen temporal solo en memoria; no se guarda la fotografía del documento. -->
 <div id="modalEscaner" class="modal-scan" aria-hidden="true"><div class="scan-card"><div class="scan-head"><strong>📷 Escanear documento</strong><button class="scan-close" onclick="cerrarEscanerDocumento()">✕</button></div><video id="videoDocumento" autoplay playsinline muted></video><canvas id="canvasDocumento" style="display:none"></canvas><div id="estadoEscaner" class="scan-status">Centre el documento y pulse Capturar.</div><div class="scan-actions"><button class="btn-main" onclick="capturarDocumento()">Capturar</button><button class="btn-light" onclick="cerrarEscanerDocumento()">Cancelar</button></div><div class="scan-note">La imagen se utiliza temporalmente para extraer datos y no se almacena como fotografía del documento.</div></div></div>
+
+<script>/* CAM-ACCESO-00P-CAMBIO-03: recuperar operador activo y preparar acción de relevo. */ inicializarOperadorActual(); if(obtenerOperadorActual()){const b=document.getElementById('btnRelevoTurno');if(b)b.textContent='Registrar relevo de turno';}</script>
 </body>
 </html>
