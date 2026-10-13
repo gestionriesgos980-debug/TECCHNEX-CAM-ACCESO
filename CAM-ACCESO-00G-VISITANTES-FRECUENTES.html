@@ -36,11 +36,15 @@ button{border:0;border-radius:8px;padding:9px 12px;font-weight:800;cursor:pointe
 @media(max-width:900px){.grid{grid-template-columns:1fr}} @media(max-width:600px){.row{grid-template-columns:1fr}.parking{grid-template-columns:repeat(3,1fr)}.brand{align-items:flex-start;flex-direction:column}.item-head{flex-direction:column}}
 .modal-scan{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;z-index:9999;padding:18px}.modal-scan.visible{display:flex}.scan-card{width:min(520px,100%);background:#fff;border-radius:16px;padding:16px;box-shadow:0 18px 60px rgba(0,0,0,.3)}.scan-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.scan-close{border:0;background:#eee;border-radius:9px;padding:8px 11px;cursor:pointer}.scan-card video{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:12px;background:#111}.scan-status{margin:10px 0;padding:10px;border-radius:10px;background:#f3f6f8;font-size:14px}.scan-actions{display:flex;gap:8px}.scan-actions button{flex:1}.scan-note{font-size:12px;color:#68737d;margin-top:10px;line-height:1.35}</style>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
+<link rel="icon" type="image/png" sizes="192x192" href="assets/tecchnex-icons/icon-192.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#b71919">
 </head>
 <body>
 <header>
   <div class="brand">
-    <div><h1>TECCHNEX · CONTROL DE ACCESO</h1><small>CAM-ACCESO-00H · Lectura de documento</small></div>
+    <div><h1><img class="tecchnex-product-logo" src="assets/tecchnex-icons/identificador.png" alt="Sistema de Control de Acceso" /> <span>TECCHNEX · CONTROL DE ACCESO</span></h1><small>CAM-ACCESO-00H · Lectura de documento</small></div>
     <!-- CAM-ACCESO-00F-CAMBIO-01: recordatorio operativo de visitantes pendientes de salida. -->
     <div class="brand-actions">
       <button id="btnRecordatorioSalidas" class="btn-reminder no-pending" onclick="irAPendientes()">🔔 Verificar salidas</button>
