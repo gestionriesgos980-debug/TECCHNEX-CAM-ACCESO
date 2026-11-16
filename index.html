@@ -182,20 +182,21 @@ body.cam-modulo-admin #panelAdministracion { display:block !important; }
 <meta name="theme-color" content="#b71919">
 </head>
 <body class="lab20-locked">
+<script src="cam-acceso-config.js"></script>
 <!-- CAM-ACCESO-LAB-20: pantalla de inicio; acceso demostrativo local, no autenticación de producción. -->
 <section id="camAccesoLoginGate" aria-labelledby="camAccesoLoginTitle">
  <div class="login-shell">
-  <div class="login-brand"><h1><img class="tecchnex-product-logo" src="assets/tecchnex-icons/identificador.png" alt="Sistema de Control de Acceso" /> <span>TECCHNEX · CAM-ACCESO</span></h1><p>Sistema de Control de Acceso · Ingreso al laboratorio</p></div>
+  <div class="login-brand"><h1><img class="tecchnex-product-logo" src="assets/tecchnex-icons/identificador.png" alt="Sistema de Control de Acceso" /> <span>TECCHNEX · CAM-ACCESO</span></h1><p>Sistema de Control de Acceso · Ingreso por puesto de servicio</p></div>
   <div class="login-content">
    <h2 id="camAccesoLoginTitle">Ingreso con credenciales</h2>
-   <p>Ingrese con una cuenta de demostración habilitada para abrir el tablero operativo.</p>
+   <p>Ingrese con el nombre de su puesto y la contraseña asignada por el administrador.</p>
    <form id="camAccesoLoginForm">
-    <div class="field"><label for="camAccesoLoginUser">Usuario</label><select id="camAccesoLoginUser" required></select></div>
-    <div class="field"><label for="camAccesoLoginPass">Contraseña</label><input id="camAccesoLoginPass" type="password" autocomplete="current-password" placeholder="Contraseña de laboratorio" required></div>
+    <div class="field"><label for="camAccesoLoginUser">Puesto de servicio</label><input id="camAccesoLoginUser" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="Ej. portería casa linda" required></div>
+    <div class="field"><label for="camAccesoLoginPass">Contraseña</label><input id="camAccesoLoginPass" type="password" autocomplete="current-password" placeholder="Contraseña del puesto" required></div>
     <button class="login-submit" type="submit">Ingresar al gestor</button>
    </form>
    <div id="camAccesoLoginStatus" class="login-status" role="status" aria-live="polite"></div>
-   <div class="login-note"><b>Modo laboratorio:</b> las cuentas y su vigencia se validan localmente en este navegador. Credenciales iniciales: <b>admin.demo</b> o <b>porteria.demo</b>; contraseña de prueba: <b>LAB-2026</b>. No use datos reales. Esta pantalla no sustituye la autenticación segura en servidor.</div>
+   <div class="login-note">El acceso se valida en el servidor según el contrato vigente. Si su puesto se suspende o el contrato vence, la sesión se cierra. Los registros guardados en este navegador se conservan.</div>
   </div>
  </div>
 </section>
@@ -1669,31 +1670,63 @@ document.addEventListener('DOMContentLoaded',renderResultadosDirectorio);
 
 
 // CAM-ACCESO-LAB-20: control inicial de acceso local. No constituye autenticación segura de producción.
-(function initCamAccesoLoginLAB20(){
- const KEY='tecchnex_cam_acceso_usuarios_demo_lab01';
- const gate=document.getElementById('camAccesoLoginGate');
- const form=document.getElementById('camAccesoLoginForm');
- const userSelect=document.getElementById('camAccesoLoginUser');
- const passInput=document.getElementById('camAccesoLoginPass');
- const status=document.getElementById('camAccesoLoginStatus');
- const sessionBar=document.getElementById('camAccesoSession');
- const sessionText=document.getElementById('camAccesoSessionText');
- const initialUsers=[
-  {usuario:'admin.demo',nombre:'Administrador Demo',perfil:'Administración',estado:'Activo',temporal:true,creado:new Date().toISOString(),vence:new Date(Date.now()+24*3600000).toISOString()},
-  {usuario:'porteria.demo',nombre:'Operador de Portería',perfil:'Portería / Vigilante',estado:'Activo',temporal:true,creado:new Date().toISOString(),vence:new Date(Date.now()+24*3600000).toISOString()}
- ];
- function readUsers(){try{const a=JSON.parse(localStorage.getItem(KEY)||'[]');return Array.isArray(a)?a:[]}catch(_e){return []}}
- function writeUsers(a){try{localStorage.setItem(KEY,JSON.stringify(a));return true}catch(_e){status.textContent='No se pudo consultar/guardar el estado de las cuentas en este navegador.';return false}}
- function seed(){let a=readUsers();if(!a.length){a=initialUsers;writeUsers(a)}return a}
- function refreshUsers(){const a=seed();const current=userSelect.value;userSelect.innerHTML='';a.forEach(u=>{const op=document.createElement('option');op.value=u.usuario;op.textContent=u.usuario+' — '+u.perfil+(u.estado!=='Activo'?' · '+u.estado:'');userSelect.appendChild(op)});if(a.some(u=>u.usuario===current))userSelect.value=current;}
- function valid(u,pass){return !!u&&u.estado==='Activo'&&(!u.vence||Date.now()<new Date(u.vence).getTime())&&pass==='LAB-2026'}
- function openSession(u){document.body.classList.remove('lab20-locked');document.body.classList.remove('cam-acceso-perfil-admin','cam-acceso-perfil-porteria');document.body.classList.add((u.perfil==='Administración'||u.perfil==='Administrador')?'cam-acceso-perfil-admin':'cam-acceso-perfil-porteria');gate.style.display='none';sessionBar.style.display='flex';sessionText.textContent='Sesión de laboratorio: '+u.nombre+' · Perfil: '+u.perfil+' · Vigencia: '+(u.vence?new Date(u.vence).toLocaleString('es-CO'):'sin fecha registrada');status.textContent='';window.scrollTo({top:0,behavior:'auto'});}
- function closeSession(){document.body.classList.remove('cam-acceso-perfil-admin','cam-acceso-perfil-porteria');document.body.classList.add('lab20-locked');gate.style.display='flex';sessionBar.style.display='none';form.reset();refreshUsers();status.textContent='Sesión finalizada. Los registros locales se conservan.';window.scrollTo({top:0,behavior:'auto'});}
- form.addEventListener('submit',function(e){e.preventDefault();const a=readUsers();const u=a.find(x=>x.usuario===userSelect.value);if(!u){status.textContent='La cuenta de demostración no existe en este navegador.';return}if(u.estado!=='Activo'){status.textContent='Acceso denegado: la cuenta está desactivada.';return}if(u.vence&&Date.now()>=new Date(u.vence).getTime()){status.textContent='Acceso denegado: la vigencia de esta cuenta ha vencido.';return}if(!valid(u,passInput.value)){status.textContent='Credenciales incorrectas. Verifique usuario y contraseña.';return}openSession(u);passInput.value='';});
- document.getElementById('camAccesoLogout').addEventListener('click',function(){if(confirm('¿Desea cerrar la sesión de laboratorio? Los datos guardados se conservarán.'))closeSession()});
- refreshUsers();
- // Actualizar la lista de cuentas locales al recuperar el foco.
- window.addEventListener('focus',refreshUsers);
+(function initCamAccesoPuestoGate(){
+ const CFG=window.CAM_ACCESO_CONFIG,norm=window.camAccesoNormalizePostCode;
+ const $=id=>document.getElementById(id);
+ const gate=$('camAccesoLoginGate'),form=$('camAccesoLoginForm'),userInput=$('camAccesoLoginUser'),passInput=$('camAccesoLoginPass');
+ const status=$('camAccesoLoginStatus'),sessionBar=$('camAccesoSession'),sessionText=$('camAccesoSessionText');
+ const RENEW_MS=10*60*1000,RECHECK_MS=3*60*1000;
+ let creds=null,token=null,tokenExp=0,lastOk=0,timer=null,busy=false; // credenciales y token solo en memoria; nunca en almacenamiento
+ async function post(body){
+  const r=await fetch(CFG.postAuthorizeUrl,{method:'POST',headers:{'Content-Type':'application/json',apikey:CFG.anonKey},body:JSON.stringify(body),cache:'no-store'});
+  let p={};try{p=await r.json()}catch(_e){}
+  return {http:r.status,p};
+ }
+ async function authorize(code,pass){
+  const {http,p}=await post({post_code:code,post_password:pass,product_code:'CAM-ACCESO'});
+  if(http===200&&p.authorized===true&&p.post&&p.session_token&&(!p.commercial||p.commercial.product_code==='CAM-ACCESO'))return {ok:true,p};
+  return {ok:false,message:p.message||'No fue posible validar el acceso.',http};
+ }
+ function profileOf(role){return role==='Administrador TIC'?'cam-acceso-perfil-admin':'cam-acceso-perfil-porteria'}
+ function open(p){
+  document.body.classList.remove('lab20-locked','cam-acceso-perfil-admin','cam-acceso-perfil-porteria');
+  document.body.classList.add(profileOf(p.post.role));
+  gate.style.display='none';sessionBar.style.display='flex';
+  const hasta=p.commercial&&p.commercial.valid_until?new Date(p.commercial.valid_until+'T00:00:00').toLocaleDateString('es-CO'):'sin fecha registrada';
+  sessionText.textContent='Puesto: '+p.post.name+' · Rol: '+p.post.role+' · Contrato vigente hasta: '+hasta;
+  status.textContent='';window.scrollTo({top:0,behavior:'auto'});
+ }
+ function lock(msg){
+  clearInterval(timer);timer=null;creds=null;token=null;tokenExp=0;
+  document.body.classList.remove('cam-acceso-perfil-admin','cam-acceso-perfil-porteria');document.body.classList.add('lab20-locked');
+  gate.style.display='flex';sessionBar.style.display='none';form.reset();status.textContent=msg||'Sesión finalizada. Los registros locales se conservan.';
+  window.scrollTo({top:0,behavior:'auto'});
+ }
+ async function renew(){ // revalida contrato, estado y clave en el servidor; falla cerrado si el token ya venció
+  if(!creds||busy)return;busy=true;
+  try{
+   const r=await authorize(creds.code,creds.pass);
+   if(r.ok){token=r.p.session_token;tokenExp=Date.now()+Number(r.p.expires_in||0)*1000;lastOk=Date.now();}
+   else if(r.http>=400&&r.http<500)lock(r.message);
+   else if(Date.now()>=tokenExp)lock('No fue posible revalidar el acceso. Vuelva a ingresar cuando haya conexión.');
+  }catch(_e){if(Date.now()>=tokenExp)lock('Sin conexión para revalidar el acceso. Los registros locales se conservan.');}
+  finally{busy=false}
+ }
+ form.addEventListener('submit',async function(e){
+  e.preventDefault();if(busy)return;
+  const code=norm(userInput.value),pass=passInput.value;
+  if(!code||!pass){status.textContent='Escriba el puesto y la contraseña.';return}
+  busy=true;status.textContent='Validando acceso…';
+  try{
+   const r=await authorize(code,pass);
+   if(!r.ok){status.textContent=r.message;return}
+   creds={code,pass};token=r.p.session_token;tokenExp=Date.now()+Number(r.p.expires_in||0)*1000;lastOk=Date.now();
+   open(r.p);passInput.value='';clearInterval(timer);timer=setInterval(renew,RENEW_MS);
+  }catch(_e){status.textContent='No fue posible conectar con el servicio. El acceso permanece bloqueado.'}
+  finally{busy=false}
+ });
+ document.addEventListener('visibilitychange',function(){if(!document.hidden&&creds&&Date.now()-lastOk>RECHECK_MS)renew()});
+ $('camAccesoLogout').addEventListener('click',function(){if(confirm('¿Desea cerrar la sesión? Los datos guardados se conservarán.'))lock()});
 })();
 </script>
 </body>
