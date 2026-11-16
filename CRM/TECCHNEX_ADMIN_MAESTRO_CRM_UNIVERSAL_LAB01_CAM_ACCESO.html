@@ -1,0 +1,1401 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>TECCHNEX · Administrador Maestro · CRM Integrado LAB V3.8.10</title>
+<style>
+:root{--navy:#123b5d;--cyan:#00b9d5;--ink:#193c57;--muted:#60788b;--line:#d6e2ea;--bg:#f3f7fa;--green:#16734a;--greenbg:#e8f7ef;--amber:#875600;--amberbg:#fff4d9;--red:#a62e2e;--redbg:#fff0ef;--bluebg:#eaf6fa}*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--ink)}header{background:var(--navy);color:white;padding:20px clamp(16px,4vw,38px);display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}header h1{margin:0 0 5px;font-size:22px}header p{margin:0;color:#d3e9f4;font-size:13px}.lab{font-size:11px;font-weight:800;background:#fff;color:var(--navy);padding:8px 10px;border-radius:20px}main{max-width:1250px;margin:auto;padding:22px clamp(12px,3vw,30px) 45px}.warning{background:var(--amberbg);border:1px solid #efd18a;color:#674400;padding:13px 15px;border-radius:12px;line-height:1.5;font-size:13px;margin-bottom:18px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}.top h2{margin:0 0 5px;font-size:23px}.muted{color:var(--muted);font-size:13px;line-height:1.5}/* CAM-VISUAL-CRM-02: botones más visibles, cómodos y consistentes con TECCHNEX. */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:44px;border:1px solid transparent;border-radius:10px;background:var(--navy);color:#fff;padding:12px 17px;font:inherit;font-size:14px;font-weight:750;line-height:1.2;letter-spacing:.1px;cursor:pointer;text-align:center;box-shadow:0 2px 4px #123b5d18;transition:background-color .16s ease,border-color .16s ease,box-shadow .16s ease,transform .16s ease}
+.btn:hover{background:#0b2e4b;box-shadow:0 4px 10px #123b5d25;transform:translateY(-1px)}
+.btn:active{transform:translateY(0);box-shadow:0 1px 2px #123b5d18}
+.btn:focus-visible{outline:3px solid #00b9d588;outline-offset:2px}
+.btn:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none}
+.btn.alt{background:#e1f7fb;color:#123b5d;border-color:#9ddde8;box-shadow:none}
+.btn.alt:hover{background:#c7f0f7;border-color:#62cddd}
+.btn.danger{background:#fff0ef;color:#982323;border-color:#f0c0bd;box-shadow:none}
+.btn.danger:hover{background:#ffe0de;border-color:#e8a4a0}
+/* Los botones de acción dentro de tarjetas mantienen un tamaño cómodo sin dominar la ficha. */
+.client .btn{min-height:42px;padding:11px 15px;font-size:13px}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:18px}.stat,.panel,.client,.detail{background:white;border:1px solid var(--line);border-radius:14px}.stat{padding:15px}.stat small{display:block;color:var(--muted);font-weight:700;font-size:11px;margin-bottom:8px}.stat strong{font-size:24px}.stat span{display:block;color:var(--muted);font-size:12px;margin-top:5px}.toolbar{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px}.toolbar input,.toolbar select,.field input,.field select,.field textarea{width:100%;border:1px solid #cbdce7;border-radius:9px;padding:11px;font:inherit;color:var(--ink);background:#fff}.toolbar input{flex:1;min-width:200px}.toolbar select{width:auto;min-width:150px}.layout{display:grid;grid-template-columns:minmax(0,1fr);gap:15px;align-items:start}.list{display:grid;gap:10px}.client{padding:15px;display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.client.selected{border-color:var(--cyan);box-shadow:0 0 0 2px #00b9d522}.client h3{margin:0 0 5px;font-size:16px}.client p{margin:0;color:var(--muted);font-size:12px;line-height:1.5}.client .meta{margin-top:8px}.pill{display:inline-block;border:1px solid var(--line);border-radius:7px;padding:5px 7px;font-size:11px;margin:2px 3px 0 0}.badge{display:inline-block;border-radius:20px;padding:5px 8px;font-size:11px;font-weight:800;white-space:nowrap}.active{background:var(--greenbg);color:var(--green)}.trial{background:var(--amberbg);color:var(--amber)}.suspended{background:var(--redbg);color:var(--red)}.panel{padding:20px;position:static}.panel h3{margin:0 0 5px}.empty{padding:25px;text-align:center;color:var(--muted);background:#fff;border:1px dashed var(--line);border-radius:12px}.section{border-top:1px solid var(--line);padding-top:14px;margin-top:14px}.products{display:grid;gap:8px;margin-top:10px}.product{border:1px solid var(--line);border-radius:10px;padding:11px;display:flex;justify-content:space-between;gap:10px;align-items:center}.product strong{display:block;font-size:13px}.product small{display:block;color:var(--muted);font-size:11px;margin-top:3px}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.field{display:block;font-size:12px;font-weight:700;margin:12px 0}.field input,.field select,.field textarea{display:block;margin-top:6px;font-size:14px}.note.success{background:var(--greenbg);border-left-color:var(--green)}.note.error{background:var(--redbg);border-left-color:var(--red)}.note{background:var(--bluebg);border-left:4px solid var(--cyan);padding:12px;border-radius:0 9px 9px 0;font-size:12px;line-height:1.5;margin-top:13px}.modal{position:fixed;inset:0;background:#102b40a8;display:none;align-items:center;justify-content:center;padding:15px;z-index:10}.modal.open{display:flex}.dialog{background:white;border-radius:15px;padding:20px;width:min(540px,100%);max-height:90vh;overflow:auto}.dialog h2{margin:0 0 5px}.dialog-actions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:16px}.toast{position:fixed;bottom:18px;right:18px;max-width:360px;background:#143e60;color:white;padding:13px 16px;border-radius:10px;box-shadow:0 8px 24px #0002;display:none;font-size:13px;z-index:20}.toast.show{display:block}.foot{text-align:center;font-size:11px;color:var(--muted);margin-top:22px}@media(max-width:850px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.layout{grid-template-columns:1fr}.panel{position:static}}@media(max-width:500px){.client{display:block}.client>div:last-child{margin-top:10px}.toolbar select{width:100%}}
+
+/* CAM-VISUAL-CRM-03: botones claramente visibles; solo cambios visuales en laboratorio. */
+.btn{min-height:46px!important;padding:12px 17px!important;font-size:14px!important;font-weight:700!important;border-radius:10px!important;line-height:1.25!important;cursor:pointer!important}
+.btn.alt{background:#dff7fc!important;color:#123b5d!important;border:1px solid #78d4e4!important}
+.btn:not(.alt):not(.danger){background:#123b5d!important;color:#fff!important;border:1px solid #123b5d!important}
+.btn.danger{background:#fff0ef!important;color:#982323!important;border:1px solid #e8a4a0!important}
+.btn:hover{filter:brightness(.96);box-shadow:0 4px 10px #123b5d25!important}
+.actions{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+.client .btn{min-height:44px!important;padding:11px 16px!important;font-size:13px!important}
+#editClient{min-width:170px}
+@media(max-width:500px){.actions .btn{flex:1 1 140px}.client .btn{max-width:100%}}
+
+/* CAM-VISUAL-CRM-04: ficha optimizada en dos columnas; diseño adaptable. */
+#detail{min-width:0;padding:22px}
+#detail>.detail-heading{grid-column:1/-1;padding-bottom:4px}
+#detail .client-detail-grid{display:grid;grid-template-columns:minmax(245px,0.72fr) minmax(0,1.65fr);gap:0 22px;align-items:start}
+#detail .client-company{grid-column:1;grid-row:1 / span 4;min-width:0;background:#f8fbfd;border:1px solid var(--line);border-radius:12px;padding:16px;margin-top:14px}
+#detail .client-company .section{border-top:0;padding-top:0;margin-top:0}
+#detail .client-company .company-field{margin-top:12px;overflow-wrap:anywhere}
+#detail .client-company .company-field:first-of-type{margin-top:0}
+#detail .client-main{grid-column:2;min-width:0}
+#detail .client-main .section:first-child{margin-top:14px}
+#detail .client-main .section{padding-top:14px;margin-top:14px}
+#detail .client-main .products{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+#detail>.note{grid-column:1/-1}
+@media(max-width:850px){#detail .client-detail-grid{grid-template-columns:minmax(0,1fr)}#detail .client-company,#detail .client-main{grid-column:1;grid-row:auto}#detail .client-company{margin-top:14px}#detail .client-main .section:first-child{margin-top:14px}}
+@media(max-width:520px){#detail{padding:15px}#detail .client-company{padding:13px}#detail .client-main .products{grid-template-columns:1fr}}
+
+/* CAM-VISUAL-CRM-05: tarjetas intensas con iconografía y navegación compacta; laboratorio. */
+/* CAM-INTERACCION-CRM-01: indicadores clicables sin alterar sus cálculos ni operaciones de servidor. */
+.stat-action{font:inherit;text-align:left;width:100%;cursor:pointer;display:block;border-radius:14px;appearance:none;-webkit-appearance:none;transition:transform .15s ease,box-shadow .15s ease}
+.stat-action:hover{transform:translateY(-2px);box-shadow:0 8px 18px #123b5d25}
+.stat-action:focus-visible{outline:3px solid #00b9d5;outline-offset:3px}
+.stat-action:active{transform:translateY(0)}
+.stat{position:relative;overflow:hidden;border:0;color:#fff;padding:15px 16px;min-height:112px;box-shadow:0 5px 14px #123b5d16}
+.stat:nth-child(1){background:linear-gradient(135deg,#164b91,#236bc4)}
+.stat:nth-child(2){background:linear-gradient(135deg,#087f8c,#0aa9a3)}
+.stat:nth-child(3){background:linear-gradient(135deg,#6335a8,#8954d8)}
+.stat:nth-child(4){background:linear-gradient(135deg,#b74710,#e87521)}
+.stat small,.stat span{color:#fff;opacity:.9}.stat strong{font-size:27px}.stat .stat-icon{float:right;font-size:25px;line-height:1;margin-left:8px}
+.client{border:0;border-left:5px solid #236bc4;box-shadow:0 3px 12px #123b5d10;transition:transform .16s,box-shadow .16s}
+.client:nth-child(4n+2){border-left-color:#078b91}.client:nth-child(4n+3){border-left-color:#7746b8}.client:nth-child(4n){border-left-color:#d45c19}
+.client:hover{transform:translateY(-1px);box-shadow:0 6px 16px #123b5d18}
+.client.selected{border-left-color:#00b9d5;box-shadow:0 0 0 2px #00b9d533,0 5px 14px #123b5d12}
+.crm-tabbar{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0 4px;padding:8px;background:#edf3f8;border-radius:13px;position:sticky;top:8px;z-index:3}
+.crm-tab{border:0;border-radius:9px;padding:10px 13px;color:#23465f;background:#fff;font:inherit;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 1px 3px #123b5d12}
+.crm-tab[aria-selected="true"]{background:#123f78;color:white;box-shadow:0 4px 10px #123f7830}
+.crm-tab .tab-icon{font-size:16px;margin-right:5px}
+#detail .client-detail-grid{display:block}
+#detail .client-company{margin-top:12px}
+#detail .client-main{min-width:0}
+#detail .client-main>.section{margin-top:12px;padding:16px;border:1px solid var(--line);border-radius:13px;background:#fff}
+#detail .client-main>.section[hidden],#detail .client-company[hidden]{display:none!important}
+#detail .client-main>.section h3,#detail .client-company h3{display:flex;align-items:center;gap:8px}
+#detail .client-main>.section h3:before{content:"";display:inline-block;width:5px;height:21px;border-radius:5px;background:#087f8c}
+#detail .client-main>.section:nth-of-type(2) h3:before{background:#087f8c}
+#detail .client-main>.section:nth-of-type(3) h3:before{background:#7041b5}
+#detail .client-main>.section:nth-of-type(4) h3:before{background:#c45113}
+#detail .client-main>.section:nth-of-type(5) h3:before{background:#236bc4}
+#detail .product{background:#f9fbfd}
+@media(max-width:650px){.crm-tabbar{position:static}.crm-tab{flex:1 1 42%;text-align:left}.stats{gap:8px}.stat{padding:12px;min-height:100px}.stat strong{font-size:23px}}
+
+
+/* CAM-CRM-VISTA-FOCO-01: administración de identidades fuera de la vista principal de clientes. */
+.crm-advanced-admin{margin:12px 0 16px;border:1px solid #cbdce7;border-radius:12px;background:#fff;overflow:hidden}
+.crm-advanced-admin>summary{list-style:none;display:flex;align-items:center;gap:10px;padding:12px 15px;cursor:pointer;color:#31536b;font-weight:800;font-size:13px;background:#f4f8fb}
+.crm-advanced-admin>summary::-webkit-details-marker{display:none}
+.crm-advanced-admin>summary::before{content:"＋";display:grid;place-items:center;width:22px;height:22px;border-radius:6px;background:#e3f2f7;color:#087e91;font-size:17px}
+.crm-advanced-admin[open]>summary::before{content:"−"}
+.crm-advanced-admin>.crm-advanced-hint{margin:0;padding:0 15px 12px;background:#f4f8fb;color:#60788b;font-size:12px;line-height:1.45}
+.crm-advanced-admin[open]>.panel{margin:12px;border-radius:10px}
+
+/* CAM-PUESTOS-ACORDEON-01: un solo panel de producto abierto a la vez. */
+.cam-product-accordion{padding:0;overflow:hidden;background:#f7fcfe}
+.cam-product-summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;cursor:pointer;color:#123b5d;font-weight:800;font-size:15px}
+.cam-product-summary::-webkit-details-marker{display:none}
+.cam-product-summary::before{content:"＋";display:inline-grid;place-items:center;flex:0 0 24px;width:24px;height:24px;border-radius:7px;background:#e2f3f8;color:#087e91;font-size:18px}
+.cam-product-accordion[open]>.cam-product-summary::before{content:"−"}
+.cam-product-summary-hint{margin-left:auto;color:#58758a;font-size:12px;font-weight:600}
+.cam-product-accordion[open]>.cam-product-summary .cam-product-summary-hint{font-size:0}
+.cam-product-accordion[open]>.cam-product-summary .cam-product-summary-hint::after{content:"Cerrar panel";font-size:12px}
+.cam-product-content{padding:0 16px 16px;border-top:1px solid #d6e8ee}
+.cam-product-content h4{margin-top:12px}
+
+/* CAM-UNIVERSAL-USERS-01: panel de puestos CAM-RONDAS dentro de Usuarios y accesos. */
+.cam-posts-panel{margin-top:18px;padding:16px;border:1px solid #b9dce7;border-radius:12px;background:#f7fcfe}
+.cam-posts-panel h4{margin:0 0 6px;color:#123b5d;font-size:16px}
+.cam-post-client-context{margin:12px 0;padding:12px 14px;background:#eaf6fa;border:1px solid #b9dce7;border-radius:10px;color:#193c57;font-size:13px;line-height:1.5}.cam-post-client-context strong{color:#123b5d}.cam-post-client-context .client-context-name{font-size:15px;font-weight:800}.cam-post-client-context .client-context-contract{margin-top:4px;color:#46677e}
+.cam-posts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;align-items:end}
+.cam-posts-list{display:grid;gap:9px;margin-top:12px}
+.cam-post-row{background:#fff;border:1px solid #d6e2ea;border-radius:10px;padding:12px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center}
+.cam-post-row strong{display:block;overflow-wrap:anywhere}.cam-post-row small{display:block;color:#60788b;margin-top:4px;overflow-wrap:anywhere}
+.cam-post-row .actions{margin-top:8px}.cam-post-status{font-size:11px;font-weight:800;border-radius:20px;padding:5px 8px;display:inline-block;background:#e8f7ef;color:#16734a}
+.cam-post-status.suspended,.cam-post-status.inactive{background:#fff0ef;color:#a62e2e}
+@media(max-width:520px){.cam-post-row{grid-template-columns:1fr}.cam-post-row>.cam-post-status{justify-self:start}}
+
+</style></head><body>
+<header><div><h1>TECCHNEX · Administrador Maestro</h1><p>Gestión centralizada de clientes · Integración comercial LAB V3.8.10 · Display Name Auth</p></div><span class="lab">LAB V3 · LABORATORIO</span></header>
+<main>
+<div class="warning"><strong>Laboratorio integrado — no es versión estable.</strong> Este módulo consulta clientes, productos y contratos reales mediante la Edge Function <code>tecchnex-commercial-admin</code>. El registro de clientes escribe en el servidor. No asigna ni suspende productos todavía. No crear clientes reales durante la primera prueba; usar únicamente datos de prueba autorizados.</div>
+<div class="top"><div><h2>Clientes</h2><div class="muted">Directorio compacto y ficha vertical ampliada para consultar y editar los datos del cliente.</div></div><div class="actions"><button class="btn alt" id="refreshClients">↻ Actualizar datos</button><button class="btn" id="newClient">＋ Registrar cliente</button></div></div><div id="integrationStatus" class="note">Inicializando conexión…</div>
+<details id="advancedUserAdministration" class="crm-advanced-admin">
+<summary>Administración avanzada de usuarios y cuentas personales</summary>
+<p class="crm-advanced-hint">Opciones administrativas de Supabase Auth y vinculación de usuarios existentes. No son necesarias para crear puestos operativos CAM-RONDAS o CAM-ACCESO.</p>
+<section id="temporaryUsersPanel" class="panel" style="margin:16px 0;display:none" aria-live="polite">
+<h2 style="margin:0 0 6px;font-size:20px">Gestión de usuarios temporales</h2>
+<p class="muted">Crear cuentas operativas de demostración por 24 horas o revocar una cuenta temporal existente. Esta tarjeta solo se habilita tras confirmar la autorización administrativa en el servidor.</p>
+<div class="layout" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin-top:10px">
+<div><label class="field">Correo del nuevo usuario temporal<input id="crmDemoEmail" type="email" placeholder="usuario@empresa.com" autocomplete="off"></label><button class="btn" id="crmCreateDemo" type="button">Crear usuario temporal · 24 horas</button></div>
+<div><label class="field">ID UUID del usuario temporal para revocar<input id="crmDemoUserId" type="text" placeholder="UUID del usuario temporal" autocomplete="off"></label><button class="btn danger" id="crmRevokeDemo" type="button">Revocar usuario temporal</button></div>
+</div><div id="crmDemoResult" class="note" role="status" aria-live="polite">Verificando autorización administrativa…</div>
+</section>
+<section id="existingUsersPanel" class="panel" style="margin:16px 0" aria-live="polite">
+<h2 style="margin:0 0 6px;font-size:20px">Usuarios existentes de Supabase</h2>
+<p class="muted">Vincula una identidad ya creada en Supabase Auth con un cliente de TECCHNEX. Antes de continuar, verifica en Authentication → Users que el UUID pertenece al usuario correcto. Esta tarjeta no crea usuarios ni confirma correos.</p>
+<div class="layout" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin-top:10px">
+<div><label class="field" for="existingUserUuid">UUID del usuario existente<input id="existingUserUuid" type="text" placeholder="UUID copiado desde Supabase Auth" autocomplete="off" maxlength="36"></label></div>
+<div><label class="field" for="existingUserClient">Cliente al que se vinculará<select id="existingUserClient"><option value="">Primero carga los clientes…</option></select></label></div>
+</div>
+<div class="actions" style="margin-top:10px"><button class="btn" id="linkExistingUser" type="button">Vincular usuario existente</button><button class="btn alt" id="clearExistingUserForm" type="button">Limpiar</button></div>
+<div id="existingUserResult" class="note" role="status" aria-live="polite">Sin operaciones todavía. Usa primero una cuenta y un cliente de prueba autorizados.</div>
+<div class="section" style="margin-top:12px"><h3 style="margin-bottom:6px">Usuarios ya vinculados al cliente seleccionado</h3><div id="existingUserMembershipList" class="muted" role="status" aria-live="polite">Selecciona un cliente para consultar sus vinculaciones.</div></div>
+</section>
+</details>
+<section class="stats" aria-label="Indicadores comerciales"><button type="button" class="stat stat-action" data-stat-action="clients" aria-label="Ver todos los clientes"><span class="stat-icon" aria-hidden="true">🏢</span><small>CLIENTES CONSULTADOS</small><strong id="countClients">3</strong><span>Datos recibidos del servidor</span></button><button type="button" class="stat stat-action" data-stat-action="active-clients" aria-label="Ver clientes activos"><span class="stat-icon" aria-hidden="true">✓</span><small>CLIENTES ACTIVOS</small><strong id="countActive">2</strong><span>Según estado registrado</span></button><button type="button" class="stat stat-action" data-stat-action="active-contracts" aria-label="Abrir contratos activos"><span class="stat-icon" aria-hidden="true">📄</span><small>CONTRATOS ACTIVOS</small><strong id="countProducts">4</strong><span>Asignaciones vigentes según estado</span></button><button type="button" class="stat stat-action" data-stat-action="review-contracts" aria-label="Abrir contratos por revisar"><span class="stat-icon" aria-hidden="true">⚠</span><small>CONTRATOS POR REVISAR</small><strong id="countReview">1</strong><span>Prueba / vencido según estado</span></button></section>
+<div class="toolbar"><input id="search" type="search" placeholder="Buscar por cliente, NIT o correo…" aria-label="Buscar clientes"><select id="filter"><option value="all">Todos los estados</option><option value="active">Activos</option><option value="trial">En prueba</option><option value="suspended">Suspendidos</option><option value="disabled">Deshabilitados</option><option value="expired">Vencidos</option><option value="cancelled">Cancelados</option></select></div>
+<div class="layout"><section><div id="clientList" class="list"></div><div class="note"><strong>Alcance de esta etapa:</strong> lectura real de clientes/productos/contratos y registro real de clientes. La asignación de productos, gestión de usuarios, suspensión/reactivación y auditoría se conectarán después de validar esta primera operación.</div></section>
+<aside id="detail" class="panel"><div class="empty">Selecciona un cliente para consultar su ficha.</div></aside></div>
+<div class="foot">TECCHNEX · MEJORAR SIN ROMPER · Módulo Clientes LAB V3.8.10 · Administración Universal de Usuarios y Accesos · Piloto CAM-RONDAS LAB-01 · CAM-ACCESO puestos (PUESTO-01) · No es versión estable</div>
+</main>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="dialog"><h2 id="modalTitle">Registrar cliente</h2><p class="muted" id="modalHelp">Los cambios se enviarán al servidor y solo se confirmarán después de volver a consultar el registro.</p><form id="clientForm"><label class="field">Nombre del cliente *<input name="name" required maxlength="120" placeholder="Empresa o copropiedad"></label><label class="field">NIT / identificación<input name="taxId" maxlength="40" placeholder="Identificación (opcional)"></label><label class="field">Persona de contacto<input name="contactName" maxlength="120" placeholder="Nombre de la persona de contacto"></label><label class="field">Correo de contacto<input name="email" type="email" maxlength="150" placeholder="contacto@empresa.com"></label><label class="field">Teléfono<input name="phone" type="tel" maxlength="40" placeholder="Teléfono de contacto"></label><label class="field">Notas comerciales<textarea name="notes" rows="3" maxlength="2000" placeholder="Notas internas sobre el cliente"></textarea></label><label class="field">Estado<select name="status"><option value="active">Activo</option><option value="trial">En prueba</option><option value="suspended">Suspendido</option></select></label><div class="dialog-actions"><button type="button" class="btn alt" id="cancelModal">Cancelar</button><button class="btn" id="saveClient" type="submit">Guardar cliente</button></div></form></div></div><div id="toast" class="toast" role="status"></div>
+<script type="module">
+// CAM-CLIENTES-INT-01: copia de laboratorio conectada a tecchnex-commercial-admin.
+// No contiene service_role ni modifica la V8. Requiere abrirse en el mismo origen
+// (p. ej. Live Server localhost:5500 o GitHub Pages autorizado) donde existe la sesión MFA.
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const $ = id => document.getElementById(id);
+const safe = s => String(s ?? "").replace(/[&<>"']/g, c => ({
+  "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+}[c]));
+const statusLabels = {active:"Activo", trial:"En prueba", suspended:"Suspendido", disabled:"Deshabilitado", expired:"Vencido", cancelled:"Cancelado"};
+// CAM-CRM-08.3: comparar estados sin depender de mayúsculas, espacios o etiquetas en español.
+const normalizeStatus = s => { const v = String(s ?? "").trim().toLowerCase(); if (["active", "activo"].includes(v)) return "active"; if (["trial", "en prueba", "prueba"].includes(v)) return "trial"; if (["disabled", "deshabilitado"].includes(v)) return "disabled"; if (["suspended", "suspendido"].includes(v)) return "suspended"; if (["expired", "vencido", "vencida"].includes(v)) return "expired"; if (["cancelled", "canceled", "cancelado"].includes(v)) return "cancelled"; return v; };
+const hasStatus = (item, allowed) => allowed.includes(normalizeStatus(item?.status));
+const statusClass = s => normalizeStatus(s) === "active" ? "active" :
+  normalizeStatus(s) === "trial" ? "trial" : "suspended";
+const labelStatus = s => statusLabels[normalizeStatus(s)] || s || "Sin estado";
+// CAM-CRM-08.9: nombre legible y UUID como referencia secundaria.
+const membershipDisplayName = m => String(m?.display_name || "").trim();
+const membershipLabel = m => {
+  const name = membershipDisplayName(m);
+  return name ? `${name} · ${m.user_id}` : `Usuario: ${m?.user_id || "UUID no disponible"}`;
+};
+const V8_URL_KEY = "tecchnex_admin_lab_v7_supabase_url";
+const V8_PUBLIC_KEY = "tecchnex_admin_lab_v7_publishable_key";
+let supabase = null;
+let clients = [];
+let products = [];
+let contracts = [];
+let memberships = [];
+let productAccess = [];
+let selectedId = null;
+let loading = false;
+
+function badge(status) {
+  return `<span class="badge ${statusClass(status)}">${safe(labelStatus(status))}</span>`;
+}
+function toast(msg) {
+  $("toast").textContent = msg;
+  $("toast").classList.add("show");
+  setTimeout(() => $("toast").classList.remove("show"), 3500);
+}
+function setStatus(message, type = "") {
+  const el = $("integrationStatus");
+  if (!el) return;
+  el.textContent = message;
+  el.className = `note ${type}`.trim();
+  el.classList.remove("hidden");
+}
+function setBusy(value) {
+  loading = value;
+  ["newClient","refreshClients","saveClient"].forEach(id => {
+    const el = $(id);
+    if (el) el.disabled = value;
+  });
+}
+async function invokeCommercial(payload) {
+  if (!supabase) throw new Error("Primero configura la conexión en el Administrador Maestro V8.");
+  const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+  if (sessionError) throw sessionError;
+  const session = sessionData?.session;
+  if (!session?.access_token) {
+    throw new Error("No hay sesión iniciada. Abre la V8 en este mismo origen, inicia sesión y completa MFA AAL2.");
+  }
+  const { data: assurance, error: assuranceError } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+  if (assuranceError) throw assuranceError;
+  if (assurance?.currentLevel !== "aal2") {
+    throw new Error("La sesión no tiene nivel AAL2. Vuelve al Administrador Maestro V8 y completa MFA.");
+  }
+  const { data, error } = await supabase.functions.invoke("tecchnex-commercial-admin", {
+    body: payload,
+    headers: { Authorization: `Bearer ${session.access_token}` }
+  });
+  if (error) {
+    let message = error.message || "Error al llamar a la función comercial.";
+    try {
+      const context = error.context;
+      if (context && typeof context.json === "function") {
+        const detail = await context.json();
+        if (detail?.message) message = detail.message;
+      }
+    } catch (_) {}
+    throw new Error(message);
+  }
+  if (!data?.ok) throw new Error(data?.message || "El servidor no confirmó la operación.");
+  return data;
+}
+// CAM-ADMIN-NAV-02: gestión temporal y vinculación de usuarios existentes dentro del panel principal; requiere AAL2 y autorización del servidor.
+let adminAuthorizedForUsers = false;
+function setDemoResult(message, type = "") { const el = $("crmDemoResult"); if (!el) return; el.textContent = message; el.className = "note" + (type ? " " + type : ""); }
+function setExistingUserResult(message, type = "") { const el = $("existingUserResult"); if (!el) return; el.textContent = message; el.className = "note" + (type ? " " + type : ""); }
+function populateExistingUserClients() {
+  const select = $("existingUserClient"); if (!select) return;
+  const prior = select.value;
+  select.innerHTML = '<option value="">Selecciona un cliente…</option>' + clients.map(c => `<option value="${safe(c.id)}">${safe(c.name || c.company_name || c.id)}</option>`).join("");
+  if (clients.some(c => c.id === prior)) select.value = prior;
+  else if (clients.some(c => c.id === selectedId)) select.value = selectedId;
+  renderExistingUserMemberships();
+}
+// CAM-CRM-07.3: mostrar TODAS las membresías recuperadas para el cliente seleccionado.
+// No se consulta ni se altera Auth; se presentan únicamente relaciones devueltas por la Edge Function.
+function renderExistingUserMemberships(highlightUserId = "") {
+  const box = $("existingUserMembershipList");
+  const select = $("existingUserClient");
+  if (!box || !select) return;
+  const clientId = select.value;
+  if (!clientId) { box.textContent = "Selecciona un cliente para consultar sus vinculaciones."; return; }
+  const rows = memberships.filter(m => m.client_id === clientId);
+  if (!rows.length) { box.textContent = "El servidor no devolvió usuarios vinculados a este cliente."; return; }
+  box.innerHTML = `<div style="display:grid;gap:8px">${rows.map(m => {
+    const highlighted = highlightUserId && String(m.user_id).toLowerCase() === highlightUserId.toLowerCase();
+    const linkedAccess = productAccess.filter(a => a.client_id === clientId && a.client_user_id === m.id);
+    const accessSummary = linkedAccess.map(a => {
+      const contract = contracts.find(x => x.id === a.client_product_id);
+      const product = products.find(p => p.id === contract?.product_id);
+      return `<div style="font-size:12px;margin-top:4px">• ${safe(product?.name || "Producto no identificado")} · Contrato: ${safe(contract?.contract_number || "Sin número de contrato")} · ${safe(labelStatus(a.status))}</div>`;
+    }).join("");
+    return `<div style="border:1px solid ${highlighted ? '#087F8C' : '#d5e1ea'};border-radius:9px;padding:10px;background:${highlighted ? '#eaf8f6' : '#fff'};overflow-wrap:anywhere"><strong>${safe(membershipDisplayName(m) || "Nombre no registrado")}</strong><div style="font-size:12px;color:#64748b">UUID: ${safe(m.user_id)}</div><div style="margin-top:4px;font-size:12px">Estado de vinculación: ${safe(labelStatus(m.status))}${highlighted ? ' · UUID buscado' : ''}</div><div style="margin-top:5px;font-size:12px"><strong>Productos y contratos asignados:</strong>${accessSummary || '<div style="margin-top:4px;color:#64748b">Sin accesos a productos registrados.</div>'}</div><div class="actions" style="margin-top:8px"><button type="button" class="btn alt" data-select-membership="${safe(m.id)}" ${!hasStatus(m, ['active']) ? 'disabled' : ''}>Seleccionar para asignar productos</button></div></div>`;
+  }).join("")}</div>`;
+  box.querySelectorAll("[data-select-membership]").forEach(button => button.addEventListener("click", () => {
+    const membershipId = button.dataset.selectMembership;
+    const membershipSelect = document.querySelector('#detail #accessForm select[name="membershipId"]');
+    if (!membershipSelect || ![...membershipSelect.options].some(option => option.value === membershipId)) {
+      setStatus("La vinculación no está activa o no aparece en la ficha del cliente. Actualiza los datos antes de asignar productos.", "warning");
+      return;
+    }
+    membershipSelect.value = membershipId;
+    const form = document.querySelector('#detail #accessForm');
+    form?.scrollIntoView({behavior:"smooth", block:"center"});
+    membershipSelect.focus({preventScroll:true});
+    setStatus("Usuario seleccionado. Ahora elige el contrato/producto y guarda la asignación de acceso.", "success");
+  }));
+}
+$("existingUserClient")?.addEventListener("change", () => renderExistingUserMemberships());
+function validUuidForLink(value) { return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value); }
+async function linkExistingAuthUser() {
+  const userId = $("existingUserUuid").value.trim();
+  const clientId = $("existingUserClient").value;
+  if (!validUuidForLink(userId)) { setExistingUserResult("Escribe un UUID válido copiado desde Supabase Auth.", "error"); return; }
+  const client = clients.find(c => c.id === clientId);
+  if (!client) { setExistingUserResult("Selecciona un cliente cargado desde el servidor.", "error"); return; }
+  const existingMembership = memberships.find(m => m.client_id === clientId && String(m.user_id).toLowerCase() === userId.toLowerCase());
+  if (existingMembership) {
+    // CAM-CRM-07.2: una relación existente lleva directamente a su ficha para distinguir duplicado de fallo de visualización.
+    selectedId = clientId;
+    render();
+    const usersTab = $("detail").querySelector('[data-tab="users"]');
+    if (usersTab) usersTab.click();
+    const existingCard = [...$("detail").querySelectorAll("[data-membership-user-id]")]
+      .find(el => String(el.dataset.membershipUserId).toLowerCase() === userId.toLowerCase());
+    if (existingCard) {
+      existingCard.style.outline = "3px solid #087F8C";
+      existingCard.style.outlineOffset = "3px";
+      existingCard.scrollIntoView({behavior:"smooth", block:"center"});
+    }
+    $("detail").scrollIntoView({behavior:"smooth", block:"start"});
+    renderExistingUserMemberships(userId);
+    setExistingUserResult("Este UUID ya figura vinculado a este cliente. No se creó otra relación. Revisa la lista completa de vinculaciones que devolvió el servidor debajo de esta tarjeta.", "warning");
+    return;
+  }
+  const confirmed = confirm(`Vas a vincular la identidad ${userId} al cliente «${client.name || client.company_name || client.id}». Verifica que el UUID corresponda a la cuenta correcta en Supabase Auth. ¿Continuar?`);
+  if (!confirmed) return;
+  const button = $("linkExistingUser"); button.disabled = true;
+  setExistingUserResult("Enviando la solicitud al servidor y verificando la persistencia…");
+  try {
+    const result = await invokeCommercial({action:"create", resource:"memberships", data:{client_id:clientId, user_id:userId, status:"active"}});
+    await refreshData();
+    const createdId = result?.data?.id;
+    const verified = memberships.some(m => m.id === createdId && m.client_id === clientId && String(m.user_id).toLowerCase() === userId.toLowerCase());
+    if (!verified) throw new Error("El servidor respondió, pero la consulta posterior no confirmó la vinculación. Revisa Supabase antes de volver a intentarlo.");
+    // CAM-CRM-07.1: mostrar inmediatamente el cliente y la pestaña donde debe verse la membresía.
+    selectedId = clientId;
+    render();
+    const usersTab = $("detail").querySelector('[data-tab="users"]');
+    if (usersTab) usersTab.click();
+    $("detail").scrollIntoView({behavior:"smooth", block:"start"});
+    $("existingUserUuid").value = "";
+    setExistingUserResult("Vinculación registrada y verificada en la consulta posterior. Revisa la ficha del cliente en Usuarios y accesos. Esto no confirma el correo ni concede por sí solo acceso al producto.", "success");
+  } catch (e) { setExistingUserResult(`No se pudo confirmar la vinculación: ${e.message}`, "error"); }
+  finally { button.disabled = false; }
+}
+$("linkExistingUser")?.addEventListener("click", linkExistingAuthUser);
+$("clearExistingUserForm")?.addEventListener("click", () => { $("existingUserUuid").value=""; $("existingUserClient").value=""; setExistingUserResult("Formulario limpio. Verifica el UUID en Supabase Auth antes de vincular."); });
+async function callDemoAdmin(payload) {
+  if (!supabase) throw new Error("No hay conexión Supabase preparada.");
+  const {data:{session},error:sessionError} = await supabase.auth.getSession(); if (sessionError) throw sessionError;
+  if (!session?.access_token) throw new Error("No hay sesión iniciada. Vuelve al ingreso del Administrador Maestro.");
+  const {data,error} = await supabase.functions.invoke("tecchnex-demo-admin", {body:payload,headers:{Authorization:"Bearer " + session.access_token}});
+  if (error) { let detail = error.message || "Error al comunicarse con la función administrativa."; try { const ctx=error.context; if(ctx&&typeof ctx.json==="function"){const body=await ctx.json();if(body?.message)detail=body.message;else if(body?.error)detail=body.error;}}catch(_){} throw new Error(detail); }
+  if (!data) throw new Error("El servidor no devolvió una respuesta."); return data;
+}
+async function validateAdminForUserManagement() {
+  adminAuthorizedForUsers=false; $("temporaryUsersPanel").style.display="none";
+  try {
+    if(!supabase) throw new Error("Configura primero la conexión desde el ingreso del Administrador Maestro.");
+    const {data:{session},error:sessionError}=await supabase.auth.getSession(); if(sessionError)throw sessionError;
+    if(!session?.access_token)throw new Error("No hay sesión iniciada. Regresa al ingreso del Administrador Maestro.");
+    const {data:assurance,error:assuranceError}=await supabase.auth.mfa.getAuthenticatorAssuranceLevel(); if(assuranceError)throw assuranceError;
+    if(assurance?.currentLevel!=="aal2")throw new Error("La sesión no tiene MFA AAL2. Completa la verificación antes de administrar usuarios.");
+    const {data,error}=await supabase.functions.invoke("tecchnex-admin-authorize",{headers:{Authorization:"Bearer "+session.access_token}}); if(error)throw error;
+    if(data?.authorized!==true)throw new Error(data?.message||"El servidor no confirmó el permiso de administrador maestro.");
+    adminAuthorizedForUsers=true; $("temporaryUsersPanel").style.display="block"; setDemoResult("Autorización administrativa confirmada. Ya puedes gestionar usuarios temporales.","success");
+  } catch(e) { setDemoResult("La gestión de usuarios permanece bloqueada: "+(e?.message||"No se pudo confirmar la autorización."),"error"); }
+}
+$("crmCreateDemo").addEventListener("click",async()=>{
+  if(!adminAuthorizedForUsers){setDemoResult("Primero debe confirmarse la autorización administrativa.","error");return;}
+  const email=$("crmDemoEmail").value.trim(); if(!email||!$("crmDemoEmail").checkValidity()){setDemoResult("Introduce un correo electrónico válido.","error");return;}
+  if(!window.confirm("¿Crear una cuenta temporal para "+email+" con vigencia de 24 horas?"))return;
+  const button=$("crmCreateDemo");button.disabled=true;
+  try{const data=await callDemoAdmin({action:"create_demo",email});if(data.error)throw new Error(data.message||data.error);const uid=data.user_id||data.id||data.user?.id;const expiry=data.expires_at?new Date(data.expires_at).toLocaleString():"vigencia indicada por el servidor";setDemoResult("Solicitud procesada por el servidor. "+(uid?"ID de usuario: "+uid+". ":"")+"Vencimiento: "+expiry+". Confirma la respuesta de Supabase antes de entregar credenciales.","success");if(uid)$("crmDemoUserId").value=uid;$("crmDemoEmail").value="";}catch(e){setDemoResult("No fue posible crear el usuario: "+(e?.message||"Error inesperado."),"error");}finally{button.disabled=false;}
+});
+$("crmRevokeDemo").addEventListener("click",async()=>{
+  if(!adminAuthorizedForUsers){setDemoResult("Primero debe confirmarse la autorización administrativa.","error");return;}
+  const userId=$("crmDemoUserId").value.trim();if(!userId){setDemoResult("Introduce el UUID de la cuenta temporal que deseas revocar.","error");return;}
+  if(!window.confirm("¿Confirmas revocar la cuenta temporal con ID "+userId+"? No uses esta acción con cuentas permanentes."))return;
+  const button=$("crmRevokeDemo");button.disabled=true;
+  try{const data=await callDemoAdmin({action:"revoke_demo",user_id:userId});if(data.error||data.revoked===false||data.success===false)throw new Error(data.message||data.error||"El servidor no confirmó la revocación.");setDemoResult(data.message||"El servidor procesó la solicitud. Confirma el resultado en Supabase.","success");$("crmDemoUserId").value="";}catch(e){setDemoResult("No fue posible revocar el usuario: "+(e?.message||"Error inesperado."),"error");}finally{button.disabled=false;}
+});
+
+function renderStats() {
+  $("countClients").textContent = clients.length;
+  $("countActive").textContent = clients.filter(c => hasStatus(c, ["active"])).length;
+  $("countProducts").textContent = contracts.filter(c => hasStatus(c, ["active"])).length;
+  $("countReview").textContent = contracts.filter(c => ["trial","expired"].includes(c.status)).length;
+}
+function renderList() {
+  const q = $("search").value.trim().toLowerCase();
+  const f = $("filter").value;
+  const found = clients.filter(c =>
+    (f === "all" || c.status === f) &&
+    [c.name, c.tax_id, c.contact_email, c.id].some(v => String(v ?? "").toLowerCase().includes(q))
+  );
+  $("clientList").innerHTML = found.length ? found.map(c => {
+    const assigned = contracts.filter(x => x.client_id === c.id);
+    const clientMemberships = memberships.filter(m => m.client_id === c.id);
+    const userCount = clientMemberships.length;
+    const activeUsers = clientMemberships.filter(m => hasStatus(m, ["active"])).length;
+    const disabledUsers = clientMemberships.filter(m => hasStatus(m, ["disabled"])).length;
+    const otherUsers = userCount - activeUsers - disabledUsers;
+    const userStateSummary = userCount
+      ? `Usuarios activos: ${activeUsers} · deshabilitados: ${disabledUsers}${otherUsers ? ` · otros estados: ${otherUsers}` : ""}`
+      : "Sin usuarios vinculados";
+    return `<article class="client ${c.id === selectedId ? "selected" : ""}">
+      <div><h3>${safe(c.name)}</h3><p>${safe(c.id)} · ${safe(c.contact_email || "Sin correo")}</p>
+      <div class="meta">${badge(c.status)} <span class="pill">${assigned.length} producto(s)/contrato(s)</span><span class="pill">Usuarios: ${userCount}</span><span class="pill" title="Estado de las vinculaciones de usuario; no cambia el estado comercial del cliente">${safe(userStateSummary)}</span></div></div>
+      <div><button class="btn alt" data-open="${safe(c.id)}">Abrir ficha →</button></div>
+    </article>`;
+  }).join("") : '<div class="empty">No hay clientes que coincidan con la búsqueda.</div>';
+  renderStats();
+}
+function dateLabel(value) {
+  if (!value) return "No informada";
+  return safe(String(value).slice(0, 10));
+}
+function contractAlert(contract) {
+  if (!contract.end_date) return {text:"Sin fecha de vencimiento", cls:""};
+  const end = new Date(`${contract.end_date}T23:59:59`);
+  if (Number.isNaN(end.getTime())) return {text:"Fecha por verificar", cls:""};
+  const days = Math.ceil((end.getTime() - Date.now()) / 86400000);
+  if (days < 0) return {text:`Vencido hace ${Math.abs(days)} día(s)`, cls:"danger"};
+  if (days <= 30) return {text:`Vence en ${days} día(s)`, cls:"warning"};
+  return {text:"Vigencia mayor a 30 días", cls:""};
+}
+
+// CAM-VISUAL-CRM-05: crea pestañas compactas sobre secciones existentes sin cambiar sus formularios ni llamadas al servidor.
+function setupClientTabs() {
+  const detail = $("detail");
+  const grid = detail.querySelector(".client-detail-grid");
+  const company = grid?.querySelector(".client-company");
+  const main = grid?.querySelector(".client-main");
+  if (!grid || !company || !main || main.querySelector(".crm-tabbar")) return;
+  const sections = [...main.querySelectorAll(":scope > .section")];
+  const tabs = [
+    {id:"overview", label:"Resumen", icon:"▦", targets:[0], company:true},
+    {id:"contracts", label:"Contratos", icon:"▤", targets:[1,2]},
+    {id:"users", label:"Usuarios y accesos", icon:"♙", targets:[3]},
+    {id:"history", label:"Seguimiento", icon:"◷", targets:[4]}
+  ];
+  const bar = document.createElement("nav");
+  bar.className = "crm-tabbar";
+  bar.setAttribute("aria-label","Secciones de la ficha del cliente");
+  bar.innerHTML = tabs.map((t,i)=>`<button type="button" class="crm-tab" data-tab="${t.id}" aria-selected="${i===0}" role="tab"><span class="tab-icon" aria-hidden="true">${t.icon}</span>${t.label}</button>`).join("");
+  detail.querySelector(".detail-heading")?.after(bar);
+  function activate(id) {
+    const tab = tabs.find(t=>t.id===id) || tabs[0];
+    sections.forEach((section,i)=>{ section.hidden = !tab.targets.includes(i); });
+    company.hidden = !tab.company;
+    bar.querySelectorAll(".crm-tab").forEach(btn=>btn.setAttribute("aria-selected",String(btn.dataset.tab===tab.id)));
+  }
+  bar.addEventListener("click",event=>{
+    const button=event.target.closest("[data-tab]");
+    if(button) activate(button.dataset.tab);
+  });
+  activate("overview");
+}
+// CAM-UNIVERSAL-USERS-01: acceso administrativo de puestos CAM-RONDAS, aislado del CRUD comercial.
+let camRondasPosts = [];
+let camRondasPostsClientId = null;
+function setCamPostsStatus(message, type = "") {
+  const el = $("camRondasPostsStatus");
+  if (!el) return;
+  el.textContent = message;
+  el.className = `note ${type}`.trim();
+}
+async function invokeCamRondasPostAdmin(payload) {
+  if (!supabase) throw new Error("No hay conexión Supabase preparada.");
+  const {data:{session},error:sessionError} = await supabase.auth.getSession();
+  if (sessionError) throw sessionError;
+  if (!session?.access_token) throw new Error("No hay sesión administrativa activa. Vuelve a V8 y completa MFA.");
+  const {data:assurance,error:assuranceError} = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+  if (assuranceError) throw assuranceError;
+  if (assurance?.currentLevel !== "aal2") throw new Error("Se requiere MFA AAL2 para administrar puestos.");
+  const {data,error} = await supabase.functions.invoke("cam-rondas-post-admin", {
+    body: payload,
+    headers: {Authorization:`Bearer ${session.access_token}`}
+  });
+  if (error) {
+    let message = error.message || "No fue posible comunicarse con la administración de puestos.";
+    try { const body = await error.context?.json?.(); if (body?.message) message = body.message; } catch (_) {}
+    throw new Error(message);
+  }
+  if (!data?.ok) throw new Error(data?.message || "El servidor no confirmó la operación.");
+  return data;
+}
+function camRondasContractsFor(clientId) {
+  return contracts.filter(contract => contract.client_id === clientId &&
+    products.some(product => product.id === contract.product_id && String(product.code || "").toUpperCase() === "CAM-RONDAS"));
+}
+function renderCamRondasPosts() {
+  const list = $("camRondasPostsList");
+  if (!list) return;
+  if (!camRondasPosts.length) { list.innerHTML = '<div class="empty">No hay puestos registrados en los contratos CAM-RONDAS de este cliente.</div>'; return; }
+  list.innerHTML = camRondasPosts.map(post => {
+    const status = String(post.status || "inactive");
+    const label = status === "active" ? "Activo" : status === "suspended" ? "Suspendido" : "Inactivo";
+    return `<article class="cam-post-row" data-post-id="${safe(post.id)}">
+      <div><strong>${safe(post.display_name || post.post_name || "Puesto sin nombre")} · ${safe(post.post_code)}</strong>
+        <small>Contrato: ${safe(post.contract_number || "Sin número")} · Rol: ${safe(post.role || "Sin rol")}</small>
+        <div class="actions">
+          <button class="btn alt" type="button" data-cam-post-action="rotate" data-id="${safe(post.id)}">Cambiar clave</button>
+          ${status === "active" ? `<button class="btn alt" type="button" data-cam-post-action="status" data-status="suspended" data-id="${safe(post.id)}">Suspender</button>` : `<button class="btn alt" type="button" data-cam-post-action="status" data-status="active" data-id="${safe(post.id)}">Activar</button>`}
+          ${status !== "inactive" ? `<button class="btn danger" type="button" data-cam-post-action="status" data-status="inactive" data-id="${safe(post.id)}">Inactivar</button>` : ""}
+        </div>
+      </div><span class="cam-post-status ${safe(status)}">${label}</span>
+    </article>`;
+  }).join("");
+}
+async function loadCamRondasPosts(clientId) {
+  const panel = $("camRondasPostsPanel");
+  if (!panel) return;
+  camRondasPostsClientId = clientId;
+  const select = $("camPostContract");
+  const prior = select?.value || "";
+  const owned = camRondasContractsFor(clientId);
+  if (select) {
+    select.innerHTML = '<option value="">Selecciona un contrato activo…</option>' + owned.filter(x => hasStatus(x,["active"]) && (!x.end_date || x.end_date >= new Date().toLocaleDateString("en-CA"))).map(x => `<option value="${safe(x.id)}">${safe(x.contract_number || x.id)} · ${safe(labelStatus(x.status))}</option>`).join("");
+    if (owned.some(x => x.id === prior)) select.value = prior;
+  }
+  const activeClient = clients.find(item => item.id === clientId);
+  if (activeClient) updatePostClientContext("CAM-RONDAS", activeClient, "camPostContract", "camRondasClientContext");
+  setCamPostsStatus("Consultando puestos CAM-RONDAS en el servidor…");
+  try {
+    const result = await invokeCamRondasPostAdmin({action:"list", client_id:clientId});
+    if (camRondasPostsClientId !== clientId || $("camRondasPostsPanel") !== panel) return;
+    camRondasPosts = Array.isArray(result.data) ? result.data : [];
+    renderCamRondasPosts();
+    setCamPostsStatus(`${camRondasPosts.length} puesto(s) recuperado(s) de los contratos CAM-RONDAS de este cliente.`, "success");
+  } catch (error) {
+    camRondasPosts = [];
+    renderCamRondasPosts();
+    setCamPostsStatus(`No se pudieron consultar los puestos: ${error.message}`, "error");
+  }
+}
+function updatePostClientContext(productCode, client, selectId, contextId) {
+  const target = $(contextId);
+  if (!target) return;
+  const select = $(selectId);
+  const contract = contracts.find(item => item.id === (select?.value || ""));
+  const productLabel = productCode === "CAM-RONDAS" ? "CAM-RONDAS" : "CAM-ACCESO";
+  const contractLabel = contract
+    ? `${contract.contract_number || contract.id} · ${labelStatus(contract.status)}`
+    : "Aún no has seleccionado un contrato";
+  target.innerHTML = `<div><strong>CLIENTE AL QUE SE ASIGNARÁ EL PUESTO</strong></div>
+    <div class="client-context-name">${safe(client.name || client.company_name || "Cliente sin nombre")}</div>
+    <div>Identificación / NIT: <strong>${safe(client.tax_id || "No registrada")}</strong></div>
+    <div class="client-context-contract">Producto: <strong>${productLabel}</strong> · Contrato seleccionado: <strong>${safe(contractLabel)}</strong></div>`;
+}
+function setupCamRondasPosts(client) {
+  const panel = $("camRondasPostsPanel");
+  if (!panel) return;
+  updatePostClientContext("CAM-RONDAS", client, "camPostContract", "camRondasClientContext");
+  $("camPostContract")?.addEventListener("change", () => updatePostClientContext("CAM-RONDAS", client, "camPostContract", "camRondasClientContext"));
+  loadCamRondasPosts(client.id);
+  $("camPostReload")?.addEventListener("click", () => loadCamRondasPosts(client.id));
+  $("camPostCreate")?.addEventListener("click", async event => {
+    const button = event.currentTarget;
+    const contractId = $("camPostContract")?.value || "";
+    const postCode = $("camPostCode")?.value.trim() || "";
+    const displayName = $("camPostName")?.value.trim() || "";
+    const role = $("camPostRole")?.value || "";
+    const password = $("camPostPassword")?.value || "";
+    if (!contractId || !postCode || !displayName || !password) { setCamPostsStatus("Completa contrato, código, nombre y clave inicial.", "warning"); return; }
+    if (password.length < 12 || password.length > 128) { setCamPostsStatus("La clave debe tener entre 12 y 128 caracteres.", "warning"); return; }
+    if (!/^[A-Za-z0-9][A-Za-z0-9._-]{1,79}$/.test(postCode)) { setCamPostsStatus("El código debe tener entre 2 y 80 caracteres: letras, números, punto, guion o guion bajo.", "warning"); return; }
+    const selectedContract = contracts.find(item => item.id === contractId);
+    if (!confirm(`CLIENTE: ${client.name || client.company_name || client.id} · NIT: ${client.tax_id || "No registrada"}\\nPRODUCTO: CAM-RONDAS · CONTRATO: ${selectedContract?.contract_number || contractId}\\n\\nSe creará el puesto ${postCode} (${displayName}), con rol ${role}. La clave se almacenará como hash en el servidor. ¿Confirmas?`)) return;
+    button.disabled = true; button.textContent = "Creando puesto…";
+    try {
+      const result = await invokeCamRondasPostAdmin({action:"create",client_id:client.id,client_product_id:contractId,post_code:postCode,display_name:displayName,role,password});
+      if (!result?.data?.id || result.data.client_product_id !== contractId) throw new Error("El servidor no confirmó el puesto y contrato esperados.");
+      $("camPostPassword").value = "";
+      $("camPostCode").value = "";
+      $("camPostName").value = "";
+      await loadCamRondasPosts(client.id);
+      if (!camRondasPosts.some(post => post.id === result.data.id)) throw new Error("El servidor creó el puesto, pero no apareció en la consulta posterior. No repitas el alta hasta revisar.");
+      setCamPostsStatus(`Puesto ${postCode} creado y verificado en el contrato CAM-RONDAS.`, "success");
+    } catch (error) { setCamPostsStatus(`No se confirmó la creación: ${error.message}`, "error"); }
+    finally { button.disabled = false; button.textContent = "＋ Crear puesto CAM-RONDAS"; }
+  });
+  panel.addEventListener("click", async event => {
+    const button = event.target.closest("[data-cam-post-action]");
+    if (!button) return;
+    const post = camRondasPosts.find(item => item.id === button.dataset.id);
+    if (!post) { setCamPostsStatus("No se encontró el puesto en la consulta actual. Actualiza la lista.", "error"); return; }
+    const action = button.dataset.camPostAction;
+    button.disabled = true;
+    try {
+      if (action === "rotate") {
+        const password = prompt(`Nueva clave para ${post.post_code} (mínimo 12 caracteres). No se mostrará ni se podrá recuperar después:`);
+        if (password === null) return;
+        if (password.length < 12 || password.length > 128) throw new Error("La clave debe tener entre 12 y 128 caracteres.");
+        if (!confirm(`¿Cambiar la clave del puesto ${post.post_code}? La clave anterior dejará de funcionar.`)) return;
+        await invokeCamRondasPostAdmin({action:"rotate_password",id:post.id,password});
+        setCamPostsStatus(`Solicitud de cambio de clave completada para ${post.post_code}.`, "success");
+      } else if (action === "status") {
+        const nextStatus = button.dataset.status;
+        if (!confirm(`¿Cambiar el estado del puesto ${post.post_code} a ${nextStatus}?`)) return;
+        await invokeCamRondasPostAdmin({action:"set_status",id:post.id,status:nextStatus});
+        setCamPostsStatus(`Estado del puesto ${post.post_code} actualizado.`, "success");
+      }
+      await loadCamRondasPosts(client.id);
+    } catch (error) { setCamPostsStatus(`No se confirmó la operación: ${error.message}`, "error"); }
+    finally { button.disabled = false; }
+  });
+}
+
+
+// CAM-UNIVERSAL-USERS-01: acceso administrativo de puestos CAM-ACCESO, aislado del CRUD comercial.
+let camAccesoPosts = [];
+let camAccesoPostsClientId = null;
+function setCamAccPostsStatus(message, type = "") {
+  const el = $("camAccesoPostsStatus");
+  if (!el) return;
+  el.textContent = message;
+  el.className = `note ${type}`.trim();
+}
+async function invokeCamAccesoPostAdmin(payload) {
+  if (!supabase) throw new Error("No hay conexión Supabase preparada.");
+  const {data:{session},error:sessionError} = await supabase.auth.getSession();
+  if (sessionError) throw sessionError;
+  if (!session?.access_token) throw new Error("No hay sesión administrativa activa. Vuelve a V8 y completa MFA.");
+  const {data:assurance,error:assuranceError} = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+  if (assuranceError) throw assuranceError;
+  if (assurance?.currentLevel !== "aal2") throw new Error("Se requiere MFA AAL2 para administrar puestos.");
+  const {data,error} = await supabase.functions.invoke("cam-acceso-post-admin", {
+    body: payload,
+    headers: {Authorization:`Bearer ${session.access_token}`}
+  });
+  if (error) {
+    let message = error.message || "No fue posible comunicarse con la administración de puestos.";
+    try { const body = await error.context?.json?.(); if (body?.message) message = body.message; } catch (_) {}
+    throw new Error(message);
+  }
+  if (!data?.ok) throw new Error(data?.message || "El servidor no confirmó la operación.");
+  return data;
+}
+function camAccesoContractsFor(clientId) {
+  return contracts.filter(contract => contract.client_id === clientId &&
+    products.some(product => product.id === contract.product_id && String(product.code || "").toUpperCase() === "CAM-ACCESO"));
+}
+function renderCamAccesoPosts() {
+  const list = $("camAccesoPostsList");
+  if (!list) return;
+  if (!camAccesoPosts.length) { list.innerHTML = '<div class="empty">No hay puestos registrados en los contratos CAM-ACCESO de este cliente.</div>'; return; }
+  list.innerHTML = camAccesoPosts.map(post => {
+    const status = String(post.status || "inactive");
+    const label = status === "active" ? "Activo" : status === "suspended" ? "Suspendido" : "Inactivo";
+    return `<article class="cam-post-row" data-post-id="${safe(post.id)}">
+      <div><strong>${safe(post.display_name || post.post_name || "Puesto sin nombre")} · ${safe(post.post_code)}</strong>
+        <small>Contrato: ${safe(post.contract_number || "Sin número")} · Rol: ${safe(post.role || "Sin rol")}</small>
+        <div class="actions">
+          <button class="btn alt" type="button" data-cam-post-action="rotate" data-id="${safe(post.id)}">Cambiar clave</button>
+          ${status === "active" ? `<button class="btn alt" type="button" data-cam-post-action="status" data-status="suspended" data-id="${safe(post.id)}">Suspender</button>` : `<button class="btn alt" type="button" data-cam-post-action="status" data-status="active" data-id="${safe(post.id)}">Activar</button>`}
+          ${status !== "inactive" ? `<button class="btn danger" type="button" data-cam-post-action="status" data-status="inactive" data-id="${safe(post.id)}">Inactivar</button>` : ""}
+        </div>
+      </div><span class="cam-post-status ${safe(status)}">${label}</span>
+    </article>`;
+  }).join("");
+}
+async function loadCamAccesoPosts(clientId) {
+  const panel = $("camAccesoPostsPanel");
+  if (!panel) return;
+  camAccesoPostsClientId = clientId;
+  const select = $("camAccPostContract");
+  const prior = select?.value || "";
+  const owned = camAccesoContractsFor(clientId);
+  if (select) {
+    select.innerHTML = '<option value="">Selecciona un contrato activo…</option>' + owned.filter(x => hasStatus(x,["active"]) && (!x.end_date || x.end_date >= new Date().toLocaleDateString("en-CA"))).map(x => `<option value="${safe(x.id)}">${safe(x.contract_number || x.id)} · ${safe(labelStatus(x.status))}</option>`).join("");
+    if (owned.some(x => x.id === prior)) select.value = prior;
+  }
+  const activeClient = clients.find(item => item.id === clientId);
+  if (activeClient) updatePostClientContext("CAM-ACCESO", activeClient, "camAccPostContract", "camAccesoClientContext");
+  setCamAccPostsStatus("Consultando puestos CAM-ACCESO en el servidor…");
+  try {
+    const result = await invokeCamAccesoPostAdmin({action:"list", client_id:clientId});
+    if (camAccesoPostsClientId !== clientId || $("camAccesoPostsPanel") !== panel) return;
+    camAccesoPosts = Array.isArray(result.data) ? result.data : [];
+    renderCamAccesoPosts();
+    setCamAccPostsStatus(`${camAccesoPosts.length} puesto(s) recuperado(s) de los contratos CAM-ACCESO de este cliente.`, "success");
+  } catch (error) {
+    camAccesoPosts = [];
+    renderCamAccesoPosts();
+    setCamAccPostsStatus(`No se pudieron consultar los puestos: ${error.message}`, "error");
+  }
+}
+function setupCamAccesoPosts(client) {
+  const panel = $("camAccesoPostsPanel");
+  if (!panel) return;
+  updatePostClientContext("CAM-ACCESO", client, "camAccPostContract", "camAccesoClientContext");
+  $("camAccPostContract")?.addEventListener("change", () => updatePostClientContext("CAM-ACCESO", client, "camAccPostContract", "camAccesoClientContext"));
+  loadCamAccesoPosts(client.id);
+  $("camAccPostReload")?.addEventListener("click", () => loadCamAccesoPosts(client.id));
+  $("camAccPostCreate")?.addEventListener("click", async event => {
+    const button = event.currentTarget;
+    const contractId = $("camAccPostContract")?.value || "";
+    const postCode = $("camAccPostCode")?.value.trim() || "";
+    const displayName = $("camAccPostName")?.value.trim() || "";
+    const role = $("camAccPostRole")?.value || "";
+    const password = $("camAccPostPassword")?.value || "";
+    if (!contractId || !postCode || !displayName || !password) { setCamAccPostsStatus("Completa contrato, código, nombre y clave inicial.", "warning"); return; }
+    if (password.length < 12 || password.length > 128) { setCamAccPostsStatus("La clave debe tener entre 12 y 128 caracteres.", "warning"); return; }
+    if (!/^[A-Za-z0-9][A-Za-z0-9._-]{1,79}$/.test(postCode)) { setCamAccPostsStatus("El código debe tener entre 2 y 80 caracteres: letras, números, punto, guion o guion bajo.", "warning"); return; }
+    const selectedContract = contracts.find(item => item.id === contractId);
+    if (!confirm(`CLIENTE: ${client.name || client.company_name || client.id} · NIT: ${client.tax_id || "No registrada"}\\nPRODUCTO: CAM-ACCESO · CONTRATO: ${selectedContract?.contract_number || contractId}\\n\\nSe creará el puesto ${postCode} (${displayName}), con rol ${role}. La clave se almacenará como hash en el servidor. ¿Confirmas?`)) return;
+    button.disabled = true; button.textContent = "Creando puesto…";
+    try {
+      const result = await invokeCamAccesoPostAdmin({action:"create",client_id:client.id,client_product_id:contractId,post_code:postCode,display_name:displayName,role,password});
+      if (!result?.data?.id || result.data.client_product_id !== contractId) throw new Error("El servidor no confirmó el puesto y contrato esperados.");
+      $("camAccPostPassword").value = "";
+      $("camAccPostCode").value = "";
+      $("camAccPostName").value = "";
+      await loadCamAccesoPosts(client.id);
+      if (!camAccesoPosts.some(post => post.id === result.data.id)) throw new Error("El servidor creó el puesto, pero no apareció en la consulta posterior. No repitas el alta hasta revisar.");
+      setCamAccPostsStatus(`Puesto ${postCode} creado y verificado en el contrato CAM-ACCESO.`, "success");
+    } catch (error) { setCamAccPostsStatus(`No se confirmó la creación: ${error.message}`, "error"); }
+    finally { button.disabled = false; button.textContent = "＋ Crear puesto CAM-ACCESO"; }
+  });
+  panel.addEventListener("click", async event => {
+    const button = event.target.closest("[data-cam-post-action]");
+    if (!button) return;
+    const post = camAccesoPosts.find(item => item.id === button.dataset.id);
+    if (!post) { setCamAccPostsStatus("No se encontró el puesto en la consulta actual. Actualiza la lista.", "error"); return; }
+    const action = button.dataset.camPostAction;
+    button.disabled = true;
+    try {
+      if (action === "rotate") {
+        const password = prompt(`Nueva clave para ${post.post_code} (mínimo 12 caracteres). No se mostrará ni se podrá recuperar después:`);
+        if (password === null) return;
+        if (password.length < 12 || password.length > 128) throw new Error("La clave debe tener entre 12 y 128 caracteres.");
+        if (!confirm(`¿Cambiar la clave del puesto ${post.post_code}? La clave anterior dejará de funcionar.`)) return;
+        await invokeCamAccesoPostAdmin({action:"rotate_password",id:post.id,password});
+        setCamAccPostsStatus(`Solicitud de cambio de clave completada para ${post.post_code}.`, "success");
+      } else if (action === "status") {
+        const nextStatus = button.dataset.status;
+        if (!confirm(`¿Cambiar el estado del puesto ${post.post_code} a ${nextStatus}?`)) return;
+        await invokeCamAccesoPostAdmin({action:"set_status",id:post.id,status:nextStatus});
+        setCamAccPostsStatus(`Estado del puesto ${post.post_code} actualizado.`, "success");
+      }
+      await loadCamAccesoPosts(client.id);
+    } catch (error) { setCamAccPostsStatus(`No se confirmó la operación: ${error.message}`, "error"); }
+    finally { button.disabled = false; }
+  });
+}
+
+function renderDetail() {
+  const c = clients.find(x => x.id === selectedId);
+  if (!c) {
+    $("detail").innerHTML = '<div class="empty">Selecciona un cliente para consultar su ficha integral.</div>';
+    return;
+  }
+  const assigned = contracts.filter(x => x.client_id === c.id);
+  const activeContracts = assigned.filter(x => hasStatus(x, ["active"])).length;
+  const needsReview = assigned.filter(x => ["trial","expired"].includes(normalizeStatus(x.status)) || (x.end_date && new Date(`${x.end_date}T23:59:59`).getTime() < Date.now())).length;
+  $("detail").innerHTML = `<div class="detail-heading"><h3>${safe(c.name)}</h3>
+    <div class="muted">Ficha integral del cliente · ID ${safe(c.id)}</div>
+    <div style="margin-top:10px">${badge(c.status)}</div></div>
+    <div class="client-detail-grid">
+      <section class="client-company" aria-label="Datos de la empresa">
+        <div class="actions" style="margin-top:0;margin-bottom:14px"><button class="btn" id="editClient" type="button">✎ Editar datos del cliente</button></div>
+        <div class="section"><h3>Datos de la empresa</h3>
+          <div class="company-field"><div class="muted">Identificación / NIT</div><strong>${safe(c.tax_id || "No registrada")}</strong></div>
+          <div class="company-field"><div class="muted">Persona de contacto</div><strong>${safe(c.contact_name || "No registrada")}</strong></div>
+          <div class="company-field"><div class="muted">Correo de contacto</div><strong>${safe(c.contact_email || "No registrado")}</strong></div>
+          <div class="company-field"><div class="muted">Teléfono</div><strong>${safe(c.contact_phone || "No registrado")}</strong></div>
+          <div class="company-field"><div class="muted">Fecha de alta</div><strong>${dateLabel(c.created_at)}</strong></div>
+          <div class="company-field"><div class="muted">Notas comerciales registradas</div><div>${safe(c.notes || "Sin notas registradas")}</div></div>
+        </div>
+      </section>
+      <div class="client-main">
+        <div class="section"><h3>Resumen de relación comercial</h3>
+          <div class="meta"><span class="pill">${assigned.length} producto(s)/contrato(s)</span><span class="pill">${activeContracts} activo(s)</span><span class="pill">${needsReview} por revisar</span></div>
+          <div class="muted" style="margin-top:9px">Este resumen se calcula con los datos recibidos del servidor; no modifica contratos ni licencias.</div>
+        </div>
+        <div class="section"><h3>Productos, contratos y vigencias</h3>
+          <div class="muted">Información consultada al servidor. Las alertas de fecha son orientativas y no cambian el estado oficial del contrato.</div>
+          <div class="products">${assigned.length ? assigned.map(x => {
+            const product = products.find(p => p.id === x.product_id);
+            const alert = contractAlert(x);
+            return `<div class="product"><div style="min-width:0;flex:1"><strong>${safe(product?.name || "Producto sin nombre")}</strong>
+              <small>${safe(x.product_code || product?.code || "")} · Contrato: ${safe(x.contract_number || "Sin número")}</small>
+              <small>Inicio: ${dateLabel(x.start_date)} · Vencimiento: ${dateLabel(x.end_date)}</small>
+              <div style="margin-top:5px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">${badge(x.status)}<span class="pill">${alert.text}</span></div>
+              ${x.notes ? `<small>Nota del contrato: ${safe(x.notes)}</small>` : ""}
+              <div class="actions" style="align-items:center">
+                <label class="muted" for="contractStatus-${safe(x.id)}">Estado:</label>
+                <select class="field" style="width:auto;min-width:145px;margin:0;padding:8px 10px" id="contractStatus-${safe(x.id)}" aria-label="Nuevo estado de ${safe(product?.name || "producto")}">
+                  ${[["active","Activo"],["suspended","Suspendido"],["trial","En prueba"],["expired","Vencido"],["cancelled","Cancelado"],["disabled","Deshabilitado"]].map(([value,label])=>`<option value="${value}" ${normalizeStatus(x.status)===value?"selected":""}>${label}</option>`).join("")}
+                </select>
+                <button class="btn alt save-contract-status" type="button" data-contract-id="${safe(x.id)}">Guardar estado</button>
+              </div>
+              <div class="actions" style="align-items:center;margin-top:8px">
+                <label class="muted" for="contractNumber-${safe(x.id)}">Número de contrato:</label>
+                <input class="field" style="width:auto;min-width:210px;max-width:100%;margin:0;padding:8px 10px" id="contractNumber-${safe(x.id)}" maxlength="80" value="${safe(x.contract_number || "")}" aria-label="Número de contrato para ${safe(product?.name || "producto")}">
+                <button class="btn alt save-contract-number" type="button" data-contract-id="${safe(x.id)}">Guardar número</button>
+              </div>
+            </div></div>`;
+          }).join("") : '<div class="empty">Este cliente no tiene contratos/productos asignados.</div>'}</div>
+        </div>
+        <div class="section"><h3>Asignar producto / registrar contrato</h3>
+          <div class="muted">La asignación se guardará en el servidor para este cliente. Antes de confirmar, verifica que estás trabajando con un cliente de prueba autorizado.</div>
+          <form id="assignmentForm" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:12px">
+            <label class="field">Producto *<select name="productId" required>${products.filter(p => hasStatus(p, ["active"])).map(p => `<option value="${safe(p.id)}">${safe(p.name)} (${safe(p.code)})</option>`).join("")}</select></label>
+            <label class="field">Número de contrato<input name="contractNumber" maxlength="80" placeholder="Ej. DEMO-0001"></label>
+            <label class="field">Fecha de inicio *<input name="startDate" type="date" required value="${new Date().toLocaleDateString("en-CA")}"></label>
+            <label class="field">Fecha de vencimiento<input name="endDate" type="date"></label>
+            <label class="field">Estado inicial<select name="status"><option value="trial">En prueba</option><option value="active">Activo</option><option value="suspended">Suspendido</option></select></label>
+            <label class="field">Nota del contrato<input name="notes" maxlength="500" placeholder="Ej. Asignación de prueba"></label>
+            <div class="actions" style="grid-column:1/-1"><button class="btn" type="submit" id="saveAssignment" ${products.filter(p => hasStatus(p, ["active"])).length ? "" : "disabled"}>Guardar asignación</button></div>
+          </form>
+          ${products.filter(p => hasStatus(p, ["active"])).length ? "" : '<div class="note error">No hay productos activos disponibles para asignar.</div>'}
+        </div>
+        <div class="section"><details class="user-access-advanced"><summary style="cursor:pointer;font-weight:700;color:#123b5d;padding:10px 12px;background:#f1f6fa;border:1px solid #d8e5ee;border-radius:9px">Cuentas personales y permisos (Supabase Auth) · Administración avanzada</summary>
+          <div class="muted">Uso exclusivo para cuentas personales (no para puestos operativos). Este módulo vincula una identidad que ya existe en Supabase Auth. No crea cuentas ni envía invitaciones. Antes de asignar, confirma el UUID del usuario desde Authentication → Users.</div>
+          <div class="products" style="margin-top:12px">
+            ${(memberships.filter(m => m.client_id === c.id)).length ? memberships.filter(m => m.client_id === c.id).map(m => {
+              const linkedAccess = productAccess.filter(a => a.client_id === c.id && a.client_user_id === m.id);
+              return `<div class="product" data-membership-user-id="${safe(m.user_id)}" data-membership-id="${safe(m.id)}"><div style="min-width:0;flex:1">
+                <strong style="overflow-wrap:anywhere;word-break:break-word">${safe(membershipDisplayName(m) || `Usuario: ${m.user_id}`)}</strong><small>UUID de Supabase Auth: ${safe(m.user_id)}</small>
+                <div style="margin-top:5px">${badge(m.status)}</div>
+                <small>${linkedAccess.length} acceso(s) de producto asociado(s)</small>
+                <div class="actions" style="margin-top:8px;gap:6px;flex-wrap:wrap">
+                  <button class="btn alt" type="button" data-membership-action="display_name" data-id="${safe(m.id)}" data-user-id="${safe(m.user_id)}">Editar Display Name</button>
+                  <button class="btn alt" type="button" data-membership-action="edit" data-id="${safe(m.id)}">Editar estado</button>
+                  <button class="btn alt" type="button" data-membership-action="replace" data-id="${safe(m.id)}" data-user-id="${safe(m.user_id)}">Reemplazar usuario</button>
+                  <button class="btn danger" type="button" data-membership-action="disable" data-id="${safe(m.id)}">Retirar acceso</button>
+                </div>
+                ${linkedAccess.map(a => {
+                  const contract = contracts.find(x => x.id === a.client_product_id);
+                  const product = products.find(p => p.id === contract?.product_id);
+                  return `<small>• ${safe(product?.name || "Producto no identificado")} · ${safe(contract?.contract_number || "Sin contrato")} · ${safe(labelStatus(a.status))}</small>`;
+                }).join("")}
+              </div></div>`;
+            }).join("") : '<div class="empty">Todavía no hay usuarios vinculados a este cliente.</div>'}
+          </div>
+          <form id="membershipForm" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:14px">
+            <label class="field">UUID de usuario existente en Auth *<input name="userId" required maxlength="36" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" autocomplete="off"></label>
+            <label class="field">Estado de membresía<select name="status"><option value="active">Activo</option><option value="disabled">Deshabilitado</option><option value="suspended">Suspendido</option></select></label>
+            <div class="actions" style="grid-column:1/-1"><button class="btn" type="submit" id="saveMembership">Vincular usuario existente</button></div>
+          </form>
+          <form id="accessForm" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:12px">
+            <label class="field">Membresía del cliente *<select name="membershipId" required>
+              <option value="">Selecciona una membresía activa…</option>
+              ${memberships.filter(m => m.client_id === c.id && hasStatus(m, ["active"])).map(m => `<option value="${safe(m.id)}">${safe(membershipLabel(m))}</option>`).join("")}
+            </select></label>
+            <label class="field">Contrato/producto *<select name="contractId" required>
+              <option value="">${assigned.some(x => hasStatus(x, ["active", "trial"])) ? "Selecciona un contrato/producto…" : "No hay contratos activos o en prueba para este cliente"}</option>
+              ${assigned.filter(x => hasStatus(x, ["active","trial"])).map(x => { const p = products.find(item => item.id === x.product_id); return `<option value="${safe(x.id)}">${safe(p?.name || "Producto")} · ${safe(x.contract_number || "Sin número de contrato")} · ${safe(labelStatus(x.status))}</option>`; }).join("")}
+            </select></label>
+            <label class="field">Estado de acceso<select name="status"><option value="active">Activo</option><option value="disabled">Deshabilitado</option><option value="suspended">Suspendido</option></select></label>
+            <div class="actions" style="grid-column:1/-1"><button class="btn alt" type="submit" id="saveProductAccess" ${memberships.some(m => m.client_id === c.id && hasStatus(m, ["active"])) && assigned.some(x => hasStatus(x, ["active","trial"])) ? "" : "disabled"}>Asignar acceso al producto</button></div>
+          </form>
+          <div class="note">Importante: la vinculación requiere el UUID correcto. El acceso operativo solo se concede si el usuario, la membresía, el cliente, el acceso y el contrato cumplen las condiciones que verifica el servidor. Si el selector indica que no hay contratos, revisa primero la sección «Asignar producto / registrar contrato» y confirma que el contrato del cliente tenga estado Activo o En prueba.</div>
+        </details></div>
+          <details class="cam-posts-panel cam-product-accordion" id="camRondasPostsPanel" aria-label="Administración de puestos CAM-RONDAS">
+            <summary class="cam-product-summary"><span>CAM-RONDAS · Administración de puestos</span><span class="cam-product-summary-hint">Abrir panel</span></summary><div class="cam-product-content"><h4>Administración Universal de Usuarios y Accesos</h4>
+            <p class="muted"><strong>Producto piloto: CAM-RONDAS · Administración de puestos.</strong> Este módulo central incorporará progresivamente la gestión de credenciales y accesos de los productos TECCHNEX. En esta versión de laboratorio, las operaciones disponibles corresponden únicamente a puestos asociados a contratos CAM-RONDAS. Las contraseñas se envían únicamente al endpoint seguro y nunca se recuperan ni se muestran después de guardarlas.</p>
+            <div id="camRondasClientContext" class="cam-post-client-context" aria-live="polite"></div>\n            <div id="camRondasPostsStatus" class="note" role="status" aria-live="polite">Consultando puestos CAM-RONDAS…</div>
+            <div class="cam-posts-grid" style="margin-top:10px">
+              <label class="field">Contrato CAM-RONDAS *<select id="camPostContract" required><option value="">Selecciona un contrato activo…</option></select></label>
+              <label class="field">Código único del puesto *<input id="camPostCode" maxlength="80" autocomplete="off" placeholder="Ej. PORTERIA-01"></label>
+              <label class="field">Nombre visible del puesto *<input id="camPostName" maxlength="100" autocomplete="off" placeholder="Ej. Portería principal"></label>
+              <label class="field">Rol operativo *<select id="camPostRole"><option value="Vigilante">Vigilante</option><option value="Supervisor">Supervisor</option><option value="Administrador TIC">Administrador TIC</option></select></label>
+              <label class="field">Clave inicial *<input id="camPostPassword" type="password" minlength="12" maxlength="128" autocomplete="new-password" placeholder="Mínimo 12 caracteres"></label>
+            </div>
+            <div class="actions"><button class="btn" id="camPostCreate" type="button">＋ Crear puesto CAM-RONDAS</button><button class="btn alt" id="camPostReload" type="button">↻ Actualizar puestos</button></div>
+            <div id="camRondasPostsList" class="cam-posts-list"><div class="empty">Cargando puestos…</div></div>
+            <p class="muted" style="margin:10px 0 0">Roles y estados se validan en el servidor. No se crean usuarios de Supabase Auth para los puestos CAM-RONDAS.</p>
+          </div></details>
+          <details class="cam-posts-panel cam-product-accordion" id="camAccesoPostsPanel" aria-label="Administración de puestos CAM-ACCESO">
+            <summary class="cam-product-summary"><span>CAM-ACCESO · Administración de puestos</span><span class="cam-product-summary-hint">Abrir panel</span></summary><div class="cam-product-content"><h4>Administración Universal de Usuarios y Accesos</h4>
+            <p class="muted"><strong>Producto piloto: CAM-ACCESO · Administración de puestos.</strong> Este módulo central incorporará progresivamente la gestión de credenciales y accesos de los productos TECCHNEX. En esta versión de laboratorio, las operaciones disponibles corresponden únicamente a puestos asociados a contratos CAM-ACCESO. Las contraseñas se envían únicamente al endpoint seguro y nunca se recuperan ni se muestran después de guardarlas.</p>
+            <div id="camAccesoClientContext" class="cam-post-client-context" aria-live="polite"></div>\n            <div id="camAccesoPostsStatus" class="note" role="status" aria-live="polite">Consultando puestos CAM-ACCESO…</div>
+            <div class="cam-posts-grid" style="margin-top:10px">
+              <label class="field">Contrato CAM-ACCESO *<select id="camAccPostContract" required><option value="">Selecciona un contrato activo…</option></select></label>
+              <label class="field">Código único del puesto *<input id="camAccPostCode" maxlength="80" autocomplete="off" placeholder="Ej. porteria-casa-linda"></label>
+              <label class="field">Nombre visible del puesto *<input id="camAccPostName" maxlength="100" autocomplete="off" placeholder="Ej. Portería principal"></label>
+              <label class="field">Rol operativo *<select id="camAccPostRole"><option value="Vigilante">Vigilante</option><option value="Supervisor">Supervisor</option><option value="Administrador TIC">Administrador TIC</option></select></label>
+              <label class="field">Clave inicial *<input id="camAccPostPassword" type="password" minlength="12" maxlength="128" autocomplete="new-password" placeholder="Mínimo 12 caracteres"></label>
+            </div>
+            <div class="actions"><button class="btn" id="camAccPostCreate" type="button">＋ Crear puesto CAM-ACCESO</button><button class="btn alt" id="camAccPostReload" type="button">↻ Actualizar puestos</button></div>
+            <div id="camAccesoPostsList" class="cam-posts-list"><div class="empty">Cargando puestos…</div></div>
+            <p class="muted" style="margin:10px 0 0">Roles y estados se validan en el servidor. No se crean usuarios de Supabase Auth para los puestos CAM-ACCESO.</p>
+          </div></details>
+        </div>
+        <div class="section"><h3>Seguimiento e historial</h3><div class="muted">La bitácora de actividades comerciales aún no está conectada. En esta versión no se inventan llamadas, demostraciones ni eventos.</div></div>
+      </div>
+    </div>
+    <div class="note">Edición disponible para los datos básicos del cliente y el estado de cada asignación producto/contrato. Cada cambio de estado requiere confirmación y se verificará con una nueva consulta al servidor. La asignación de productos y contratos está habilitada en este laboratorio; revisa los datos antes de confirmar cada alta.</div>`;
+  setupClientTabs();
+  setupCamRondasPosts(c);
+  setupCamAccesoPosts(c);
+  $("editClient").addEventListener("click", () => openModal("edit", c));
+  const assignmentForm = $("assignmentForm");
+  assignmentForm?.addEventListener("invalid", event => {
+    const field = event.target;
+    setStatus(`No se puede guardar la asignación: revisa el campo obligatorio «${field.labels?.[0]?.textContent?.trim() || field.name || "campo"}».`, "warning");
+  }, true);
+  $("saveAssignment")?.addEventListener("click", () => {
+    setStatus("Solicitud de asignación recibida. Validando los campos del formulario…", "");
+  });
+  assignmentForm?.addEventListener("submit", async event => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const values = new FormData(form);
+    const productId = String(values.get("productId") || "");
+    const contractNumber = String(values.get("contractNumber") || "").trim();
+    const startDate = String(values.get("startDate") || "");
+    const endDate = String(values.get("endDate") || "");
+    const status = String(values.get("status") || "trial");
+    const notes = String(values.get("notes") || "").trim();
+    if (!productId || !startDate) {
+      setStatus("Selecciona un producto y una fecha de inicio.", "warning");
+      return;
+    }
+    if (endDate && endDate < startDate) {
+      setStatus("La fecha de vencimiento no puede ser anterior a la fecha de inicio.", "warning");
+      return;
+    }
+    const product = products.find(item => item.id === productId);
+    if (!product) {
+      setStatus("El producto seleccionado ya no está disponible. Actualiza los datos.", "error");
+      return;
+    }
+    if (contracts.some(item => item.client_id === c.id && item.product_id === productId &&
+      String(item.contract_number || "").trim().toLowerCase() === contractNumber.toLowerCase() && contractNumber !== "")) {
+      setStatus("Ya existe una asignación para este cliente con ese producto y número de contrato. Verifica el registro antes de continuar.", "warning");
+      return;
+    }
+    // CAM-CRM-09.1: la restricción real de tecchnex_client_products_status_check
+    // solo admite active, suspended, expired y cancelled. No enviar "trial".
+    // Si el usuario elige "En prueba", se conserva la intención en la nota,
+    // pero el estado persistido será "active" (no existe estado trial en BD).
+    const persistedStatus = status === "trial" ? "active" : status;
+    const statusLabel = labelStatus(status);
+    const persistenceLabel = status === "trial"
+      ? 'En prueba (se guardará técnicamente como "Activo" por la restricción vigente de Supabase)'
+      : statusLabel;
+    const auditNote = status === "trial"
+      ? [notes, "Estado solicitado en CRM: En prueba; estado persistido: active por restricción vigente de Supabase."].filter(Boolean).join(" | ")
+      : notes;
+    if (!confirm(`¿Confirmas asignar ${product.name} al cliente ${c.name}?\nContrato: ${contractNumber || "sin número"}\nEstado solicitado: ${persistenceLabel}\n\nEsta acción creará un registro en Supabase.`)) {
+      setStatus("Asignación cancelada. No se enviaron cambios al servidor.", "warning");
+      return;
+    }
+    const button = $("saveAssignment");
+    button.disabled = true;
+    button.textContent = "Guardando…";
+    try {
+      const payload = {client_id:c.id, product_id:productId, contract_number:contractNumber || null,
+        start_date:startDate, end_date:endDate || null, status:persistedStatus, notes:auditNote || null};
+      const result = await invokeCommercial({action:"create", resource:"contracts", data:payload});
+      if (!result?.data?.id || result.data.client_id !== c.id || result.data.product_id !== productId) {
+        throw new Error("El servidor no confirmó la creación de la asignación.");
+      }
+      setStatus("Asignación creada. Consultando nuevamente para verificar persistencia…", "success");
+      const createdId = result.data.id;
+      const refreshed = await refreshData();
+      if (!refreshed || !contracts.some(item => item.id === createdId && item.client_id === c.id && item.product_id === productId)) {
+        throw new Error("La asignación se creó, pero no se pudo confirmar en la nueva consulta. No vuelvas a enviarla hasta revisar el servidor.");
+      }
+      setStatus(`Asignación de ${product.name} guardada y recuperada correctamente desde el servidor.`, "success");
+    } catch (error) {
+      console.error("Product assignment failed:", error);
+      setStatus(error?.message || "No fue posible crear la asignación.", "error");
+    } finally {
+      const stillPresent = $("saveAssignment");
+      if (stillPresent) { stillPresent.disabled = false; stillPresent.textContent = "Guardar asignación"; }
+    }
+  });
+  $("detail").querySelectorAll(".save-contract-status").forEach(button => {
+    button.addEventListener("click", async () => {
+      const contractId = button.dataset.contractId;
+      const select = $("contractStatus-" + contractId);
+      const nextStatus = select?.value;
+      const current = contracts.find(item => item.id === contractId);
+      if (!current || !nextStatus || normalizeStatus(current.status) === normalizeStatus(nextStatus)) {
+        setStatus("Selecciona un estado diferente para guardar.", "warning");
+        return;
+      }
+      const nextLabel = labelStatus(nextStatus);
+      if (!confirm(`¿Confirmas cambiar el estado de ${current.contract_number || "este contrato"} a "${nextLabel}"? Esta acción modifica el registro en Supabase.`)) return;
+      button.disabled = true;
+      button.textContent = "Guardando…";
+      try {
+        const result = await invokeCommercial({action:"update", resource:"contracts", id:contractId, data:{status:nextStatus}});
+        if (!result?.data?.id || normalizeStatus(result.data.status) !== normalizeStatus(nextStatus)) {
+          throw new Error("El servidor no confirmó el nuevo estado.");
+        }
+        setStatus("Estado actualizado en el servidor. Verificando con una nueva consulta…", "success");
+        await refreshData();
+        const verified = contracts.find(item => item.id === contractId);
+        if (!verified || normalizeStatus(verified.status) !== normalizeStatus(nextStatus)) {
+          throw new Error("El servidor no devolvió el estado solicitado tras la consulta.");
+        }
+        setStatus(`Estado confirmado: ${nextLabel}. El cambio se recuperó correctamente desde el servidor.`, "success");
+      } catch (error) {
+        console.error("Contract status update failed:", error);
+        setStatus(error?.message || "No fue posible actualizar el estado del contrato.", "error");
+      } finally {
+        button.disabled = false;
+        button.textContent = "Guardar estado";
+      }
+    });
+  });
+  // CAM-CRM-08: corregir el número comercial del contrato sin modificar su UUID interno.
+  $("detail").querySelectorAll(".save-contract-number").forEach(button => {
+    button.addEventListener("click", async () => {
+      const contractId = button.dataset.contractId;
+      const input = $("contractNumber-" + contractId);
+      const current = contracts.find(item => item.id === contractId);
+      if (!current || !input) {
+        setStatus("No se encontró el contrato seleccionado. Actualiza los datos e inténtalo de nuevo.", "error");
+        return;
+      }
+      const nextNumber = String(input.value || "").trim();
+      const currentNumber = String(current.contract_number || "").trim();
+      if (nextNumber.length > 80) {
+        setStatus("El número de contrato no puede superar 80 caracteres.", "warning");
+        return;
+      }
+      if (nextNumber === currentNumber) {
+        setStatus("El número no ha cambiado; no hay nada que guardar.", "warning");
+        return;
+      }
+      // Se conserva la misma regla de duplicados usada al crear contratos:
+      // cliente + producto + número comercial, excluyendo el registro actual.
+      const duplicate = contracts.some(item => item.id !== contractId &&
+        item.client_id === current.client_id && item.product_id === current.product_id &&
+        String(item.contract_number || "").trim().toLowerCase() === nextNumber.toLowerCase() && nextNumber !== "");
+      if (duplicate) {
+        setStatus("Ya existe otro contrato para este cliente y producto con ese número. Elige un número distinto.", "warning");
+        return;
+      }
+      if (!confirm(`¿Confirmas corregir el número del contrato?\nActual: ${currentNumber || "Sin número"}\nNuevo: ${nextNumber || "Sin número"}\n\nSolo se modificará el número comercial; el ID interno y sus relaciones permanecerán iguales.`)) return;
+      button.disabled = true;
+      button.textContent = "Guardando…";
+      try {
+        const result = await invokeCommercial({action:"update", resource:"contracts", id:contractId, data:{contract_number:nextNumber || null}});
+        if (!result?.data?.id || result.data.id !== contractId || String(result.data.contract_number || "") !== nextNumber) {
+          throw new Error("El servidor no confirmó el nuevo número de contrato.");
+        }
+        setStatus("Número actualizado en el servidor. Verificando con una nueva consulta…", "success");
+        await refreshData();
+        const verified = contracts.find(item => item.id === contractId);
+        if (!verified || String(verified.contract_number || "") !== nextNumber) {
+          throw new Error("El servidor no devolvió el número solicitado tras la consulta.");
+        }
+        setStatus(`Número de contrato corregido y verificado: ${nextNumber || "Sin número"}.`, "success");
+      } catch (error) {
+        console.error("Contract number update failed:", error);
+        setStatus(error?.message || "No fue posible corregir el número del contrato.", "error");
+      } finally {
+        button.disabled = false;
+        button.textContent = "Guardar número";
+      }
+    });
+  });
+
+  $("membershipForm")?.addEventListener("submit", async event => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const values = new FormData(form);
+    const userId = String(values.get("userId") || "").trim();
+    const status = String(values.get("status") || "active");
+    const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    if (!uuidPattern.test(userId)) {
+      setStatus("El UUID no tiene un formato válido. Cópialo desde Authentication → Users.", "warning");
+      return;
+    }
+    if (memberships.some(m => m.client_id === c.id && m.user_id.toLowerCase() === userId.toLowerCase())) {
+      setStatus("Este usuario ya tiene una membresía registrada para el cliente. Revisa el estado existente antes de repetir.", "warning");
+      return;
+    }
+    if (!confirm(`¿Vincular el usuario Auth ${userId} al cliente ${c.name} con estado ${labelStatus(status)}? No se creará una cuenta nueva.`)) return;
+    const button = $("saveMembership");
+    button.disabled = true; button.textContent = "Vinculando…";
+    try {
+      const result = await invokeCommercial({action:"create", resource:"memberships", data:{client_id:c.id, user_id:userId, status}});
+      if (!result?.data?.id || result.data.client_id !== c.id || String(result.data.user_id).toLowerCase() !== userId.toLowerCase()) {
+        throw new Error("El servidor no confirmó la membresía esperada.");
+      }
+      const id = result.data.id;
+      setStatus("Membresía creada. Verificando con una consulta nueva…", "success");
+      const refreshed = await refreshData();
+      if (!refreshed || !memberships.some(m => m.id === id && m.client_id === c.id && String(m.user_id).toLowerCase() === userId.toLowerCase())) {
+        throw new Error("La membresía se creó, pero no se pudo verificar después de consultar. No la repitas hasta revisar el registro.");
+      }
+      setStatus("Usuario vinculado y membresía recuperada correctamente desde el servidor. La cuenta Auth y su contraseña no se modificaron.", "success");
+    } catch (error) {
+      setStatus(error?.message || "No fue posible vincular el usuario.", "error");
+    } finally {
+      const currentButton = $("saveMembership");
+      if (currentButton) { currentButton.disabled = false; currentButton.textContent = "Vincular usuario existente"; }
+    }
+  });
+  // CAM-CRM-08: administración explícita de vinculaciones. No elimina identidades Auth.
+  $("detail")?.addEventListener("click", async event => {
+    const actionButton = event.target.closest("[data-membership-action]");
+    if (!actionButton) return;
+    const membership = memberships.find(m => m.id === actionButton.dataset.id && m.client_id === c.id);
+    if (!membership) { setStatus("No se encontró la vinculación actualizada. Recarga los datos antes de continuar.", "error"); return; }
+    const action = actionButton.dataset.membershipAction;
+    actionButton.disabled = true;
+    try {
+      if (action === "display_name") {
+        const currentName = membershipDisplayName(membership);
+        const proposedName = prompt("Nombre visible para esta cuenta de Supabase Auth (máximo 100 caracteres):", currentName);
+        if (proposedName === null) return;
+        const displayName = proposedName.trim();
+        if (!displayName || displayName.length > 100) throw new Error("El Display Name debe tener entre 1 y 100 caracteres.");
+        if (!confirm(`Se actualizará el Display Name de la cuenta Auth ${membership.user_id} a «${displayName}». Se conservarán los demás metadatos y no cambiarán productos, contratos, contraseña ni MFA. ¿Continuar?`)) return;
+        const result = await invokeCommercial({action:"set_display_name", resource:"memberships", user_id:membership.user_id, display_name:displayName});
+        if (result?.data?.user_id !== membership.user_id || result?.data?.display_name !== displayName) throw new Error("El servidor no confirmó el nombre y el UUID esperados.");
+        const refreshed = await refreshData();
+        if (!refreshed || !memberships.some(m => m.user_id === membership.user_id && membershipDisplayName(m) === displayName)) throw new Error("Supabase respondió al cambio, pero la consulta posterior no confirmó el nombre. Revisa la cuenta antes de repetir.");
+        setStatus(`Display Name guardado y verificado para ${membership.user_id}.`, "success");
+      } else if (action === "edit") {
+        const allowed = ["active", "disabled", "suspended"];
+        const current = String(membership.status || "active");
+        const proposed = prompt("Nuevo estado de la vinculación: active, disabled o suspended", current);
+        if (proposed === null) return;
+        const status = proposed.trim().toLowerCase();
+        if (!allowed.includes(status)) throw new Error("Estado no válido. Usa active, disabled o suspended.");
+        if (!confirm(`¿Cambiar el estado de la vinculación de ${membership.user_id} a ${status}?`)) return;
+        await invokeCommercial({action:"update", resource:"memberships", id:membership.id, data:{status}});
+        await refreshData();
+        setStatus("Estado de la vinculación actualizado y datos consultados nuevamente.", "success");
+      } else if (action === "disable") {
+        if (!confirm(`Se deshabilitará la vinculación de ${membership.user_id} con este cliente. La cuenta Auth no se borrará y la relación histórica se conservará. ¿Continuar?`)) return;
+        await invokeCommercial({action:"update", resource:"memberships", id:membership.id, data:{status:"disabled"}});
+        await refreshData();
+        setStatus("Vinculación deshabilitada. La identidad de Supabase Auth no fue eliminada.", "success");
+      } else if (action === "replace") {
+        const nextUserId = prompt("UUID de la identidad nueva en Supabase Auth. La vinculación anterior se conservará hasta verificar la nueva.");
+        if (nextUserId === null) return;
+        const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+        if (!uuidPattern.test(nextUserId.trim())) throw new Error("El UUID nuevo no tiene un formato válido.");
+        if (memberships.some(m => m.client_id === c.id && String(m.user_id).toLowerCase() === nextUserId.trim().toLowerCase())) throw new Error("La nueva identidad ya tiene una vinculación con este cliente.");
+        if (!confirm(`Se agregará ${nextUserId.trim()} al cliente. Solo después de verificar la nueva vinculación se podrá deshabilitar la anterior (${membership.user_id}). ¿Continuar?`)) return;
+        const created = await invokeCommercial({action:"create", resource:"memberships", data:{client_id:c.id, user_id:nextUserId.trim(), status:membership.status || "active"}});
+        if (!created?.data?.id || created.data.client_id !== c.id || String(created.data.user_id).toLowerCase() !== nextUserId.trim().toLowerCase()) throw new Error("El servidor no confirmó la nueva vinculación; la anterior se mantiene sin cambios.");
+        const refreshed = await refreshData();
+        if (!refreshed || !memberships.some(m => m.id === created.data.id && m.client_id === c.id && String(m.user_id).toLowerCase() === nextUserId.trim().toLowerCase())) throw new Error("La nueva vinculación no pudo verificarse. La anterior se conserva activa; revisa antes de repetir.");
+        if (!confirm("La nueva vinculación fue verificada. ¿Quieres deshabilitar la anterior? Si eliges Cancelar, ambas quedarán vinculadas.")) {
+          setStatus("Nueva vinculación verificada. La anterior se conservó activa por decisión del administrador.", "success");
+          return;
+        }
+        await invokeCommercial({action:"update", resource:"memberships", id:membership.id, data:{status:"disabled"}});
+        await refreshData();
+        setStatus("Usuario reemplazado: nueva vinculación verificada y anterior deshabilitada. Ninguna identidad Auth fue borrada.", "success");
+      }
+    } catch (error) {
+      setStatus(error?.message || "No se pudo completar la operación de vinculación.", "error");
+    } finally {
+      actionButton.disabled = false;
+    }
+  });
+
+  const accessForm = $("accessForm");
+  accessForm?.addEventListener("invalid", event => {
+    const field = event.target;
+    setStatus(`No se puede asignar el acceso: revisa el campo obligatorio «${field.labels?.[0]?.textContent?.trim() || field.name || "campo"}».`, "warning");
+  }, true);
+  $("saveProductAccess")?.addEventListener("click", () => {
+    setStatus("Solicitud de acceso recibida. Validando membresía y contrato/producto…", "");
+  });
+  accessForm?.addEventListener("submit", async event => {
+    event.preventDefault();
+    const values = new FormData(event.currentTarget);
+    const membershipId = String(values.get("membershipId") || "");
+    const contractId = String(values.get("contractId") || "");
+    const status = String(values.get("status") || "active");
+    const membership = memberships.find(m => m.id === membershipId && m.client_id === c.id && hasStatus(m, ["active"]));
+    const contract = contracts.find(x => x.id === contractId && x.client_id === c.id);
+    if (!membership || !contract) {
+      setStatus("Selecciona una membresía activa y un contrato perteneciente a este cliente.", "warning");
+      return;
+    }
+    if (productAccess.some(a => a.client_user_id === membership.id && a.client_product_id === contract.id && a.client_id === c.id)) {
+      setStatus("Ya existe un registro de acceso para esta combinación de usuario y contrato. Revisa su estado antes de repetir.", "warning");
+      return;
+    }
+    if (!confirm(`¿Asignar acceso a ${membership.user_id} para el contrato ${contract.contract_number || contract.id}? Estado: ${labelStatus(status)}.`)) {
+      setStatus("Asignación de acceso cancelada. No se enviaron cambios al servidor.", "warning");
+      return;
+    }
+    const button = $("saveProductAccess");
+    button.disabled = true; button.textContent = "Asignando…";
+    try {
+      const result = await invokeCommercial({action:"create", resource:"access", data:{
+        client_user_id:membership.id, client_id:c.id, client_product_id:contract.id, status
+      }});
+      if (!result?.data?.id || result.data.client_user_id !== membership.id || result.data.client_product_id !== contract.id || result.data.client_id !== c.id) {
+        throw new Error("El servidor no confirmó la relación de acceso esperada.");
+      }
+      const id = result.data.id;
+      setStatus("Acceso registrado. Verificando persistencia…", "success");
+      const refreshed = await refreshData();
+      if (!refreshed || !productAccess.some(a => a.id === id && a.client_user_id === membership.id && a.client_product_id === contract.id)) {
+        throw new Error("El acceso se registró, pero no se pudo verificar en la consulta posterior. No lo repitas hasta revisar.");
+      }
+      setStatus("Acceso del usuario al producto recuperado y verificado desde el servidor. Falta probar el ingreso real al producto.", "success");
+    } catch (error) {
+      setStatus(error?.message || "No fue posible asignar el acceso.", "error");
+    } finally {
+      const currentButton = $("saveProductAccess");
+      if (currentButton) { currentButton.disabled = false; currentButton.textContent = "Asignar acceso al producto"; }
+    }
+  });
+}
+// CAM-INTERACCION-CRM-01: cada tarjeta navega usando datos ya recuperados; no escribe en Supabase.
+document.querySelectorAll("[data-stat-action]").forEach(card => card.addEventListener("click", () => {
+  const action = card.dataset.statAction;
+  const list = $("clientList");
+  if (action === "clients") {
+    $("search").value = ""; $("filter").value = "all";
+    renderList(); list.scrollIntoView({behavior:"smooth", block:"start"});
+    toast("Mostrando todos los clientes consultados.");
+    return;
+  }
+  if (action === "active-clients") {
+    $("search").value = ""; $("filter").value = "active";
+    renderList(); list.scrollIntoView({behavior:"smooth", block:"start"});
+    toast("Directorio filtrado por clientes activos.");
+    return;
+  }
+  const matchingStatuses = action === "active-contracts" ? ["active"] : ["trial", "expired"];
+  const matching = contracts.filter(contract => matchingStatuses.includes(contract.status) ||
+    (action === "review-contracts" && contract.end_date && new Date(`${contract.end_date}T23:59:59`).getTime() < Date.now()));
+  const firstClient = clients.find(client => matching.some(contract => contract.client_id === client.id));
+  if (!firstClient) {
+    toast(action === "active-contracts" ? "No hay contratos activos asociados a clientes en los datos consultados." : "No hay contratos por revisar asociados a clientes en los datos consultados.");
+    return;
+  }
+  selectedId = firstClient.id;
+  render();
+  const tab = $("detail").querySelector(`[data-tab="contracts"]`);
+  if (tab) tab.click();
+  $("detail").scrollIntoView({behavior:"smooth", block:"start"});
+  toast(action === "active-contracts" ? "Abriendo la ficha del primer cliente con contratos activos." : "Abriendo la ficha del primer cliente con contratos por revisar.");
+}));
+
+function render() { renderList(); renderDetail(); }
+async function refreshData() {
+  if (loading) return;
+  setBusy(true);
+  setStatus("Consultando clientes y productos al servidor…");
+  try {
+    const [clientResult, productResult, contractResult, membershipResult, accessResult] = await Promise.all([
+      invokeCommercial({action:"list", resource:"clients", limit:100}),
+      invokeCommercial({action:"list", resource:"products", limit:100}),
+      invokeCommercial({action:"list", resource:"contracts", limit:100}),
+      invokeCommercial({action:"list", resource:"memberships", limit:100}),
+      invokeCommercial({action:"list", resource:"access", limit:100})
+    ]);
+    clients = Array.isArray(clientResult.data) ? clientResult.data : [];
+    populateExistingUserClients();
+    products = Array.isArray(productResult.data) ? productResult.data : [];
+    contracts = Array.isArray(contractResult.data) ? contractResult.data : [];
+    memberships = Array.isArray(membershipResult.data) ? membershipResult.data : [];
+    productAccess = Array.isArray(accessResult.data) ? accessResult.data : [];
+    if (!clients.some(c => c.id === selectedId)) selectedId = clients[0]?.id || null;
+    renderExistingUserMemberships();
+    render();
+    setStatus(`Consulta completada: ${clients.length} clientes, ${products.length} productos, ${contracts.length} contratos, ${memberships.length} membresías y ${productAccess.length} accesos recuperados del servidor.`, "success");
+    return true;
+  } catch (e) {
+    setStatus(`No se pudo cargar el directorio real: ${e.message}`, "error");
+    toast("No se confirmó la consulta comercial. Revisa el mensaje de estado.");
+    return false;
+  } finally { setBusy(false); }
+}
+let formMode = "create";
+let editingClientId = null;
+function openModal(mode = "create", client = null) {
+  formMode = mode;
+  editingClientId = mode === "edit" ? client?.id : null;
+  const form = $("clientForm");
+  form.reset();
+  $("modalTitle").textContent = mode === "edit" ? "Editar cliente" : "Registrar cliente";
+  $("modalHelp").textContent = mode === "edit"
+    ? "Revisa los datos y guarda solo cuando estés seguro. Se verificará la respuesta del servidor antes de confirmar."
+    : "El registro se enviará al servidor y solo se confirmará después de volver a consultar el registro.";
+  $("saveClient").textContent = mode === "edit" ? "Guardar cambios" : "Guardar cliente";
+  if (client) {
+    form.elements.name.value = client.name || "";
+    form.elements.taxId.value = client.tax_id || "";
+    form.elements.contactName.value = client.contact_name || "";
+    form.elements.email.value = client.contact_email || "";
+    form.elements.phone.value = client.contact_phone || "";
+    form.elements.notes.value = client.notes || "";
+    form.elements.status.value = client.status || "active";
+  }
+  $("modal").classList.add("open");
+  form.elements.name.focus();
+}
+function closeModal() { $("modal").classList.remove("open"); }
+$("newClient").addEventListener("click", openModal);
+$("cancelModal").addEventListener("click", closeModal);
+$("modal").addEventListener("click", e => { if (e.target === $("modal")) closeModal(); });
+$("search").addEventListener("input", renderList);
+$("filter").addEventListener("change", renderList);
+$("refreshClients").addEventListener("click", refreshData);
+$("clientList").addEventListener("click", e => {
+  const b = e.target.closest("[data-open]");
+  if (b) { selectedId = b.dataset.open; render(); }
+});
+$("clientForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  if (loading) return;
+  const f = new FormData(e.currentTarget);
+  const name = String(f.get("name") || "").trim();
+  if (!name) return;
+  const payload = {
+    name,
+    tax_id: String(f.get("taxId") || "").trim() || null,
+    contact_name: String(f.get("contactName") || "").trim() || null,
+    contact_email: String(f.get("email") || "").trim() || null,
+    contact_phone: String(f.get("phone") || "").trim() || null,
+    notes: String(f.get("notes") || "").trim() || null,
+    status: String(f.get("status") || "active")
+  };
+  const isEdit = formMode === "edit";
+  const clientId = editingClientId;
+  if (isEdit && !clientId) {
+    setStatus("No se puede guardar: no se identificó el cliente que se está editando.", "error");
+    return;
+  }
+  setBusy(true);
+  setStatus(isEdit ? "Enviando actualización de cliente al servidor…" : "Enviando solicitud de creación de cliente…");
+  try {
+    const result = await invokeCommercial(isEdit
+      ? {action:"update", resource:"clients", id:clientId, data:payload}
+      : {action:"create", resource:"clients", data:payload});
+    const saved = result.data;
+    if (!saved?.id || (isEdit && saved.id !== clientId)) {
+      throw new Error("El servidor no devolvió el ID esperado; la operación no se confirmará en pantalla.");
+    }
+    closeModal();
+    selectedId = saved.id;
+    setBusy(false);
+    const refreshed = await refreshData();
+    const persisted = clients.find(c => c.id === saved.id);
+    const matches = refreshed && persisted && persisted.name === payload.name &&
+      (persisted.tax_id || null) === payload.tax_id &&
+      (persisted.contact_name || null) === payload.contact_name &&
+      (persisted.contact_email || null) === payload.contact_email &&
+      (persisted.contact_phone || null) === payload.contact_phone &&
+      (persisted.notes || null) === payload.notes && persisted.status === payload.status;
+    if (matches) {
+      setStatus(isEdit ? `Cambios guardados y verificados en la consulta posterior. ID: ${saved.id}` : `Cliente creado y confirmado por el servidor. ID: ${saved.id}`, "success");
+      toast(isEdit ? "Datos del cliente actualizados y verificados." : "Cliente creado y recuperado desde el servidor.");
+    } else {
+      setStatus(isEdit
+        ? `El servidor respondió para el cliente ${saved.id}, pero la consulta posterior no coincide con todos los datos enviados. Revisa la ficha antes de repetir.`
+        : `El servidor devolvió el ID ${saved.id}, pero el cliente no apareció con todos los datos esperados en la consulta posterior. Revisar antes de repetir.`, "error");
+    }
+  } catch (err) {
+    setStatus(`No se confirmó ${isEdit ? "la actualización" : "la creación"}: ${err.message}`, "error");
+  } finally { setBusy(false); }
+});
+// CAM-CRM-DBG-01: diagnóstico delegado para confirmar que los clics y envíos llegan al DOM activo.
+// No escribe datos ni sustituye los controladores de negocio existentes.
+document.addEventListener("click", event => {
+  const button = event.target.closest?.("#saveProductAccess, #saveAssignment");
+  if (!button) return;
+  const form = button.closest("form");
+  console.info("[TECCHNEX CRM diagnóstico] Clic detectado", {button:button.id, form:form?.id || null, file:location.pathname});
+  setStatus(`Clic detectado en «${button.id === "saveProductAccess" ? "Asignar acceso al producto" : "Guardar asignación"}». Validando formulario…`, "warning");
+}, true);
+document.addEventListener("submit", event => {
+  if (event.target?.id !== "accessForm" && event.target?.id !== "assignmentForm") return;
+  console.info("[TECCHNEX CRM diagnóstico] Envío de formulario detectado", {form:event.target.id, file:location.pathname});
+  setStatus(`Envío detectado: ${event.target.id}. Si no aparece después un resultado, revisaremos el controlador de esta operación.`, "warning");
+}, true);
+
+$("integrationStatus").classList.remove("hidden");
+$("integrationStatus").textContent = "Inicializando conexión de laboratorio…";
+try {
+  const url = localStorage.getItem(V8_URL_KEY);
+  const key = localStorage.getItem(V8_PUBLIC_KEY);
+  if (!url || !key) {
+    setStatus("No encontré la configuración guardada por la V8 en este navegador. Abre ambas páginas desde el mismo origen y prepara la conexión en V8.", "error");
+  } else {
+    supabase = createClient(url, key, {auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,flowType:"pkce"}});
+    const {data:{session},error} = await supabase.auth.getSession();
+    if (error) throw error;
+    if (!session) {
+      setStatus("Configuración encontrada, pero no hay sesión activa en este origen. Abre V8, inicia sesión y completa MFA AAL2.", "error");
+    } else {
+      const {data: assurance,error:assuranceError} = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+      if (assuranceError) throw assuranceError;
+      if (assurance?.currentLevel !== "aal2") {
+        setStatus("Hay sesión, pero no tiene AAL2. Completa MFA en la V8 antes de consultar datos comerciales.", "error");
+      } else {
+        setStatus("Sesión AAL2 detectada. Verificando permisos administrativos…", "success");
+        await validateAdminForUserManagement();
+        await refreshData();
+      }
+    }
+  }
+} catch (e) {
+  setStatus(`No se pudo inicializar la conexión: ${e.message}`, "error");
+}
+
+// CAM-PUESTOS-ACORDEON-01: mantener visible únicamente el producto seleccionado.
+document.querySelectorAll(".cam-product-accordion").forEach(panel => {
+  panel.addEventListener("toggle", () => {
+    if (!panel.open) return;
+    document.querySelectorAll(".cam-product-accordion").forEach(other => {
+      if (other !== panel) other.open = false;
+    });
+  });
+});
+</script></body></html>
