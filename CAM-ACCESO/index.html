@@ -26,8 +26,10 @@ button{border:0;border-radius:8px;padding:9px 12px;font-weight:800;cursor:pointe
 .item-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.item b{color:var(--navy)}.item small{display:block;color:var(--muted);margin-top:3px;line-height:1.35}.item-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px}
 .timer{font-size:13px;font-weight:900;padding:4px 8px;border-radius:999px;background:#F0F8F3;color:var(--ok)}.timer.warn{background:#FFF4DB;color:var(--warn)}.timer.alert{background:#FADCE1;color:var(--danger)}
 .badge{display:inline-block;padding:3px 8px;border-radius:999px;font-size:10px;font-weight:800}.badge.type{background:#EAF3F6;color:var(--navy)}.badge.alert{background:#FADCE1;color:var(--danger)}
-.alert-banner{display:none;margin:12px 0 0;padding:11px 12px;border-radius:9px;background:var(--danger-bg);border:1px solid #E6B9C0;color:var(--danger);font-size:12px;font-weight:800}
+.alert-banner{display:none;margin:12px 0 10px;padding:11px 12px;border-radius:9px;background:var(--danger-bg);border:1px solid #E6B9C0;color:var(--danger);font-size:12px;font-weight:800;line-height:1.45}
 .alert-banner.visible{display:block;animation:pulse 1.8s infinite}
+.alert-banner.warning{background:#FFF4DB;border-color:#E7C46C;color:#8A5700;animation:none}
+.alert-banner.info{background:#EAF3F6;border-color:#B8DDE5;color:var(--navy);animation:none}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(178,58,72,.08)}50%{box-shadow:0 0 0 5px rgba(178,58,72,.08)}}
 .parking-summary{padding:16px 12px;border:1px solid var(--line);border-radius:10px;background:#F0F8F3;color:var(--ok);text-align:center;font-weight:800;font-size:25px}.parking-summary.full{background:#FCEDEF;color:var(--danger)}.parking-summary small{display:block;margin-top:4px;font-size:12px;font-weight:600}.parking-config{margin-top:12px;padding:12px;border:1px solid var(--line);border-radius:10px;background:#F8FBFC}.parking-config-row{display:grid;grid-template-columns:minmax(70px,1fr) auto;gap:8px;align-items:center}.parking-config-row button{white-space:nowrap}@media(max-width:420px){.parking-config-row{grid-template-columns:1fr}.parking-config-row button{width:100%}}
 .note{margin-top:10px;padding:10px;border-left:4px solid var(--cyan);background:var(--soft);color:var(--muted);font-size:12px}
@@ -77,7 +79,7 @@ button{border:0;border-radius:8px;padding:9px 12px;font-weight:800;cursor:pointe
 
 
 /* CAM-ACCESO-LAB-09: cada módulo se consulta por separado; las alertas permanecen en el tablero. */
-.lab08-hidden{display:none!important}.lab08-back{margin:0 0 12px}.lab08-workspace{max-width:1180px;margin:12px auto;padding:0 12px}.lab08-module-title{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;color:#fff;margin:0 0 12px;background:#123b5d}.lab08-module-title h2{margin:0;font-size:20px}.lab08-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.lab08-form .full{grid-column:1/-1}.lab08-record{border:1px solid #cbd5e1;border-left:5px solid #1677b8;border-radius:9px;padding:10px;margin:8px 0;background:#fff}.lab08-record small{color:#64748b}.lab08-record-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.lab08-empty{padding:16px;text-align:center;color:#64748b;background:#f8fafc;border:1px dashed #cbd5e1;border-radius:8px}.lab08-section{background:#fff;border:1px solid #d4deea;border-radius:12px;padding:14px;margin-bottom:12px}.lab08-module-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}@media(max-width:620px){.lab08-form{grid-template-columns:1fr}.lab08-form .full{grid-column:auto}}
+.lab08-hidden{display:none!important}.lab08-back{margin:0 0 12px;background:linear-gradient(135deg,#3286e4,#063a85);color:#fff;border:1px solid #0d56a0;box-shadow:0 4px 10px rgba(6,58,133,.20);transition:transform .15s,box-shadow .15s,filter .15s}.lab08-back:hover{filter:brightness(1.06);transform:translateY(-1px);box-shadow:0 6px 14px rgba(6,58,133,.25)}.lab08-back:focus-visible{outline:3px solid rgba(10,167,192,.35);outline-offset:2px}.lab08-workspace{max-width:1180px;margin:12px auto;padding:0 12px}.lab08-module-title{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;color:#fff;margin:0 0 12px;background:#123b5d}.lab08-module-title h2{margin:0;font-size:20px}.lab08-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.lab08-form .full{grid-column:1/-1}.lab08-record{border:1px solid #cbd5e1;border-left:5px solid #1677b8;border-radius:9px;padding:10px;margin:8px 0;background:#fff}.lab08-record small{color:#64748b}.lab08-record-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.lab08-empty{padding:16px;text-align:center;color:#64748b;background:#f8fafc;border:1px dashed #cbd5e1;border-radius:8px}.lab08-section{background:#fff;border:1px solid #d4deea;border-radius:12px;padding:14px;margin-bottom:12px}.lab08-module-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}@media(max-width:620px){.lab08-form{grid-template-columns:1fr}.lab08-form .full{grid-column:auto}}
 
 
 /* CAM-ACCESO-LAB-10: las alertas permanecen visibles durante la navegación. */
@@ -159,6 +161,14 @@ body.cam-modulo-acceso #panelAdministracion,
 body.cam-modulo-acceso #panelDirectorioResidencial { display:none !important; }
 body.cam-modulo-acceso #camAccesoRegistroOperativo { display:block !important; }
 body.cam-modulo-acceso .wrap > .grid > aside.card { display:block !important; }
+/* CAM-ACCESO-UI-OPERATOR-01: la vista del operador se abre solo bajo demanda. */
+body.cam-modulo-acceso main.wrap .grid > aside.card.operator-card-hidden { display:none !important; }
+/* CAM-ACCESO-UI-AJUSTES-02: el formulario ocupa todo el ancho cuando la vista del operador está cerrada. */
+@media(min-width:901px){
+ body.cam-modulo-acceso main.wrap .grid.lab14-access-layout:not(.operator-card-open){grid-template-columns:minmax(0,1fr)!important;}
+ body.cam-modulo-acceso main.wrap .grid.lab14-access-layout.operator-card-open{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)!important;}
+}
+@media(max-width:900px){body.cam-modulo-acceso main.wrap .grid.lab14-access-layout{grid-template-columns:minmax(0,1fr)!important;}}
 body.cam-modulo-reportes #camAccesoRegistroOperativo,
 body.cam-modulo-reportes .admin-gate,
 body.cam-modulo-reportes #panelAdministracion,
@@ -176,6 +186,10 @@ body.cam-modulo-admin #panelTrazabilidad,
 body.cam-modulo-admin .wrap > .grid > aside.card { display:none !important; }
 body.cam-modulo-admin .admin-gate,
 body.cam-modulo-admin #panelAdministracion { display:block !important; }
+/* CAM-ACCESO-UI-OPERATOR-01: encabezado compacto para abrir/cerrar la vista del operador. */
+.operator-card-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+.operator-card-heading h2{margin:0}
+.operator-card-close{flex:0 0 auto;padding:7px 10px;font-size:12px}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 
@@ -411,16 +425,14 @@ body.cam-modulo-admin #panelAdministracion { display:block !important; }
       </div>
     </section>
 
-    <aside class="card">
-      <h2>Vista del operador</h2>
+    <aside id="vistaOperadorCard" class="card operator-card-hidden">
+      <div class="operator-card-heading"><h2>Vista del operador</h2><button type="button" class="btn-light operator-card-close" onclick="ocultarVistaOperador()" aria-label="Ocultar vista del operador">Ocultar</button></div>
       <div class="stats">
         <div class="stat"><strong id="total">12</strong><span>Ingresos del día</span></div>
         <div class="stat"><strong id="pendientes">3</strong><span>Pendientes de salida</span></div>
         <div class="stat"><strong id="dentro">7</strong><span>Actualmente dentro</span></div>
         <div class="stat alert-stat"><strong id="alertas">1</strong><span>Alertas activas</span></div>
       </div>
-
-      <div id="alertBanner" class="alert-banner">⚠️ Hay domiciliarios que superaron los 20 minutos y requieren verificación de salida.</div>
 
       <div class="section-title">Buscar visitante para registrar salida</div>
       <!-- CAM-ACCESO-00C-CAMBIO-01: búsqueda operativa por apartamento para localizar rápidamente
@@ -432,6 +444,7 @@ body.cam-modulo-admin #panelAdministracion { display:block !important; }
       </div>
 
       <div id="seccionPendientes" class="section-title">Visitantes pendientes de salida</div>
+      <div id="alertBanner" class="alert-banner" role="status" aria-live="polite"></div>
       <!-- CAM-ACCESO-00B-CAMBIO-01: el panel operativo prioriza las salidas pendientes. -->
       <div id="listaSalidas" class="list"></div>
 
@@ -1188,12 +1201,27 @@ function actualizarRecordatorioSalidas(cantidad){
 }
 
 function irAPendientes(){
-  const seccion=document.getElementById('seccionPendientes');
-  if(seccion){
-    seccion.scrollIntoView({behavior:'smooth',block:'start'});
+  // CAM-ACCESO-UI-OPERATOR-01: abrir la vista del operador solo cuando se solicita.
+  if(typeof window.abrirModuloLAB08==='function') window.abrirModuloLAB08('acceso');
+  const tarjeta=document.getElementById('vistaOperadorCard');
+  if(tarjeta){
+    tarjeta.classList.remove('operator-card-hidden');
+    tarjeta.closest('.grid')?.classList.add('operator-card-open');
   }
-  const buscador=document.getElementById('buscarApartamento');
-  if(buscador) setTimeout(()=>buscador.focus(),350);
+  setTimeout(()=>{
+    const seccion=document.getElementById('seccionPendientes');
+    if(seccion) seccion.scrollIntoView({behavior:'smooth',block:'start'});
+    const buscador=document.getElementById('buscarApartamento');
+    if(buscador) buscador.focus();
+  },120);
+}
+
+function ocultarVistaOperador(){
+  const tarjeta=document.getElementById('vistaOperadorCard');
+  if(tarjeta){
+    tarjeta.classList.add('operator-card-hidden');
+    tarjeta.closest('.grid')?.classList.remove('operator-card-open');
+  }
 }
 
 // CAM-ACCESO-00M-CAMBIO-02: contadores operativos calculados desde registros reales del día.
@@ -1204,14 +1232,35 @@ function render(){
   const finDia=inicioDia+24*60*60*1000;
   const ingresosHoy=visitantes.filter(v=>Number(v.ingreso)>=inicioDia && Number(v.ingreso)<finDia).length;
   const activos=visitantes.filter(v=>!v.salio && !v.salida);
-  const alertados=activos.filter(v=>esAlerta(v,ahora));
+  const domiciliarios=activos.filter(v=>v.tipo==='Domiciliario');
+  const alertados=domiciliarios.filter(v=>esAlerta(v,ahora));
+  const proximos=domiciliarios.filter(v=>{const transcurrido=ahora-Number(v.ingreso||0);return transcurrido>=15*60000&&transcurrido<20*60000;});
   actualizarRecordatorioSalidas(activos.length);
   document.getElementById('total').textContent=ingresosHoy;
   document.getElementById('pendientes').textContent=activos.length;
   document.getElementById('alertas').textContent=alertados.length;
   // "Actualmente dentro" corresponde a visitantes con ingreso vigente y sin salida registrada.
   document.getElementById('dentro').textContent=activos.length;
-  document.getElementById('alertBanner').classList.toggle('visible',alertados.length>0);
+  const banner=document.getElementById('alertBanner');
+  if(banner){
+    banner.classList.remove('warning','info');
+    if(alertados.length){
+      const cantidad=alertados.length;
+      banner.textContent=`⚠️ ALERTA DE DOMICILIARIOS: ${cantidad} domiciliario${cantidad===1?'':'s'} ${cantidad===1?'superó':'superaron'} el límite de 20 minutos. Verifique y registre ${cantidad===1?'su salida':'las salidas'}.`;
+      banner.classList.add('visible');
+    }else if(proximos.length){
+      const cantidad=proximos.length;
+      banner.textContent=`🟠 ATENCIÓN: ${cantidad} domiciliario${cantidad===1?'':'s'} ${cantidad===1?'se acerca':'se acercan'} al límite de 20 minutos. Verifique su permanencia.`;
+      banner.classList.add('visible','warning');
+    }else if(domiciliarios.length){
+      const cantidad=domiciliarios.length;
+      banner.textContent=`🕒 ${cantidad} domiciliario${cantidad===1?'':'s'} pendiente${cantidad===1?'':'s'} de salida. Tiempo máximo de permanencia: 20 minutos.`;
+      banner.classList.add('visible','info');
+    }else{
+      banner.classList.remove('visible');
+      banner.textContent='';
+    }
+  }
 
   const lista=document.getElementById('listaSalidas');
   if(!activos.length){
@@ -1277,6 +1326,8 @@ function renderParking(){
   resumen.innerHTML=`${disponibles} / ${parkingCapacity} disponibles<small>${ocupados} ocupados · Solo se controla la cantidad total, no una celda individual</small>`;
   const input=document.getElementById('parkingCapacity');
   if(input && document.activeElement!==input) input.value=parkingCapacity;
+  // CAM-ACCESO-PARKING-SYNC-01: mantener sincronizado el indicador del tablero.
+  if(typeof actualizarAlertasLAB08==='function') actualizarAlertasLAB08();
 }
 
 function limpiarFormularioIngreso(){
@@ -1368,7 +1419,7 @@ body.cam-acceso-perfil-porteria .report-panel { display:none !important; }
 
 
 
-</body></html>`);w.document.close();
+<\/body></html>`);w.document.close();
 }
 
 render();
@@ -1568,7 +1619,7 @@ document.addEventListener('DOMContentLoaded',renderResultadosDirectorio);
  const STORE={correspondencia:'tecchnex_cam_acceso_correspondencia_lab09',bitacora:'tecchnex_cam_acceso_bitacora_lab09',agenda:'tecchnex_cam_acceso_agenda_lab09'};
  let workspace=document.getElementById('lab08Workspace');
  if(!workspace){workspace=document.createElement('section');workspace.id='lab08Workspace';workspace.className='lab08-workspace lab08-hidden';main.appendChild(workspace);}
- function addBack(el){if(!el||el.querySelector(':scope > .lab08-back'))return;const b=document.createElement('button');b.className='btn-light lab08-back';b.textContent='← Volver al tablero';b.onclick=volver;el.prepend(b)}
+ function addBack(el){if(!el||el.querySelector(':scope > .lab08-back'))return;const b=document.createElement('button');b.className='btn-main lab08-back';b.textContent='← Volver al tablero';b.onclick=volver;el.prepend(b)}
  function hideAll(){[qr,dir,grid,workspace].forEach(e=>{if(e)e.classList.add('lab08-hidden')});}
  function mostrarAlertas(){if(tablero){tablero.classList.remove('lab08-hidden');const nav=tablero.querySelector('.dash-mod-title');const modules=tablero.querySelector('.dash-modules');const note=tablero.querySelector('.dash-note');[nav,modules,note].forEach(e=>{if(e)e.classList.add('lab08-nav-hidden')});}}
  function mostrarMenu(){if(tablero){tablero.classList.remove('lab08-hidden');const nav=tablero.querySelector('.dash-mod-title');const modules=tablero.querySelector('.dash-modules');const note=tablero.querySelector('.dash-note');[nav,modules,note].forEach(e=>{if(e)e.classList.remove('lab08-nav-hidden')});}}
@@ -1651,7 +1702,7 @@ document.addEventListener('DOMContentLoaded',renderResultadosDirectorio);
    render();
  }
  const ids={
-  acceso:()=>{document.body.classList.remove('cam-modulo-reportes','cam-modulo-admin');document.body.classList.add('cam-modulo-acceso');showOnly(grid);grid?.classList.add('lab14-access-layout');if(operatorCard)operatorCard.classList.remove('lab08-hidden');scrollToTop(grid)},
+  acceso:()=>{document.body.classList.remove('cam-modulo-reportes','cam-modulo-admin');document.body.classList.add('cam-modulo-acceso');showOnly(grid);grid?.classList.add('lab14-access-layout');if(operatorCard){operatorCard.classList.add('operator-card-hidden');grid?.classList.remove('operator-card-open');}scrollToTop(grid)},
   directorio:()=>{showOnly(dir);scrollToTop(dir)},
   qr:()=>{showOnly(qr);scrollToTop(qr)},
   historial:()=>{document.body.classList.remove('cam-modulo-acceso','cam-modulo-reportes','cam-modulo-admin');showOnly(grid);setTimeout(()=>{const b=document.querySelector('#panelTrazabilidad button');if(b)b.click();scrollToTop(document.getElementById('panelTrazabilidad'));},50)},
@@ -1662,7 +1713,7 @@ document.addEventListener('DOMContentLoaded',renderResultadosDirectorio);
   bitacora:()=>{buildBasicModule('bitacora');showOnly(workspace);scrollToTop(workspace)},
   agenda:()=>{buildBasicModule('agenda');showOnly(workspace);scrollToTop(workspace)}
  };
- window.volver=function(){document.body.classList.remove('cam-modulo-acceso','cam-modulo-reportes','cam-modulo-admin');hideAll();grid?.classList.remove('lab14-access-layout');mostrarMenu();window.scrollTo({top:0,behavior:'smooth'});actualizarAlertasLAB08();};
+ window.volver=function(){document.body.classList.remove('cam-modulo-acceso','cam-modulo-reportes','cam-modulo-admin');if(operatorCard)operatorCard.classList.add('operator-card-hidden');grid?.classList.remove('operator-card-open');hideAll();grid?.classList.remove('lab14-access-layout');mostrarMenu();window.scrollTo({top:0,behavior:'smooth'});actualizarAlertasLAB08();};
  window.abrirModuloLAB08=function(mod){mostrarAlertas();if(ids[mod]){ids[mod]();return;}showOnly(grid);};
  function actualizarAlertasLAB08(){
   const p=document.getElementById('dashPendingCount');
@@ -1684,7 +1735,8 @@ document.addEventListener('DOMContentLoaded',renderResultadosDirectorio);
   }
 }
  window.actualizarAlertasLAB08=actualizarAlertasLAB08;
- // Inicialización inmediata: el script se ejecuta al final del documento, después de crear los paneles.
+ // Inicialización inmediata: calcular parqueaderos antes de pintar el indicador del tablero.
+ if(typeof renderParking==='function') renderParking();
  hideAll();mostrarMenu();actualizarAlertasLAB08();setTimeout(actualizarAlertasLAB08,300);
 })();
 
