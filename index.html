@@ -177,7 +177,7 @@ body.cam-modulo-admin #panelAdministracion { display:block !important; }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 
-<link rel="icon" type="image/png" sizes="192x192" href="assets/tecchnex-icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#b71919">
 </head>
@@ -186,7 +186,7 @@ body.cam-modulo-admin #panelAdministracion { display:block !important; }
 <!-- CAM-ACCESO-LAB-20: pantalla de inicio; acceso demostrativo local, no autenticación de producción. -->
 <section id="camAccesoLoginGate" aria-labelledby="camAccesoLoginTitle">
  <div class="login-shell">
-  <div class="login-brand"><h1><img class="tecchnex-product-logo" src="assets/tecchnex-icons/identificador.png" alt="Sistema de Control de Acceso" /> <span>TECCHNEX · CAM-ACCESO</span></h1><p>Sistema de Control de Acceso · Ingreso por puesto de servicio</p></div>
+  <div class="login-brand"><h1><img class="tecchnex-product-logo" src="identificador.png" alt="Sistema de Control de Acceso" /> <span>TECCHNEX · CAM-ACCESO</span></h1><p>Sistema de Control de Acceso · Ingreso por puesto de servicio</p></div>
   <div class="login-content">
    <h2 id="camAccesoLoginTitle">Ingreso con credenciales</h2>
    <p>Ingrese con el nombre de su puesto y la contraseña asignada por el administrador.</p>
@@ -1662,7 +1662,25 @@ document.addEventListener('DOMContentLoaded',renderResultadosDirectorio);
  };
  window.volver=function(){document.body.classList.remove('cam-modulo-acceso','cam-modulo-reportes','cam-modulo-admin');hideAll();grid?.classList.remove('lab14-access-layout');mostrarMenu();window.scrollTo({top:0,behavior:'smooth'});actualizarAlertasLAB08();};
  window.abrirModuloLAB08=function(mod){mostrarAlertas();if(ids[mod]){ids[mod]();return;}showOnly(grid);};
- function actualizarAlertasLAB08(){const p=document.getElementById('dashPendingCount');const source=document.getElementById('pendientes');if(p&&source)p.textContent=source.textContent;const parking=document.getElementById('parkingSummary');const count=document.getElementById('dashParkingCount');const detail=document.getElementById('dashParkingDetail');if(parking&&count){const t=parking.innerText||parking.textContent||'';count.textContent=t.split('\n')[0].trim()||'—';detail.textContent=t.split('\n').slice(1).join(' ').trim()||'Disponibilidad actual';}}
+ function actualizarAlertasLAB08(){
+  const p=document.getElementById('dashPendingCount');
+  const source=document.getElementById('pendientes');
+  if(p&&source)p.textContent=source.textContent;
+
+  // CAM-ACCESO-LAB-17-CORR-02: separar el valor y el detalle usando los nodos reales.
+  // No depender de saltos de línea de innerText, que varían entre navegadores.
+  const parking=document.getElementById('parkingSummary');
+  const count=document.getElementById('dashParkingCount');
+  const detail=document.getElementById('dashParkingDetail');
+  if(parking&&count){
+    const valueNode=Array.from(parking.childNodes).find(node=>node.nodeType===Node.TEXT_NODE);
+    const detailNode=parking.querySelector('small');
+    count.textContent=(valueNode?.textContent||'').trim()||'—';
+    if(detail){
+      detail.textContent=(detailNode?.textContent||'').trim()||'Disponibilidad actual';
+    }
+  }
+}
  window.actualizarAlertasLAB08=actualizarAlertasLAB08;
  // Inicialización inmediata: el script se ejecuta al final del documento, después de crear los paneles.
  hideAll();mostrarMenu();actualizarAlertasLAB08();setTimeout(actualizarAlertasLAB08,300);
